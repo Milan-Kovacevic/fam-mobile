@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
+import { RootSiblingParent } from "react-native-root-siblings";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -33,9 +34,12 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <StorageProvider>
-        <GestureHandlerRootView className="h-full w-full flex-1">
-          <RootNavigator />
-        </GestureHandlerRootView>
+        {/* For displaying native toast messages */}
+        <RootSiblingParent>
+          <GestureHandlerRootView className="h-full w-full flex-1">
+            <RootNavigator />
+          </GestureHandlerRootView>
+        </RootSiblingParent>
       </StorageProvider>
     </ThemeProvider>
   );

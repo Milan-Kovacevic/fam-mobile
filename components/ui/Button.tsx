@@ -32,6 +32,7 @@ export interface ButtonProps extends TouchableOpacityProps {
   children?: React.ReactNode;
   disabled?: boolean;
   loading?: boolean;
+  textClassName?: string;
   onPressed: () => void;
 }
 
@@ -45,6 +46,7 @@ export function Button(props: ButtonProps) {
     LeftAccessory,
     disabled,
     loading,
+    textClassName,
     onPressed,
     ...rest
   } = props;
@@ -58,7 +60,8 @@ export function Button(props: ButtonProps) {
   );
 
   const $buttonTextClassName: string = cn(
-    $buttonTextVariantsClassName[variant]
+    $buttonTextVariantsClassName[variant],
+    textClassName
   );
 
   return (
@@ -101,12 +104,10 @@ const $baseButtonClassName: string =
 const $baseButtonTextClassName: string =
   "text-sm leading-8 font-pmedium text-center flex-shrink flex-grow-0";
 
-const $baseButtonLoaderClassName: string = "mr-2 pb-0.5";
-
 const $buttonVariantsClassName = {
   primary: cn(
     $baseButtonClassName,
-    "border-2 border-transparent bg-primary-400 dark:bg-primary"
+    "border-2 border-transparent bg-primary-400/70 dark:bg-primary/90"
   ),
   "primary-outline": cn(
     $baseButtonClassName,
@@ -114,7 +115,7 @@ const $buttonVariantsClassName = {
   ),
   secondary: cn(
     $baseButtonClassName,
-    "border-2 border-transparent bg-secondary-400/50 dark:bg-secondary/50"
+    "border-2 border-transparent bg-secondary-400/70 dark:bg-secondary/90"
   ),
   "secondary-outline": cn(
     $baseButtonClassName,

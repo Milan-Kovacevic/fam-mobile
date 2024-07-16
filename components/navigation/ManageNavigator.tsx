@@ -26,6 +26,7 @@ const ManageNavigator = () => {
           name="edit/location"
           options={{
             headerShown: true,
+
             title: "Edit Location",
             headerStyle: {
               ...(scheme == "dark"

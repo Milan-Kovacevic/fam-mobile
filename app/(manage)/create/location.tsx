@@ -1,39 +1,28 @@
 import React, { useState } from "react";
 import { Screen } from "@/components/ui/Screen";
-import { Text } from "@/components/ui/Text";
-import { ToastAndroid, View } from "react-native";
-import FormField from "@/components/ui/FormField";
-import { Icon } from "@/components/ui/Icon";
-import { Button } from "@/components/ui/Button";
+import { useColorScheme, View } from "react-native";
 import { createLocation } from "@/storage/repositories/locations-repository";
 import { useSQLiteContext } from "expo-sqlite";
 import { router } from "expo-router";
+import ManageLocationHeading from "@/components/screens/locations/ManageLocationHeading";
+import ManageLocationForm from "@/components/screens/locations/ManageLocationForm";
+import { delay } from "@/utils/util";
+import { showToast } from "@/utils/toast";
 
 const CreateLocationScreen = () => {
   const db = useSQLiteContext();
-  const [locationForm, setLocationForm] = useState({
-    name: "",
-  });
+  const scheme = useColorScheme();
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<{ name?: string }>({
-    name: undefined,
-  });
 
-  function handleChangeLocationName(text: string) {
-    setLocationForm({ ...locationForm, name: text });
-  }
-
-  async function handleLocationSubmitted() {
-    setErrors({ name: undefined });
-    if (locationForm.name.trim() == "") {
-      setErrors({ ...errors, name: "Name cannot be empty" });
-      return;
-    }
-
+  async function handleLocationSubmitted(formData: { name: string }) {
     setLoading(true);
-    createLocation(db, { name: locationForm.name })
+    await delay(750);
+    createLocation(db, { name: formData.name })
       .then((location) => {
         router.push("/locations");
+      })
+      .catch((err) => {
+        showToast("Unable to create location. Possible duplicate name", scheme);
       })
       .finally(() => {
         setLoading(false);
@@ -43,34 +32,11 @@ const CreateLocationScreen = () => {
   return (
     <Screen className="h-full w-full px-4 py-4 mt-10" variant="scroll">
       <View className="px-2">
-        <View className="flex-col mx-4 mb-6 items-center justify-center">
-          <Icon
-            icon="map-signs"
-            variant="fontawesome"
-            className="text-primary-400 dark:text-primary"
-            size={60}
-          />
-          <Text className="mt-3 text-center" variant="muted">
-            Please enter the required data and press 'Submit' to create new
-            location.
-          </Text>
-        </View>
+        <ManageLocationHeading text="Please enter the required data and press 'Submit' to create new location." />
 
-        <FormField
-          title={"Location name"}
-          text={locationForm.name}
-          handleChangeText={handleChangeLocationName}
-          handleSubmitted={handleLocationSubmitted}
-          placeholder="ex. Banja Luka"
-          returnKeyType="done"
-          error={errors.name}
-        />
-        <Button
-          variant="secondary"
-          text="Submit"
-          onPressed={handleLocationSubmitted}
-          className="mt-4"
+        <ManageLocationForm
           loading={loading}
+          onSubmit={handleLocationSubmitted}
         />
       </View>
     </Screen>

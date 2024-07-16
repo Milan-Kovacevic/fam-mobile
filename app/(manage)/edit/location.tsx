@@ -1,39 +1,65 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Screen } from "@/components/ui/Screen";
-import { Text } from "@/components/ui/Text";
-import { ToastAndroid, View } from "react-native";
-import FormField from "@/components/ui/FormField";
-import { Icon } from "@/components/ui/Icon";
-import { Button } from "@/components/ui/Button";
-import { createLocation } from "@/storage/repositories/locations-repository";
+import { useColorScheme, View } from "react-native";
+import {
+  getLocationById,
+  updateLocation,
+} from "@/storage/repositories/locations-repository";
 import { useSQLiteContext } from "expo-sqlite";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
+import { LocationDTO } from "@/storage/models/locations";
+import ManageLocationHeading from "@/components/screens/locations/ManageLocationHeading";
+import ManageLocationForm from "@/components/screens/locations/ManageLocationForm";
+import { delay } from "@/utils/util";
+import { showToast } from "@/utils/toast";
 
 const EditLocationScreen = () => {
   const db = useSQLiteContext();
-  const [locationForm, setLocationForm] = useState({
-    name: "",
-  });
+  const { id } = useLocalSearchParams();
+  const [locationId, setLocationId] = useState<number>();
+  const [location, setLocation] = useState<LocationDTO | undefined>(undefined);
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<{ name?: string }>({
-    name: undefined,
-  });
+  const scheme = useColorScheme();
 
-  function handleChangeLocationName(text: string) {
-    setLocationForm({ ...locationForm, name: text });
-  }
-
-  async function handleLocationSubmitted() {
-    setErrors({ name: undefined });
-    if (locationForm.name.trim() == "") {
-      setErrors({ ...errors, name: "Name cannot be empty" });
+  useEffect(() => {
+    if (id == undefined) {
+      router.push("/locations");
       return;
     }
-
+    var routeId = parseInt(id[0]);
+    if (isNaN(routeId)) {
+      router.push("/locations");
+      return;
+    }
+    setLocationId(routeId);
     setLoading(true);
-    createLocation(db, { name: locationForm.name })
-      .then((location) => {
-        router.push("/locations");
+    getLocationById(db, routeId)
+      .then((result) => {
+        if (result == null) {
+          showToast("Location was not found, try again later.", scheme);
+          router.push("/locations");
+          return;
+        }
+        setLocation(result);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  async function handleLocationSubmitted(locationForm: { name: string }) {
+    setLoading(true);
+    await delay(750);
+    updateLocation(db, { id: locationId!, name: locationForm.name })
+      .then((isSuccess) => {
+        if (isSuccess) router.push("/locations");
+        else {
+          showToast("Unable to update location.", scheme);
+        }
+      })
+      .catch((err) => {
+        showToast("Unable to update location. Possible duplicate name", scheme);
+        console.log(err);
       })
       .finally(() => {
         setLoading(false);
@@ -43,35 +69,14 @@ const EditLocationScreen = () => {
   return (
     <Screen className="h-full w-full px-4 py-4 mt-10" variant="scroll">
       <View className="px-2">
-        <View className="flex-col mx-4 mb-6 items-center justify-center">
-          <Icon
-            icon="map-signs"
-            variant="fontawesome"
-            className="text-primary-400 dark:text-primary"
-            size={60}
+        <ManageLocationHeading text="Please enter the required data and press 'Submit' to update your location." />
+        {location && (
+          <ManageLocationForm
+            loading={loading}
+            location={location}
+            onSubmit={handleLocationSubmitted}
           />
-          <Text className="mt-3 text-center" variant="muted">
-            Please enter the required data and press 'Submit' to create new
-            location.
-          </Text>
-        </View>
-
-        <FormField
-          title={"Location name"}
-          text={locationForm.name}
-          handleChangeText={handleChangeLocationName}
-          handleSubmitted={handleLocationSubmitted}
-          placeholder="ex. Banja Luka"
-          returnKeyType="done"
-          error={errors.name}
-        />
-        <Button
-          variant="secondary"
-          text="Submit"
-          onPressed={handleLocationSubmitted}
-          className="mt-4"
-          loading={loading}
-        />
+        )}
       </View>
     </Screen>
   );

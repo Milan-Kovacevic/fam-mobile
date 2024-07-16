@@ -7,5 +7,13 @@
   },
   "welcomeScreen": {
     "letsGo": "Let's go!"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Update your application appearance and other preferences",
+    "displayLanguageLabel": "Display Language",
+    "displayLanguageEn": "English",
+    "displayLanguageSr": "Serbian",
+    "saveChangesLabel": "Apply Changes"
   }
 }

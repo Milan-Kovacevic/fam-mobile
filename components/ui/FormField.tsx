@@ -45,7 +45,7 @@ const FormField = (props: FormFieldProps) => {
       >
         {title}
       </Text>
-      <View className="border-2 border-primary-50 dark:border-primary-950 w-full px-4 h-12 justify-center bg-primary-100 dark:bg-primary-900 rounded-2xl focus:border-primary focus:dark:border-primary-400">
+      <View className="border-2 border-primary-50 dark:border-primary-950 w-full px-4 h-12 justify-center bg-primary-100/80 dark:bg-primary-900/80 rounded-2xl focus:border-primary focus:dark:border-primary-400">
         <TextInput
           className="flex-1 font-pregular text-base text-black dark:text-white"
           value={text}
@@ -62,7 +62,7 @@ const FormField = (props: FormFieldProps) => {
       {error && (
         <Text
           variant="muted"
-          className="ml-2 text-xs text-red-400 dark:text-red-500/60"
+          className="ml-2 text-xs text-red-400 dark:text-red-400/80"
         >
           {error}
         </Text>

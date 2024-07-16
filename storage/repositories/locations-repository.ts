@@ -13,7 +13,7 @@ interface LocationEntity {
 export async function createLocationsTable(db: SQLiteDatabase) {
   await db.execAsync(`
         PRAGMA journal_mode = 'wal';
-        CREATE TABLE IF NOT EXISTS locations (id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL);
+        CREATE TABLE IF NOT EXISTS locations (id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL UNIQUE);
         INSERT INTO locations (name) VALUES ('Banja Luka');
         INSERT INTO locations (name) VALUES ('Laktasi');
         INSERT INTO locations (name) VALUES ('Gradiska');
@@ -24,6 +24,31 @@ export async function getAllLocations(
   db: SQLiteDatabase
 ): Promise<LocationDTO[]> {
   var result = await db.getAllAsync<LocationEntity>("SELECT * FROM locations");
+  return result.map((x) => {
+    return { id: x.id, name: x.name };
+  });
+}
+
+export async function getLocationById(
+  db: SQLiteDatabase,
+  id: number
+): Promise<LocationDTO | null> {
+  var result = await db.getFirstSync<LocationEntity>(
+    "SELECT * FROM locations WHERE id = ?",
+    [id]
+  );
+  return result ? { id: result?.id, name: result?.name } : null;
+}
+
+export async function getLocationsByName(
+  db: SQLiteDatabase,
+  query: string
+): Promise<LocationDTO[]> {
+  const searchParam = `%${query}%`;
+  var result = await db.getAllAsync<LocationEntity>(
+    "SELECT * FROM locations WHERE name LIKE ?",
+    [searchParam]
+  );
   return result.map((x) => {
     return { id: x.id, name: x.name };
   });

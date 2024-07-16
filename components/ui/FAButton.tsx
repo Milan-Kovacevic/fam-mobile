@@ -35,4 +35,4 @@ export function FAButton(props: ButtonProps) {
 }
 
 const $buttonClassName: string =
-  "absolute bg-secondary-400/50 dark:bg-secondary/50 p-2.5 py-1.5 rounded-full z-10 justify-center items-center overflow-hidden flex-grow-0";
+  "absolute bg-secondary-400/50 dark:bg-secondary/80 p-2.5 py-1.5 rounded-full z-10 justify-center items-center overflow-hidden flex-grow-0";

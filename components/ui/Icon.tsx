@@ -1,20 +1,21 @@
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Entypo, Fontisto } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
-import { StyleProp, View } from "react-native";
+import { StyleProp } from "react-native";
 import { cn } from "@/utils/tw";
-import { Text } from "../ui/Text";
 
 export type IconVariant =
   | "material"
   | "antdesign"
   | "ionicon"
   | "fontawesome"
-  | "feather";
+  | "feather"
+  | "fontisto"
+  | "entypo";
 
 export interface IconProps {
   icon: string;
@@ -30,6 +31,8 @@ const iconComponents = {
   ionicon: Ionicons,
   fontawesome: FontAwesome,
   feather: Feather,
+  fontisto: Fontisto,
+  entypo: Entypo,
 };
 
 export function Icon(props: IconProps) {

@@ -14,18 +14,15 @@ import { NativeSearchBar } from "react-native-screens";
 interface SearchInputProps extends ViewProps {
   text: string;
   placeholder?: string;
-  handleSearch: (text: string) => void;
+  onTextChange: (text: string) => void;
+  onSearch: (text: string) => void;
+  onClear: () => void;
 }
 
 const SearchInput = (props: SearchInputProps) => {
-  const { text, placeholder, handleSearch, ...rest } = props;
+  const { text, placeholder, onSearch, onClear, onTextChange, ...rest } = props;
   const scheme = useColorScheme();
-  const [searchText, setSearchText] = useState(text);
   const [active, setActive] = useState(false);
-
-  function handleClearText() {
-    setSearchText("");
-  }
 
   return (
     <View
@@ -49,21 +46,21 @@ const SearchInput = (props: SearchInputProps) => {
           "flex-1 font-pregular text-black dark:text-white self-center pt-0.5"
         )}
         style={{ fontSize: 14 }}
-        value={searchText}
+        value={text}
         placeholder={placeholder}
-        onChangeText={setSearchText}
-        onSubmitEditing={() => handleSearch(searchText)}
+        onChangeText={onTextChange}
+        onSubmitEditing={() => onSearch(text)}
         placeholderTextColor={
           scheme == "dark" ? palette.gray400 : palette.gray500
         }
         onFocus={() => setActive(true)}
         onBlur={() => setActive(false)}
       />
-      {searchText != "" && (
+      {text != "" && (
         <TouchableOpacity
           className="items-center justify-center px-2"
           activeOpacity={0.6}
-          onPress={handleClearText}
+          onPress={onClear}
         >
           <Icon
             icon="close"

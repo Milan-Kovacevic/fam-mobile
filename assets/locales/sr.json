@@ -1,11 +1,19 @@
 {
   "common": {
     "ok": "OK!",
-    "cancel": "Cancel",
-    "back": "Back",
-    "logOut": "Log Out"
+    "cancel": "Ponisti",
+    "back": "Nazad",
+    "logOut": "Odjavite se"
   },
   "welcomeScreen": {
     "letsGo": "Idemoo!"
+  },
+  "settings": {
+    "title": "Postavke",
+    "description": "Ažurirajte izgled kao i druge postavke vaše aplikacije",
+    "displayLanguageLabel": "Jezik za prikaz",
+    "displayLanguageEn": "Engleski",
+    "displayLanguageSr": "Srpski",
+    "saveChangesLabel": "Primjenite izmjene"
   }
 }

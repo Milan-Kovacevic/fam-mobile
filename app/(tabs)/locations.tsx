@@ -1,105 +1,116 @@
 import React, { useEffect, useState } from "react";
-import { SafeScreen, Screen } from "@/components/ui/Screen";
-import { Text } from "@/components/ui/Text";
+import { SafeScreen } from "@/components/ui/Screen";
 import { useSQLiteContext } from "expo-sqlite";
-import { ActivityIndicator, ScrollView, TextInput, View } from "react-native";
+import { useColorScheme, View } from "react-native";
 import { LocationDTO } from "@/storage/models/locations";
 import {
   deleteLocation,
   getAllLocations,
+  getLocationsByName,
 } from "@/storage/repositories/locations-repository";
-import FormField from "@/components/ui/FormField";
 import SearchInput from "@/components/ui/SearchInput";
-import { palette } from "@/theme/colors";
-import { Button } from "@/components/ui/Button";
-import { Icon, IconVariant } from "@/components/ui/Icon";
-import LocationCard from "@/components/LocationCard";
-import { FAButton } from "@/components/ui/FAButton";
 import { router } from "expo-router";
-
-interface Todo {
-  value: string;
-  intValue: number;
-}
+import LocationsList from "@/components/screens/locations/LocationsList";
+import LocationsHeading from "@/components/screens/locations/LocationsHeading";
+import LocationsSkeleton from "@/components/screens/locations/LocationsSkeleton";
+import { delay } from "@/utils/util";
+import { showToast } from "@/utils/toast";
 
 const LocationsScreen = () => {
   const db = useSQLiteContext();
   const [locations, setLocations] = useState<LocationDTO[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [searchText, setSearchText] = useState("");
+  const scheme = useColorScheme();
 
   useEffect(() => {
-    async function setup() {
-      const result = await getAllLocations(db);
-      setLocations(result);
-    }
-    setup();
+    fetchLocations();
   }, []);
+
+  async function fetchLocations() {
+    setLoading(true);
+    await delay(300);
+    const result = await getAllLocations(db);
+    setLocations(result);
+    setLoading(false);
+  }
+  async function searchLocations(query: string) {
+    setLoading(true);
+    await delay(300);
+    const result = await getLocationsByName(db, query);
+    setLocations(result);
+    setLoading(false);
+  }
+
+  async function handleSearchClear() {
+    setSearchText("");
+    await fetchLocations();
+  }
+
+  async function handleTextChanged(text: string) {
+    setSearchText(text);
+    if (text == "") await fetchLocations();
+  }
+  async function handleSearchLocations() {
+    await searchLocations(searchText);
+  }
+
+  async function onRefreshing() {
+    setRefreshing(true);
+    await fetchLocations();
+    setRefreshing(false);
+    setSearchText("");
+  }
 
   function handleCreateLocation() {
     router.push("/create/location");
   }
 
   function handleEditLocation(id: number) {
-    router.push("/edit/location");
+    router.push({ pathname: `/edit/location`, params: { id: id } });
   }
 
   async function handleDeleteLocation(id: number) {
     var isSuccess = await deleteLocation(db, id);
-    if (isSuccess) setLocations([...locations.filter((x) => x.id != id)]);
+    if (isSuccess) {
+      setLocations([...locations.filter((x) => x.id != id)]);
+      showToast("Location removed successfully!", scheme);
+    }
   }
 
   return (
-    <View className="flex-1">
-      <FAButton
-        icon="plus"
-        variant="feather"
-        onPressed={handleCreateLocation}
-        iconClassName="text-2xl"
-        className="right-4 bottom-4"
-      />
-      <SafeScreen
-        variant="fixed"
-        className="p-4 h-full w-full"
-        contentContainerClassName="flex-1"
-      >
-        <View className="mb-6 mx-2 gap-0 mt-0 items-center">
-          <LocationsHeading />
-          <SearchInput
-            className=""
-            text={""}
-            placeholder="Search..."
-            handleSearch={(text) => console.log(text)}
+    <SafeScreen
+      variant="fixed"
+      className="h-full w-full"
+      contentContainerClassName="flex-1"
+    >
+      <View className="px-3 pt-3.5 mb-1.5 mx-1 items-center">
+        <LocationsHeading onCreateLocation={handleCreateLocation} />
+        <SearchInput
+          className=""
+          placeholder="Search..."
+          text={searchText}
+          onTextChange={handleTextChanged}
+          onSearch={handleSearchLocations}
+          onClear={handleSearchClear}
+        />
+      </View>
+      <View className="flex-1 py-2 pb-0 mb-1 mt-2">
+        {loading ? (
+          <LocationsSkeleton />
+        ) : (
+          <LocationsList
+            refreshing={refreshing}
+            onRefreshing={onRefreshing}
+            onEditLocation={handleEditLocation}
+            onDeleteLocation={handleDeleteLocation}
+            locations={locations}
           />
-        </View>
-        <ScrollView className="flex-1 mx-2 ml-0 space-y-1.5">
-          {locations.map((location) => (
-            <View key={location.id} className="flex-1">
-              <LocationCard
-                id={location.id}
-                name={location.name}
-                onDelete={handleDeleteLocation}
-                onEdit={handleEditLocation}
-              />
-            </View>
-          ))}
-        </ScrollView>
-      </SafeScreen>
-    </View>
+        )}
+      </View>
+    </SafeScreen>
   );
 };
 
 export default LocationsScreen;
-
-const LocationsHeading = () => {
-  return (
-    <View className="flex-row w-full items-center gap-0.5 justify-start mx-0.5 mb-2.5">
-      <Icon
-        icon="location-pin"
-        variant="material"
-        className="text-xl mb-0.5 mr-0"
-      />
-      <Text className="text-2xl font-psemibold tracking-tighter">
-        Your Locations
-      </Text>
-    </View>
-  );
-};

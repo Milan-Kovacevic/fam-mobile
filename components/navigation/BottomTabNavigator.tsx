@@ -9,6 +9,7 @@ const BottomTabNavigator = () => {
 
   return (
     <Tabs
+      initialRouteName="locations"
       screenOptions={{
         tabBarShowLabel: false,
         tabBarStyle: {

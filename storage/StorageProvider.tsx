@@ -1,9 +1,10 @@
 import React from "react";
 import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
 import { createLocationsTable } from "./repositories/locations-repository";
+import { createEmployeesTable } from "./repositories/employees-repository";
 
 export const DATABASE_NAME = "fam.db";
-export const DATABASE_VERSION = 2;
+export const DATABASE_VERSION = 4;
 
 type StorageProviderProps = {
   children: React.ReactNode;
@@ -29,6 +30,7 @@ async function migrateDbIfNeeded(db: SQLiteDatabase) {
   }
   if (currentDbVersion === 0) {
     await createLocationsTable(db);
+    await createEmployeesTable(db);
     console.log("Applied database migration");
   }
 

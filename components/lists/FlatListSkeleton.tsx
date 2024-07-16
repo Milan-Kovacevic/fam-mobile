@@ -1,9 +1,9 @@
 import { View } from "react-native";
 import React from "react";
 
-const LocationsSkeleton = () => {
+const FlatListSkeleton = () => {
   return (
-    <View className="px-4">
+    <View>
       <SkeletonItem />
       <SkeletonItem />
       <SkeletonItem />
@@ -12,7 +12,7 @@ const LocationsSkeleton = () => {
   );
 };
 
-export default LocationsSkeleton;
+export default FlatListSkeleton;
 
 const SkeletonItem = () => {
   return (

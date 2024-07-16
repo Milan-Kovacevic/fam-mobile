@@ -27,7 +27,7 @@ export function Text(props: TextProps) {
   const content = i18nText || text || children;
 
   const variant: Variant = props.variant ?? "default";
-  const $className = $variants[variant];
+  const $className = cn($variants[variant], props.className);
 
   return (
     <RNText {...rest} style={style} className={$className}>

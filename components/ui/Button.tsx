@@ -104,7 +104,7 @@ const $baseButtonClassName: string =
 const $baseButtonTextClassName: string =
   "text-sm leading-8 font-pmedium text-center flex-shrink flex-grow-0";
 
-const $buttonVariantsClassName = {
+export const $buttonVariantsClassName = {
   primary: cn(
     $baseButtonClassName,
     "border-2 border-transparent bg-primary-400/70 dark:bg-primary/90"
@@ -124,7 +124,7 @@ const $buttonVariantsClassName = {
   ghost: cn($baseButtonClassName, "bg-transparent"),
 };
 
-const $buttonTextVariantsClassName = {
+export const $buttonTextVariantsClassName = {
   primary: cn(
     $baseButtonTextClassName,
     "text-neutral-950 dark:text-neutral-200"

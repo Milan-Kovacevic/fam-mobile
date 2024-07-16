@@ -1,17 +1,18 @@
 import { View, Text } from "react-native";
 import React from "react";
-import { Button } from "../../ui/Button";
-import { Icon, IconVariant } from "../../ui/Icon";
 import { cn } from "@/utils/tw";
+import { Icon, IconVariant } from "@/components/ui/Icon";
+import { Button } from "@/components/ui/Button";
+import { EmployeeDTO } from "@/storage/models/employees";
 
-type LocationCardProps = {
-  id: number;
-  name: string;
+type EmployeeCardProps = {
+  item: EmployeeDTO;
   onDelete: (id: number) => void;
   onEdit: (id: number) => void;
 };
 
-const LocationCard = ({ id, name, onEdit, onDelete }: LocationCardProps) => {
+const EmployeeCard = (props: EmployeeCardProps) => {
+  const { item, onDelete, onEdit } = props;
   return (
     <View
       className={cn(
@@ -21,11 +22,13 @@ const LocationCard = ({ id, name, onEdit, onDelete }: LocationCardProps) => {
     >
       <View className={cn("flex-row gap-1.5 items-center flex-1 h-10")}>
         <Icon
-          icon="pushpino"
-          variant="antdesign"
+          icon="user"
+          variant="feather"
           className="text-base dark:text-gray-400 text-gray-500/90"
         />
-        <Text className="flex-1 text-base font-pregular pt-1 text-gray-800 dark:text-gray-300">{`${name}`}</Text>
+        <Text className="flex-1 text-base font-pregular pt-1 text-gray-800 dark:text-gray-300">
+          {item.firstName} {item.lastName}
+        </Text>
       </View>
 
       <View className="flex-row gap-0 self-center items-center justify-center">
@@ -35,7 +38,7 @@ const LocationCard = ({ id, name, onEdit, onDelete }: LocationCardProps) => {
             <ActionIcon icon="edit-3" iconVariant="feather" />
           )}
           className="p-2 py-0.5 self-center"
-          onPressed={() => onEdit(id)}
+          onPressed={() => onEdit(item.id)}
         />
         <Button
           variant="ghost"
@@ -43,14 +46,14 @@ const LocationCard = ({ id, name, onEdit, onDelete }: LocationCardProps) => {
             <ActionIcon icon="delete-outline" iconVariant="material" />
           )}
           className="p-2 py-0.5 self-center"
-          onPressed={() => onDelete(id)}
+          onPressed={() => onDelete(item.id)}
         />
       </View>
     </View>
   );
 };
 
-export default LocationCard;
+export default EmployeeCard;
 
 const ActionIcon = ({
   icon,

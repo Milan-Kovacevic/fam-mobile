@@ -24,7 +24,7 @@ const EmployeeCard = (props: EmployeeCardProps) => {
         <Icon
           icon="user"
           variant="feather"
-          className="text-base dark:text-gray-400 text-gray-500/90"
+          className="text-base dark:text-gray-400 text-gray-500/90 pt-0.5"
         />
         <Text className="flex-1 text-base font-pregular pt-1 text-gray-800 dark:text-gray-300">
           {item.firstName} {item.lastName}

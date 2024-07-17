@@ -59,7 +59,6 @@ const EditLocationScreen = () => {
       })
       .catch((err) => {
         showToast("Unable to update location. Possible duplicate name", scheme);
-        console.log(err);
       })
       .finally(() => {
         setLoading(false);

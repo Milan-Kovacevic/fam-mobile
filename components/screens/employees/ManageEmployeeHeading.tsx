@@ -1,24 +1,24 @@
 import { View } from "react-native";
 import React from "react";
+import { TxKeyPath } from "@/i18n";
+import { TranslateOptions } from "i18n-js";
 import { Icon } from "@/components/ui/Icon";
 import { Text } from "@/components/ui/Text";
-import { TranslateOptions } from "i18n-js";
-import { TxKeyPath } from "@/i18n";
 
-type ManageLocationHeadingProps = {
+type ManageEmployeeHeadingProps = {
   tx?: TxKeyPath;
   txOptions?: TranslateOptions;
   text?: string;
 };
 
-const ManageLocationHeading = (props: ManageLocationHeadingProps) => {
+const ManageEmployeeHeading = (props: ManageEmployeeHeadingProps) => {
   const { tx, txOptions, text } = props;
 
   return (
     <View className="flex-col mx-4 mb-6 items-center justify-center">
       <Icon
-        icon="map"
-        variant="fontisto"
+        icon="user-plus"
+        variant="fontawesome"
         className=" text-secondary/90 dark:text-secondary-400/80"
         size={54}
       />
@@ -33,4 +33,4 @@ const ManageLocationHeading = (props: ManageLocationHeadingProps) => {
   );
 };
 
-export default ManageLocationHeading;
+export default ManageEmployeeHeading;

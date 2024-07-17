@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import React, { useState } from "react";
-import FormField from "@/components/ui/FormField";
+import { FormField } from "@/components/ui/FormField";
 import { Button } from "@/components/ui/Button";
 import { LocationDTO } from "@/storage/models/locations";
 
@@ -27,7 +27,7 @@ const ManageLocationForm = (props: ManageLocationFormProps) => {
   function handleLocationSubmitted() {
     setErrors({ name: undefined });
     if (locationForm.name.trim() == "") {
-      setErrors({ ...errors, name: "Name cannot be empty" });
+      setErrors((prev) => ({ ...prev, name: "Name cannot be empty" }));
       return;
     }
 

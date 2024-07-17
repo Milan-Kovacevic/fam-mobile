@@ -1,6 +1,6 @@
 import React from "react";
 import { Stack } from "expo-router";
-import { TextStyle, useColorScheme, ViewStyle } from "react-native";
+import { useColorScheme } from "react-native";
 import { palette } from "@/theme/colors";
 
 const ManageNavigator = () => {
@@ -28,6 +28,32 @@ const ManageNavigator = () => {
             headerShown: true,
 
             title: "Edit Location",
+            headerStyle: {
+              ...(scheme == "dark"
+                ? $darkThemeHeaderStyle
+                : $lightThemeHeaderStyle),
+            },
+            headerTitleStyle: $headerTitleStyle,
+          }}
+        />
+        <Stack.Screen
+          name="create/employee"
+          options={{
+            headerShown: true,
+            title: "Create Employee",
+            headerStyle: {
+              ...(scheme == "dark"
+                ? $darkThemeHeaderStyle
+                : $lightThemeHeaderStyle),
+            },
+            headerTitleStyle: $headerTitleStyle,
+          }}
+        />
+        <Stack.Screen
+          name="edit/employee"
+          options={{
+            headerShown: true,
+            title: "Update Employee",
             headerStyle: {
               ...(scheme == "dark"
                 ? $darkThemeHeaderStyle

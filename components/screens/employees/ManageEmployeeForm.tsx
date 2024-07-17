@@ -92,7 +92,7 @@ const ManageEmployeeForm = (props: ManageEmployeeFormProps) => {
         variant="primary"
         text="Submit"
         onPressed={handleFormSubmitted}
-        className="mt-4"
+        className="mt-4 mx-1"
         loading={loading}
       />
     </View>

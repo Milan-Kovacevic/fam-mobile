@@ -5,7 +5,9 @@ import { createLocation } from "@/storage/repositories/locations-repository";
 import { useSQLiteContext } from "expo-sqlite";
 import { router } from "expo-router";
 import ManageLocationHeading from "@/components/screens/locations/ManageLocationHeading";
-import ManageLocationForm from "@/components/screens/locations/ManageLocationForm";
+import ManageLocationForm, {
+  LocationForm,
+} from "@/components/screens/locations/ManageLocationForm";
 import { delay } from "@/utils/util";
 import { showToast } from "@/utils/toast";
 
@@ -14,10 +16,10 @@ const CreateLocationScreen = () => {
   const scheme = useColorScheme();
   const [loading, setLoading] = useState(false);
 
-  async function handleLocationSubmitted(formData: { name: string }) {
+  async function handleLocationSubmitted(formData: LocationForm) {
     setLoading(true);
     await delay(750);
-    createLocation(db, { name: formData.name })
+    createLocation(db, { ...formData })
       .then((location) => {
         router.push("/locations");
       })
@@ -30,9 +32,12 @@ const CreateLocationScreen = () => {
   }
 
   return (
-    <Screen className="h-full w-full px-4 py-4 mt-10" variant="scroll">
-      <View className="px-2">
-        <ManageLocationHeading text="Please enter the required data and press 'Submit' to create new location." />
+    <Screen className="h-full w-full px-4 my-4 mt-6" variant="scroll">
+      <View className="px-2 flex-1">
+        <ManageLocationHeading
+          className="mb-6"
+          text="Please enter the required data and press 'Submit' to create new location."
+        />
 
         <ManageLocationForm
           loading={loading}

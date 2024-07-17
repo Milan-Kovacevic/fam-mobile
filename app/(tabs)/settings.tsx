@@ -1,10 +1,8 @@
-import ActionSelect from "@/components/ui/RadioGroup";
 import { Button } from "@/components/ui/Button";
-import FormField from "@/components/ui/FormField";
 import { Icon } from "@/components/ui/Icon";
 import { SafeScreen } from "@/components/ui/Screen";
 import { Text } from "@/components/ui/Text";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { View } from "react-native";
 import RadioGroup from "@/components/ui/RadioGroup";
 import translate, { i18n } from "@/i18n";
@@ -62,10 +60,10 @@ export default function SettingsScreen() {
             ]}
           />
           <Button
-            variant="secondary"
+            variant="primary"
             text={translate("settings.saveChangesLabel")}
             onPressed={handleSaveSettings}
-            className="mt-6"
+            className="mt-6 flex-1"
             loading={false}
           />
         </View>

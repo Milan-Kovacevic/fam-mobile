@@ -1,17 +1,27 @@
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import React from "react";
 import { Button } from "../../ui/Button";
 import { Icon, IconVariant } from "../../ui/Icon";
 import { cn } from "@/utils/tw";
+import { Text } from "@/components/ui/Text";
 
 type LocationCardProps = {
   id: number;
   name: string;
+  latitude: number;
+  longitude: number;
   onDelete: (id: number) => void;
   onEdit: (id: number) => void;
 };
 
-const LocationCard = ({ id, name, onEdit, onDelete }: LocationCardProps) => {
+const LocationCard = ({
+  id,
+  name,
+  latitude,
+  longitude,
+  onEdit,
+  onDelete,
+}: LocationCardProps) => {
   return (
     <View
       className={cn(
@@ -19,13 +29,21 @@ const LocationCard = ({ id, name, onEdit, onDelete }: LocationCardProps) => {
         "border-neutral-400/30 dark:border-neutral-400/20"
       )}
     >
-      <View className={cn("flex-row gap-1.5 items-center flex-1 h-10")}>
-        <Icon
-          icon="pushpino"
-          variant="antdesign"
-          className="text-base dark:text-gray-400 text-gray-500/90"
-        />
-        <Text className="flex-1 text-base font-pregular pt-1 text-gray-800 dark:text-gray-300">{`${name}`}</Text>
+      <View className="flex-1 items-center">
+        <View className={cn("flex-row gap-1.5 items-center")}>
+          <Icon
+            icon="pushpino"
+            variant="antdesign"
+            className="text-base dark:text-gray-400 text-gray-500/90"
+          />
+          <Text className="flex-1 text-base font-pregular pt-1 text-gray-800 dark:text-gray-300">{`${name}`}</Text>
+        </View>
+        <View className="self-start flex-1">
+          <Text className="ml-1 text-[11px]" variant="muted">
+            {latitude.toFixed(8)}°{"  "}
+            {longitude.toFixed(8)}°
+          </Text>
+        </View>
       </View>
 
       <View className="flex-row gap-0 self-center items-center justify-center">

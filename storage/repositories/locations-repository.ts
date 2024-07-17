@@ -8,15 +8,15 @@ import {
 interface LocationEntity {
   id: number;
   name: string;
+  latitude: number;
+  longitude: number;
 }
 
 export async function createLocationsTable(db: SQLiteDatabase) {
   await db.execAsync(`
         PRAGMA journal_mode = 'wal';
-        CREATE TABLE IF NOT EXISTS locations (id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL UNIQUE);
-        INSERT INTO locations (name) VALUES ('Banja Luka');
-        INSERT INTO locations (name) VALUES ('Laktasi');
-        INSERT INTO locations (name) VALUES ('Gradiska');
+        CREATE TABLE IF NOT EXISTS locations (id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL UNIQUE, latitude DECIMAL(12,8) NOT NULL, longitude DECIMAL(12,8) NOT NULL);
+        INSERT INTO locations (name, latitude, longitude) VALUES ('Banja Luka', 44.772182, 17.191000);
         `);
 }
 
@@ -25,7 +25,7 @@ export async function getAllLocations(
 ): Promise<LocationDTO[]> {
   var result = await db.getAllAsync<LocationEntity>("SELECT * FROM locations");
   return result.map((x) => {
-    return { id: x.id, name: x.name };
+    return { ...x };
   });
 }
 
@@ -37,7 +37,7 @@ export async function getLocationById(
     "SELECT * FROM locations WHERE id = ?",
     [id]
   );
-  return result ? { id: result?.id, name: result?.name } : null;
+  return result ? { ...result } : null;
 }
 
 export async function getLocationsByName(
@@ -50,7 +50,7 @@ export async function getLocationsByName(
     [searchParam]
   );
   return result.map((x) => {
-    return { id: x.id, name: x.name };
+    return { ...x };
   });
 }
 
@@ -58,12 +58,13 @@ export async function createLocation(
   db: SQLiteDatabase,
   location: CreateLocationDTO
 ): Promise<LocationDTO> {
-  const result = await db.runAsync("INSERT INTO locations (name) VALUES (?)", [
-    location.name,
-  ]);
+  const result = await db.runAsync(
+    "INSERT INTO locations (name, latitude, longitude) VALUES (?, ?, ?)",
+    [location.name, location.latitude, location.longitude]
+  );
 
   const locationId = result.lastInsertRowId;
-  if (result.changes == 1) return { id: locationId, name: location.name };
+  if (result.changes == 1) return { id: locationId, ...location };
 
   throw new Error(
     `Unable to insert record for a location with name ${location.name}`
@@ -75,8 +76,8 @@ export async function updateLocation(
   location: UpdateLocationDTO
 ): Promise<boolean> {
   const result = await db.runAsync(
-    "UPDATE locations SET name = ? WHERE id = ?",
-    [location.name, location.id]
+    "UPDATE locations SET name = ?, latitude = ?, longitude = ? WHERE id = ?",
+    [location.name, location.latitude, location.longitude, location.id]
   );
   return result.changes == 1;
 }

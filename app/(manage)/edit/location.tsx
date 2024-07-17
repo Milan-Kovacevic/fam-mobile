@@ -9,7 +9,9 @@ import { useSQLiteContext } from "expo-sqlite";
 import { router, useLocalSearchParams } from "expo-router";
 import { LocationDTO } from "@/storage/models/locations";
 import ManageLocationHeading from "@/components/screens/locations/ManageLocationHeading";
-import ManageLocationForm from "@/components/screens/locations/ManageLocationForm";
+import ManageLocationForm, {
+  LocationForm,
+} from "@/components/screens/locations/ManageLocationForm";
 import { delay } from "@/utils/util";
 import { showToast } from "@/utils/toast";
 
@@ -47,10 +49,10 @@ const EditLocationScreen = () => {
       });
   }, []);
 
-  async function handleLocationSubmitted(locationForm: { name: string }) {
+  async function handleLocationSubmitted(locationForm: LocationForm) {
     setLoading(true);
     await delay(750);
-    updateLocation(db, { id: locationId!, name: locationForm.name })
+    updateLocation(db, { id: locationId!, ...locationForm })
       .then((isSuccess) => {
         if (isSuccess) router.push("/locations");
         else {
@@ -68,7 +70,10 @@ const EditLocationScreen = () => {
   return (
     <Screen className="h-full w-full px-4 py-4 mt-10" variant="scroll">
       <View className="px-2">
-        <ManageLocationHeading text="Please enter the required data and press 'Submit' to update your location." />
+        <ManageLocationHeading
+          className="mb-6"
+          text="Please enter the required data and press 'Submit' to update your location."
+        />
         {location && (
           <ManageLocationForm
             loading={loading}

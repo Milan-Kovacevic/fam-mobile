@@ -14,6 +14,10 @@ import LocationsHeading from "@/components/screens/locations/LocationsHeading";
 import { showToast } from "@/utils/toast";
 import useSearchableList from "@/hooks/useSearchableList";
 import FlatListSkeleton from "@/components/lists/FlatListSkeleton";
+import SwipeableList from "@/components/ui/SwipeableList";
+import { RectButton, Swipeable } from "react-native-gesture-handler";
+import { Text } from "@/components/ui/Text";
+import Animated from "react-native-reanimated";
 
 const LocationsScreen = () => {
   const db = useSQLiteContext();
@@ -72,10 +76,10 @@ const LocationsScreen = () => {
       className="h-full w-full"
       contentContainerClassName="flex-1"
     >
-      <View className="px-3 pt-3.5 mb-1.5 mx-1 items-center">
+      <View className="px-3 pt-3.5 mb-1.5 mx-1 items-stretch flex-1">
         <LocationsHeading onCreateLocation={handleCreateLocation} />
 
-        <View className="mb-1.5">
+        <View className="mb-1.5 flex-1">
           <SearchInput
             className=""
             placeholder="Search..."
@@ -84,9 +88,27 @@ const LocationsScreen = () => {
             onSearch={onSearch}
             onClear={onSearchClear}
           />
-          <View className="flex-1 py-2 pb-0 mb-1 mt-3.5">
+          {/* <SwipeableList
+            items={[
+              <View className="border border-red-50">
+                {loading ? (
+                  <FlatListSkeleton className="h-[70px]" />
+                ) : (
+                  <LocationsList
+                    locations={listData}
+                    refreshing={refreshing}
+                    onRefreshing={onRefreshing}
+                    onDelete={onDeleteItem}
+                    onEdit={onEditItem}
+                  />
+                )}
+              </View>,
+            ]}
+          /> */}
+
+          <View className="py-2 pb-0 mb-1 mt-3.5 flex-1">
             {loading ? (
-              <FlatListSkeleton />
+              <FlatListSkeleton className="h-[70px]" />
             ) : (
               <LocationsList
                 locations={listData}

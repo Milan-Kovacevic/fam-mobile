@@ -23,14 +23,7 @@ const LocationsList = (props: LocationsListProps) => {
         <RefreshControl refreshing={refreshing} onRefresh={onRefreshing} />
       }
       renderItem={({ item }) => {
-        return (
-          <LocationCard
-            id={item.id}
-            name={item.name}
-            onDelete={onDelete}
-            onEdit={onEdit}
-          />
-        );
+        return <LocationCard onDelete={onDelete} onEdit={onEdit} {...item} />;
       }}
       ListEmptyComponent={
         <EmptyListPlaceholder

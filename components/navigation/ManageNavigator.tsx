@@ -62,6 +62,19 @@ const ManageNavigator = () => {
             headerTitleStyle: $headerTitleStyle,
           }}
         />
+        <Stack.Screen
+          name="create/asset"
+          options={{
+            headerShown: true,
+            title: "Create Asset",
+            headerStyle: {
+              ...(scheme == "dark"
+                ? $darkThemeHeaderStyle
+                : $lightThemeHeaderStyle),
+            },
+            headerTitleStyle: $headerTitleStyle,
+          }}
+        />
       </Stack>
     </>
   );

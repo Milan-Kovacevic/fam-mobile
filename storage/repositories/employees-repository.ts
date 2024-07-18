@@ -53,8 +53,8 @@ export async function getEmployeesByName(
 ): Promise<EmployeeDTO[]> {
   const searchParam = `%${query}%`;
   var result = await db.getAllAsync<EmployeeEntity>(
-    "SELECT * FROM employees WHERE firstName LIKE ? OR lastName LIKE ?",
-    [searchParam, searchParam]
+    "SELECT * FROM employees WHERE firstName LIKE ? OR lastName LIKE ? OR concat(firstName, ' ', lastName) LIKE ?",
+    [searchParam, searchParam, searchParam]
   );
   return result.map((x) => {
     return { id: x.id, firstName: x.firstName, lastName: x.lastName };

@@ -49,10 +49,14 @@ const EditLocationScreen = () => {
       });
   }, []);
 
-  async function handleLocationSubmitted(locationForm: LocationForm) {
+  async function handleLocationSubmitted(formData: LocationForm) {
     setLoading(true);
     await delay(750);
-    updateLocation(db, { id: locationId!, ...locationForm })
+    updateLocation(db, {
+      id: locationId!,
+      name: formData.name,
+      ...formData.coordinates,
+    })
       .then((isSuccess) => {
         if (isSuccess) router.push("/locations");
         else {

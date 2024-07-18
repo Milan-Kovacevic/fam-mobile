@@ -5,15 +5,8 @@ import {
   ScrollView,
   NativeSyntheticEvent,
   NativeScrollEvent,
-  TouchableOpacity,
 } from "react-native";
-import React, {
-  ComponentProps,
-  ComponentType,
-  createRef,
-  useRef,
-  useState,
-} from "react";
+import React, { ComponentType, useState } from "react";
 import { cn } from "@/utils/tw";
 import { $horizontalMarginClassName, $horizontalMarginOffset } from "./Screen";
 
@@ -66,7 +59,7 @@ const HorizontalCarousel = (props: HorizontalCarouselProps) => {
           <View
             key={`hover-${index}`}
             className={cn(
-              "rounded-full h-2.5 w-2.5 bg-secondary-400/70 dark:bg-secondary/90 opacity-80",
+              "rounded-full h-2.5 w-2.5 bg-secondary-400/70 dark:bg-secondary-400/70 opacity-80",
               index == selectedIndex && "w-4 opacity-100"
             )}
           />

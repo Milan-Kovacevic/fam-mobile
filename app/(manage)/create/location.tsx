@@ -19,7 +19,7 @@ const CreateLocationScreen = () => {
   async function handleLocationSubmitted(formData: LocationForm) {
     setLoading(true);
     await delay(750);
-    createLocation(db, { ...formData })
+    createLocation(db, { name: formData.name, ...formData.coordinates })
       .then((location) => {
         router.push("/locations");
       })

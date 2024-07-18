@@ -1,97 +1,68 @@
-import { TextInput, View } from "react-native";
-import React, { useRef, useState } from "react";
+import { View } from "react-native";
+import React from "react";
 import { EmployeeDTO } from "@/storage/models/employees";
-import { FormField } from "@/components/ui/FormField";
 import { Button } from "@/components/ui/Button";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import FormInput from "@/components/form/FormInput";
+
+export type EmployeeForm = {
+  firstName: string;
+  lastName: string;
+};
 
 type ManageEmployeeFormProps = {
-  onSubmit: ({
-    firstName,
-    lastName,
-  }: {
-    firstName: string;
-    lastName: string;
-  }) => void;
+  onSubmit: (data: EmployeeForm) => void;
   employee?: EmployeeDTO;
   loading: boolean;
 };
 
+const formSchema = z.object({
+  firstName: z.string().min(1, "First name is required."),
+  lastName: z.string().min(1, "Last name is required."),
+});
+
 const ManageEmployeeForm = (props: ManageEmployeeFormProps) => {
   const { onSubmit, loading, employee } = props;
-  const lastNameInputRef = useRef<TextInput>(null);
 
-  const [employeeForm, setEmployeeForm] = useState({
-    firstName: employee?.firstName ?? "",
-    lastName: employee?.lastName ?? "",
-  });
-  const [errors, setErrors] = useState<{
-    firstName?: string;
-    lastName?: string;
-  }>({
-    firstName: undefined,
-    lastName: undefined,
+  const { control, handleSubmit, setFocus } = useForm<EmployeeForm>({
+    defaultValues: {
+      firstName: employee?.firstName ?? "",
+      lastName: employee?.lastName ?? "",
+    },
+    resolver: zodResolver(formSchema),
   });
 
-  function handleChangeFirstName(text: string) {
-    setEmployeeForm({ ...employeeForm, firstName: text });
-  }
-  function handleChangeLastName(text: string) {
-    setEmployeeForm({ ...employeeForm, lastName: text });
-  }
-
-  function handleFormSubmitted() {
-    setErrors({ ...errors, firstName: undefined, lastName: undefined });
-
-    if (employeeForm.firstName.trim() == "") {
-      setErrors((prev) => ({
-        ...prev,
-        firstName: "First Name cannot be empty",
-      }));
-      return;
-    }
-    if (employeeForm.lastName.trim() == "") {
-      setErrors((prev) => ({
-        ...prev,
-        lastName: "Last Name cannot be empty",
-      }));
-      return;
-    }
-
-    onSubmit({
-      firstName: employeeForm.firstName,
-      lastName: employeeForm.lastName,
-    });
+  function handleFormSubmitted(data: EmployeeForm) {
+    onSubmit({ ...data });
   }
 
   return (
     <View>
-      <FormField
+      <FormInput
         title={"First Name"}
-        text={employeeForm.firstName}
-        handleChangeText={handleChangeFirstName}
-        handleSubmitted={() => {
-          lastNameInputRef?.current?.focus();
-        }}
+        name="firstName"
+        control={control}
         placeholder="ex. Marko"
+        onSubmitted={() => {
+          setFocus("lastName");
+        }}
         returnKeyType="next"
-        error={errors.firstName}
       />
-      <FormField
-        ref={lastNameInputRef}
+      <FormInput
         title={"Last Name"}
-        text={employeeForm.lastName}
-        handleChangeText={handleChangeLastName}
-        handleSubmitted={handleFormSubmitted}
+        name="lastName"
+        control={control}
         placeholder="ex. Markovic"
+        onSubmitted={handleSubmit(handleFormSubmitted)}
         returnKeyType="done"
         className="mt-3"
-        error={errors.lastName}
       />
-
       <Button
         variant="primary"
         text="Submit"
-        onPressed={handleFormSubmitted}
+        onPressed={handleSubmit(handleFormSubmitted)}
         className="mt-4 mx-1"
         loading={loading}
       />

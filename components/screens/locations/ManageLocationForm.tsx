@@ -1,18 +1,30 @@
 import { useColorScheme, View } from "react-native";
-import React, { useState } from "react";
-import { FormField } from "@/components/ui/FormField";
+import React from "react";
 import { Button } from "@/components/ui/Button";
 import { LocationDTO } from "@/storage/models/locations";
-import MapView, { ClickEvent, LatLng, Marker } from "react-native-maps";
-import mapDark from "@/assets/styles/map-dark.json";
-import mapLight from "@/assets/styles/map-light.json";
+import { LatLng } from "react-native-maps";
 import { defaultMapCoordinates } from "./LocationsMap";
+import { useForm } from "react-hook-form";
+import FormInput from "@/components/form/FormInput";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import FormMapSelect from "@/components/form/FormMapSelect";
 
 export type LocationForm = {
   name: string;
-  latitude: number;
-  longitude: number;
+  coordinates: {
+    latitude: number;
+    longitude: number;
+  };
 };
+
+const formSchema = z.object({
+  name: z.string().min(1, "City name is required."),
+  coordinates: z.object({
+    latitude: z.number(),
+    longitude: z.number(),
+  }),
+});
 
 type ManageLocationFormProps = {
   onSubmit: (fromData: LocationForm) => void;
@@ -22,86 +34,49 @@ type ManageLocationFormProps = {
 
 const ManageLocationForm = (props: ManageLocationFormProps) => {
   const { onSubmit, loading, location } = props;
-  const scheme = useColorScheme();
 
-  const [locationForm, setLocationForm] = useState<LocationForm>({
-    name: location?.name ?? "",
-    latitude: location?.latitude ?? defaultMapCoordinates.latitude,
-    longitude: location?.longitude ?? defaultMapCoordinates.longitude,
+  const { control, handleSubmit, getValues, setValue } = useForm<LocationForm>({
+    defaultValues: {
+      name: location?.name ?? "",
+      coordinates: {
+        latitude: location?.latitude ?? defaultMapCoordinates.latitude,
+        longitude: location?.longitude ?? defaultMapCoordinates.longitude,
+      },
+    },
+    resolver: zodResolver(formSchema),
   });
 
-  const [errors, setErrors] = useState<{ name?: string }>({
-    name: undefined,
-  });
-
-  function handleChangeLocationName(text: string) {
-    setLocationForm({ ...locationForm, name: text });
+  function handleFormSubmitted(data: LocationForm) {
+    onSubmit({ ...data });
   }
-
-  function handleLocationSubmitted() {
-    setErrors({ name: undefined });
-    if (locationForm.name.trim() == "") {
-      setErrors((prev) => ({ ...prev, name: "Name cannot be empty" }));
-      return;
-    }
-
-    onSubmit({ ...locationForm });
-  }
-
-  const initalRegion = {
-    latitude: location?.latitude ?? defaultMapCoordinates.latitude,
-    longitude: location?.longitude ?? defaultMapCoordinates.longitude,
-    latitudeDelta: defaultMapCoordinates.latitudeDelta,
-    longitudeDelta: defaultMapCoordinates.longitudeDelta,
-  };
 
   function handleChangeLocationPin(locationPin: LatLng) {
-    setLocationForm({
-      ...locationForm,
-      latitude: locationPin.latitude,
-      longitude: locationPin.longitude,
-    });
-  }
-
-  function handleMapPressed(event: ClickEvent) {
-    handleChangeLocationPin(event.nativeEvent.coordinate);
+    setValue("coordinates", locationPin);
   }
 
   return (
     <View>
-      <FormField
+      <FormInput
         title={"City name"}
-        text={locationForm.name}
-        handleChangeText={handleChangeLocationName}
-        handleSubmitted={handleLocationSubmitted}
+        name="name"
+        control={control}
         placeholder="ex. Banja Luka"
-        returnKeyType="done"
-        error={errors.name}
+        onSubmitted={handleSubmit(handleFormSubmitted)}
       />
-      <View className="mt-4 min-h-[320px] rounded-xl flex-1 overflow-hidden border-2 border-neutral-200 dark:border-neutral-800">
-        <MapView
-          className="flex-1 "
-          initialRegion={initalRegion}
-          loadingEnabled
-          onPress={handleMapPressed}
-          customMapStyle={scheme == "dark" ? mapDark : mapLight}
-        >
-          <Marker
-            title={
-              locationForm.name == "" ? "Enter location" : locationForm.name
-            }
-            titleVisibility="visible"
-            draggable
-            coordinate={{ ...locationForm }}
-            onDragEnd={(e) => handleChangeLocationPin(e.nativeEvent.coordinate)}
-          />
-        </MapView>
-      </View>
+
+      <FormMapSelect
+        name="coordinates"
+        control={control}
+        onPinChange={handleChangeLocationPin}
+        cityLabel={
+          getValues("name") == "" ? "Enter Location" : getValues("name")
+        }
+      />
 
       <Button
         variant="primary"
         text="Submit"
-        onPressed={handleLocationSubmitted}
+        onPressed={handleSubmit(handleFormSubmitted)}
         className="mt-6"
         loading={loading}
       />

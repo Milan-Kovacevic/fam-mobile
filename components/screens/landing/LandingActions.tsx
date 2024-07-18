@@ -5,6 +5,10 @@ import { Icon } from "@/components/ui/Icon";
 import { router } from "expo-router";
 
 const LandingActions = () => {
+  function handleGoToCreateAssetPage() {
+    router.push("/create/asset");
+  }
+
   function handleGoToMainPage() {
     router.push("/assets");
   }
@@ -15,7 +19,7 @@ const LandingActions = () => {
         text="Scan Now"
         className="self-center py-0"
         variant="primary-outline"
-        onPressed={handleGoToMainPage}
+        onPressed={handleGoToCreateAssetPage}
         textClassName="pt-2 px-0 text-sm pb-1.5 text-[12px]"
         LeftAccessory={() => (
           <Icon

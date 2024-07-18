@@ -18,6 +18,7 @@ const EmployeesList = (props: EmployeesListProps) => {
   return (
     <FlatList
       className="px-0"
+      showsVerticalScrollIndicator={false}
       data={employees}
       keyExtractor={(item) => item.id.toString()}
       refreshControl={

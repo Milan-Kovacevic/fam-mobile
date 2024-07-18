@@ -32,7 +32,7 @@ const CreateLocationScreen = () => {
   }
 
   return (
-    <Screen className="h-full w-full px-4 my-4 mt-6" variant="scroll">
+    <Screen className="h-full w-full px-3 my-4 mt-6" variant="scroll">
       <View className="px-2 flex-1">
         <ManageLocationHeading
           className="mb-6"

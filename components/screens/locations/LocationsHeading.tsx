@@ -1,17 +1,17 @@
-import { View } from "react-native";
+import { View, ViewProps } from "react-native";
 import React from "react";
 import { Icon } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/Button";
 import { Text } from "@/components/ui/Text";
 
-type LocationsHeadingProps = {
+interface LocationsHeadingProps extends ViewProps {
   onCreateLocation: () => void;
-};
+}
 
 const LocationsHeading = (props: LocationsHeadingProps) => {
   const { onCreateLocation } = props;
   return (
-    <View className="flex-row mx-0.5 mb-3.5 mt-0 items-center">
+    <View className="flex-row mx-0.5 mb-3.5 mt-0 items-center" {...props}>
       <View className="flex-1 flex-row w-full items-center gap-0.5 ml-0.5 justify-start">
         <Icon
           icon="location-pin"

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { SafeScreen } from "@/components/ui/Screen";
+import { $horizontalMarginClassName, SafeScreen } from "@/components/ui/Screen";
 import { useSQLiteContext } from "expo-sqlite";
 import { useColorScheme, View } from "react-native";
 import {
@@ -13,11 +13,8 @@ import LocationsList from "@/components/screens/locations/LocationsList";
 import LocationsHeading from "@/components/screens/locations/LocationsHeading";
 import { showToast } from "@/utils/toast";
 import useSearchableList from "@/hooks/useSearchableList";
-import FlatListSkeleton from "@/components/lists/FlatListSkeleton";
-import SwipeableList from "@/components/ui/SwipeableList";
-import { RectButton, Swipeable } from "react-native-gesture-handler";
-import { Text } from "@/components/ui/Text";
-import Animated from "react-native-reanimated";
+import HorizontalCarousel from "@/components/ui/HorizontalCarousel";
+import LocationsMap from "@/components/screens/locations/LocationsMap";
 
 const LocationsScreen = () => {
   const db = useSQLiteContext();
@@ -76,49 +73,38 @@ const LocationsScreen = () => {
       className="h-full w-full"
       contentContainerClassName="flex-1"
     >
-      <View className="px-3 pt-3.5 mb-1.5 mx-1 items-stretch flex-1">
-        <LocationsHeading onCreateLocation={handleCreateLocation} />
+      <View className="pt-3.5 mb-1.5 items-stretch flex-1">
+        <LocationsHeading
+          className={$horizontalMarginClassName}
+          onCreateLocation={handleCreateLocation}
+        />
 
-        <View className="mb-1.5 flex-1">
-          <SearchInput
-            className=""
-            placeholder="Search..."
-            text={searchText}
-            onTextChange={onSearchTextChanged}
-            onSearch={onSearch}
-            onClear={onSearchClear}
-          />
-          {/* <SwipeableList
-            items={[
-              <View className="border border-red-50">
-                {loading ? (
-                  <FlatListSkeleton className="h-[70px]" />
-                ) : (
-                  <LocationsList
-                    locations={listData}
-                    refreshing={refreshing}
-                    onRefreshing={onRefreshing}
-                    onDelete={onDeleteItem}
-                    onEdit={onEditItem}
-                  />
-                )}
-              </View>,
-            ]}
-          /> */}
-
-          <View className="py-2 pb-0 mb-1 mt-3.5 flex-1">
-            {loading ? (
-              <FlatListSkeleton className="h-[70px]" />
-            ) : (
-              <LocationsList
-                locations={listData}
-                refreshing={refreshing}
-                onRefreshing={onRefreshing}
-                onDelete={onDeleteItem}
-                onEdit={onEditItem}
-              />
-            )}
+        <View className="mb-0 flex-1">
+          <View className={$horizontalMarginClassName}>
+            <SearchInput
+              placeholder="Search..."
+              text={searchText}
+              onTextChange={onSearchTextChanged}
+              onSearch={onSearch}
+              onClear={onSearchClear}
+            />
           </View>
+
+          <HorizontalCarousel
+            items={[
+              () => (
+                <LocationsList
+                  loading={loading}
+                  locations={listData}
+                  refreshing={refreshing}
+                  onRefreshing={onRefreshing}
+                  onDelete={onDeleteItem}
+                  onEdit={onEditItem}
+                />
+              ),
+              () => <LocationsMap locations={listData} loading={loading} />,
+            ]}
+          />
         </View>
       </View>
     </SafeScreen>

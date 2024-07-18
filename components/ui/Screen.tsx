@@ -219,3 +219,7 @@ const $containerClassName = "flex-1 h-full w-full";
 const $keyboardAvoidingViewClassName = "flex-1";
 const $outerClassName = "flex-1 h-full w-full";
 const $innerClassName = "flex-start items-stretch";
+
+export const $horizontalMarginClassName = "mx-3.5";
+export const $horizontalPaddingClassName = "px-3.5";
+export const $horizontalMarginOffset = 28; // px

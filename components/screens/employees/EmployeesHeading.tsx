@@ -11,7 +11,7 @@ type EmployeesHeadingProps = {
 const EmployeesHeading = (props: EmployeesHeadingProps) => {
   const { onCreateEmployee } = props;
   return (
-    <View className="flex-row mx-0.5 mb-3.5 mt-0 items-center">
+    <View className="flex-row mb-3.5 mt-0 items-center">
       <View className="flex-1 flex-row w-full items-center gap-0.5 ml-0.5 justify-start">
         <Icon
           icon="group"

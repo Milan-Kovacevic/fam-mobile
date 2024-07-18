@@ -1,12 +1,16 @@
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
-import { SafeScreen } from "@/components/ui/Screen";
+import {
+  $horizontalPaddingClassName,
+  SafeScreen,
+} from "@/components/ui/Screen";
 import { Text } from "@/components/ui/Text";
 import React, { useState } from "react";
 import { View } from "react-native";
 import RadioGroup from "@/components/ui/RadioGroup";
 import translate, { i18n } from "@/i18n";
 import { reloadAppAsync } from "expo";
+import { cn } from "@/utils/tw";
 
 export default function SettingsScreen() {
   const [language, setLanguage] = useState<string>(i18n.locale);
@@ -21,11 +25,17 @@ export default function SettingsScreen() {
   return (
     <SafeScreen
       variant="auto"
-      className="h-full w-full p-3 py-4"
+      className="h-full w-full"
       contentContainerClassName="flex-1"
     >
-      <View key={key}>
-        <View className="mx-2">
+      <View
+        key={key}
+        className={cn(
+          "pt-3.5 mb-1.5 items-stretch flex-1",
+          $horizontalPaddingClassName
+        )}
+      >
+        <View className="">
           <View className="flex-1 flex-row w-full items-center gap-2 -ml-px justify-start">
             <Icon
               icon="gear"
@@ -41,7 +51,7 @@ export default function SettingsScreen() {
           </Text>
           <View className="h-px my-2.5 flex-1 bg-neutral-400/30 dark:bg-neutral-700/30" />
         </View>
-        <View className="mx-2.5 mt-3">
+        <View className="mx-0.5 mt-3">
           <RadioGroup
             selectedId={language}
             onSelectionChange={setLanguage}

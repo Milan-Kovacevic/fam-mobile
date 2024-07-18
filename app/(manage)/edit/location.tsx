@@ -68,7 +68,7 @@ const EditLocationScreen = () => {
   }
 
   return (
-    <Screen className="h-full w-full px-4 py-4 mt-10" variant="scroll">
+    <Screen className="h-full w-full px-3 py-4 mt-6" variant="scroll">
       <View className="px-2">
         <ManageLocationHeading
           className="mb-6"

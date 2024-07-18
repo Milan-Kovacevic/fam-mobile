@@ -6,18 +6,12 @@ import { LocationDTO } from "@/storage/models/locations";
 import MapView, { ClickEvent, LatLng, Marker } from "react-native-maps";
 import mapDark from "@/assets/styles/map-dark.json";
 import mapLight from "@/assets/styles/map-light.json";
+import { defaultMapCoordinates } from "./LocationsMap";
 
 export type LocationForm = {
   name: string;
   latitude: number;
   longitude: number;
-};
-
-const defaultMapCoordinates = {
-  latitude: 44.7722,
-  longitude: 17.191,
-  latitudeDelta: 0.0922,
-  longitudeDelta: 0.0421,
 };
 
 type ManageLocationFormProps = {

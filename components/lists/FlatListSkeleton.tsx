@@ -3,7 +3,7 @@ import React from "react";
 
 const FlatListSkeleton = (props: ViewProps) => {
   return (
-    <View className="flex-1 w-full">
+    <View className="flex-1 w-full h-full">
       {Array.of(1, 2, 3, 4).map((item, index) => (
         <SkeletonItem key={`item-${index}`} {...props} />
       ))}

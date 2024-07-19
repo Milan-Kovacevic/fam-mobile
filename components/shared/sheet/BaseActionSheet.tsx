@@ -1,6 +1,6 @@
 import { ScrollViewProps, View, ViewProps, useColorScheme } from "react-native";
 import React from "react";
-import ActionSheet, { ScrollView } from "react-native-actions-sheet";
+import ActionSheet from "react-native-actions-sheet";
 import { palette } from "@/theme/colors";
 
 interface BaseActionSheetProps extends ViewProps {
@@ -16,6 +16,7 @@ const BaseActionSheet = (props: BaseActionSheetProps) => {
       gestureEnabled={true}
       animated={true}
       closeOnPressBack={true}
+      defaultOverlayOpacity={0.3}
       indicatorStyle={{
         marginTop: 10,
         backgroundColor:

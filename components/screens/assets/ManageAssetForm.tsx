@@ -9,22 +9,22 @@ import FormTextArea from "@/components/shared/form/FormTextArea";
 import BarCodeScanner from "./BarCodeScanner";
 import FormImagePicker from "@/components/shared/form/FormImagePicker";
 import FormActionButton from "@/components/shared/form/FormActionButton";
-import FormReadonlyInput from "@/components/shared/form/FormReadonlyInput";
 import { SheetManager } from "react-native-actions-sheet";
 import { LocationDTO } from "@/storage/models/locations";
 import { EmployeeDTO } from "@/storage/models/employees";
+import FormSelectInput from "@/components/shared/form/FormSelectInput";
+import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 
 export type AssetForm = {
   name: string;
   description?: string;
   barcode: string;
   price: number;
-  // dateCreated: Date;
-  location: {
+  employee: {
     id: number;
     label: string;
   };
-  employee: {
+  location: {
     id: number;
     label: string;
   };
@@ -45,15 +45,6 @@ const formSchema = z.object({
   price: z.coerce
     .number({ invalid_type_error: "Invalid input" })
     .positive("Price must be positive."),
-  location: z
-    .object(
-      {
-        id: z.number(),
-        label: z.string(),
-      },
-      { required_error: "Location is required." }
-    )
-    .required(),
   employee: z
     .object(
       {
@@ -61,6 +52,15 @@ const formSchema = z.object({
         label: z.coerce.string(),
       },
       { required_error: "Employee is required." }
+    )
+    .required(),
+  location: z
+    .object(
+      {
+        id: z.number(),
+        label: z.string(),
+      },
+      { required_error: "Location is required." }
     )
     .required(),
   image: z.string().optional(),
@@ -124,6 +124,9 @@ const ManageAssetForm = (props: ManageAssetFormProps) => {
       onEmployeeSelected: handleEmployeeSelected,
     });
   }
+  function onOpenDatePicker() {
+    DateTimePickerAndroid.open({ value: new Date() });
+  }
 
   function handleOpenSheet(sheetName: string, payload: any) {
     SheetManager.show(sheetName, {
@@ -158,7 +161,7 @@ const ManageAssetForm = (props: ManageAssetFormProps) => {
 
   return (
     <View className="flex-1">
-      <View className="flex-1 gap-y-1">
+      <View className="flex-1 gap-y-1.5">
         <FormImagePicker
           className=" mb-1.5 pt-2"
           onImageSelected={handleImageSelected}
@@ -198,6 +201,7 @@ const ManageAssetForm = (props: ManageAssetFormProps) => {
             onButtonPressed={() => setShowScanner(true)}
             icon="qr-code-scanner"
             variant="material"
+            className="mt-[18px] py-1.5 px-2.5"
           />
         </View>
 
@@ -208,41 +212,29 @@ const ManageAssetForm = (props: ManageAssetFormProps) => {
           control={control}
           placeholder="ex. 19.49"
           onSubmitted={() => {
-            onOpenLocationsSheet();
+            onOpenEmployeesSheet();
           }}
           returnKeyType="next"
         />
-        <View className="flex-1 flex-row w-full">
-          <FormReadonlyInput
-            control={control}
-            title="Location"
-            name="location"
-            placeholder="Select location..."
-            className="flex-1"
-            extractValue={(value) => value?.label ?? ""}
-          />
-          <FormActionButton
-            onButtonPressed={onOpenLocationsSheet}
-            icon="list"
-            variant="entypo"
-          />
-        </View>
 
-        <View className="flex-1 flex-row w-full">
-          <FormReadonlyInput
-            control={control}
-            title="Employee in charge"
-            name="employee"
-            placeholder="Select employee..."
-            className="flex-1"
-            extractValue={(value) => value?.label ?? ""}
-          />
-          <FormActionButton
-            onButtonPressed={onOpenEmployeesSheet}
-            icon="list"
-            variant="entypo"
-          />
-        </View>
+        <FormSelectInput
+          control={control}
+          title="Employee in charge"
+          name="employee"
+          placeholder="Select employee..."
+          className="flex-1"
+          extractValue={(value) => value?.label ?? ""}
+          onPressed={onOpenEmployeesSheet}
+        />
+        <FormSelectInput
+          control={control}
+          title="Asset location"
+          name="location"
+          placeholder="Select location..."
+          className="flex-1"
+          extractValue={(value) => value?.label ?? ""}
+          onPressed={onOpenLocationsSheet}
+        />
       </View>
 
       <Button

@@ -48,7 +48,7 @@ const $variants = {
 
   subheading: cn($baseClassName, "text-lg font-pmedium"),
 
-  formLabel: cn($baseClassName, "font-pmedium"),
+  formLabel: cn($baseClassName, "font-pmedium text-xs"),
 
   formHelper: cn($baseClassName, "text-sm font-pregular"),
 

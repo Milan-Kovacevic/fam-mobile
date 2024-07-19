@@ -1,16 +1,18 @@
+import { TouchableOpacityProps } from "react-native";
 import { Button } from "../../ui/Button";
 import { Icon, IconVariant } from "../../ui/Icon";
 
-type FormActionButtonProps = {
+interface FormActionButtonProps extends TouchableOpacityProps {
   onButtonPressed: () => void;
   icon: string;
   variant: IconVariant;
-};
+}
 
 const FormActionButton = ({
   onButtonPressed,
   icon,
   variant,
+  ...rest
 }: FormActionButtonProps) => {
   return (
     <Button
@@ -24,6 +26,7 @@ const FormActionButton = ({
       )}
       className="p-2 py-1 rounded-2xl ml-0.5 self-start mt-6 bg-primary-100/60 dark:bg-primary-900/80 border-2 border-primary-50 dark:border-primary-950"
       onPressed={onButtonPressed}
+      {...rest}
     />
   );
 };

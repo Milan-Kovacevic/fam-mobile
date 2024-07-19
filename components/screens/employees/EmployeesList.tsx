@@ -37,7 +37,7 @@ const EmployeesList = (props: EmployeesListProps) => {
   return (
     <View className="flex-1 py-5 pb-0 mb-1" {...rest}>
       {loading ? (
-        <FlatListSkeleton />
+        <FlatListSkeleton className="" />
       ) : (
         <FlatList
           scrollEnabled={scrollable}

@@ -45,7 +45,7 @@ const FormInput = (props: FormFieldProps) => {
     <View className={`space-y-0.5`} {...rest}>
       <Text
         variant="formLabel"
-        className="ml-2 text-neutral-800 dark:text-neutral-200"
+        className="ml-2 text-neutral-700 dark:text-neutral-300"
       >
         {title}
       </Text>

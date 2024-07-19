@@ -15,7 +15,7 @@ function useReadonlyList<T>(props: UseReadonlyListProps<T>) {
   }, []);
   async function loadListData() {
     setLoading(true);
-    await delay(300);
+    await delay(500);
     const result = await fetchData();
     setListData(result);
     setLoading(false);

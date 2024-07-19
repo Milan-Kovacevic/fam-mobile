@@ -57,13 +57,13 @@ const ManageEmployeeForm = (props: ManageEmployeeFormProps) => {
         placeholder="ex. Markovic"
         onSubmitted={handleSubmit(handleFormSubmitted)}
         returnKeyType="done"
-        className="mt-3"
+        className="mt-2"
       />
       <Button
         variant="primary"
         text="Submit"
         onPressed={handleSubmit(handleFormSubmitted)}
-        className="mt-4 mx-1"
+        className="mt-5 mx-1"
         loading={loading}
       />
     </View>

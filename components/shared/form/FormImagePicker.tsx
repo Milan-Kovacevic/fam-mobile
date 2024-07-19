@@ -12,9 +12,7 @@ interface FormImagePickerProps extends ViewProps {
 
 const FormImagePicker = (props: FormImagePickerProps) => {
   const { image: $image, onImageSelected, ...rest } = props;
-  const [image, setImage] = useState<string>(
-    $image ?? "https://picsum.photos/id/2/200/300"
-  );
+  const [image, setImage] = useState<string>($image ?? "");
 
   async function handleSelectImage() {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -48,7 +46,7 @@ const FormImagePicker = (props: FormImagePickerProps) => {
     <View className="flex-1" {...rest}>
       <Image
         resizeMode="contain"
-        className="flex-1 opacity-100 bg-primary-100/30 dark:bg-primary-950 rounded-xl h-[153px] w-full overflow-hidden"
+        className="flex-1 opacity-100 bg-primary-100/60 dark:bg-primary-900/80 rounded-xl h-[153px] w-full overflow-hidden"
         src={image}
       />
       <View className="absolute -bottom-2 flex-row self-center gap-x-2">

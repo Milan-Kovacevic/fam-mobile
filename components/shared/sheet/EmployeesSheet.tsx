@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, SheetProps } from "react-native-actions-sheet";
+import { SheetProps } from "react-native-actions-sheet";
 import BaseActionSheet from "./BaseActionSheet";
 import { useSQLiteContext } from "expo-sqlite";
 import useReadonlyList from "@/hooks/useReadonlyList";

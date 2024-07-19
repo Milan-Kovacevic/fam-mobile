@@ -1,9 +1,7 @@
-import { Image, View, useColorScheme } from "react-native";
+import { View, useColorScheme } from "react-native";
 import React from "react";
 import { Icon } from "@/components/ui/Icon";
 import { Text } from "@/components/ui/Text";
-import logoLight from "@/assets/images/logo-light.png";
-import logoDark from "@/assets/images/logo-dark.png";
 
 const LandingHeading = () => {
   const scheme = useColorScheme();
@@ -11,11 +9,6 @@ const LandingHeading = () => {
   return (
     <View className="items-center gap-0 justify-start mx-2">
       <View className="items-center gap-0 pt-6">
-        {/* <Image
-          source={scheme == "dark" ? logoDark : logoLight}
-          resizeMode="contain"
-          className="h-[60px] w-[120px]"
-        /> */}
         <Text
           style={{ letterSpacing: -3 }}
           className="text-[54px] pt-12 font-pbold tracking-tighter -mb-4 text-neutral-800 dark:text-neutral-200"

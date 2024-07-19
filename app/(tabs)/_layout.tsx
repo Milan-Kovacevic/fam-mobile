@@ -1,8 +1,6 @@
 import React from "react";
 
-import BottomTabNavigator from "@/components/navigation/BottomTabNavigator";
-import { View } from "react-native";
-import { Screen } from "@/components/ui/Screen";
+import BottomTabNavigator from "@/components/shared/navigation/BottomTabNavigator";
 
 export default function TabsLayout() {
   return (

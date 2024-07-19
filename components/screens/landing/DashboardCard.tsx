@@ -2,7 +2,7 @@ import { StyleProp, View, ViewStyle } from "react-native";
 import { Icon, IconVariant } from "../../ui/Icon";
 import { cn } from "@/utils/tw";
 import { Text } from "../../ui/Text";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 
 export type DashboardCardProps = {

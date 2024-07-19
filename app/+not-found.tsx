@@ -5,7 +5,7 @@ import {
 import { Text } from "@/components/ui/Text";
 import { cn } from "@/utils/tw";
 import { Link, Stack } from "expo-router";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 
 export default function NotFoundScreen() {
   return (

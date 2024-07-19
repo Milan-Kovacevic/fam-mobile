@@ -4,21 +4,25 @@ import { cn } from "@/utils/tw";
 import { Icon, IconVariant } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/Button";
 import { EmployeeDTO } from "@/storage/models/employees";
+import CardContainer from "@/components/shared/card/CardContainer";
 
 type EmployeeCardProps = {
   item: EmployeeDTO;
-  onDelete: (id: number) => void;
-  onEdit: (id: number) => void;
+  onDelete?: (id: number) => void;
+  onEdit?: (id: number) => void;
+  pressable?: boolean;
+  readonly?: boolean;
+  onPressed?: (id: number) => void;
 };
 
 const EmployeeCard = (props: EmployeeCardProps) => {
-  const { item, onDelete, onEdit } = props;
+  const { item, onDelete, onEdit, readonly, pressable, onPressed } = props;
   return (
-    <View
-      className={cn(
-        "flex-1 mb-1.5 p-2 px-4 rounded-xl border-[1.5px] bg-primary-100/30 dark:bg-primary-900/20 flex-row",
-        "border-neutral-400/30 dark:border-neutral-400/20"
-      )}
+    <CardContainer
+      selectable={pressable ?? false}
+      onPress={() => {
+        if (onPressed) onPressed(item.id);
+      }}
     >
       <View className={cn("flex-row gap-1.5 items-center flex-1 h-10")}>
         <Icon
@@ -30,26 +34,31 @@ const EmployeeCard = (props: EmployeeCardProps) => {
           {item.firstName} {item.lastName}
         </Text>
       </View>
-
-      <View className="flex-row gap-0 self-center items-center justify-center">
-        <Button
-          variant="ghost"
-          LeftAccessory={() => (
-            <ActionIcon icon="edit-3" iconVariant="feather" />
-          )}
-          className="p-2 py-0.5 self-center"
-          onPressed={() => onEdit(item.id)}
-        />
-        <Button
-          variant="ghost"
-          LeftAccessory={() => (
-            <ActionIcon icon="delete-outline" iconVariant="material" />
-          )}
-          className="p-2 py-0.5 self-center"
-          onPressed={() => onDelete(item.id)}
-        />
-      </View>
-    </View>
+      {!readonly && (
+        <View className="flex-row gap-0 self-center items-center justify-center">
+          <Button
+            variant="ghost"
+            LeftAccessory={() => (
+              <ActionIcon icon="edit-3" iconVariant="feather" />
+            )}
+            className="p-2 py-0.5 self-center"
+            onPressed={() => {
+              if (onEdit) onEdit(item.id);
+            }}
+          />
+          <Button
+            variant="ghost"
+            LeftAccessory={() => (
+              <ActionIcon icon="delete-outline" iconVariant="material" />
+            )}
+            className="p-2 py-0.5 self-center"
+            onPressed={() => {
+              if (onDelete) onDelete(item.id);
+            }}
+          />
+        </View>
+      )}
+    </CardContainer>
   );
 };
 

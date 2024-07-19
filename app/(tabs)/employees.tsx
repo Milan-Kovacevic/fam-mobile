@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import {
-  $horizontalMarginClassName,
   $horizontalPaddingClassName,
   SafeScreen,
 } from "@/components/ui/Screen";
@@ -17,7 +16,7 @@ import {
 import EmployeesList from "@/components/screens/employees/EmployeesList";
 import SearchInput from "@/components/ui/SearchInput";
 import useSearchableList from "@/hooks/useSearchableList";
-import FlatListSkeleton from "@/components/lists/FlatListSkeleton";
+import FlatListSkeleton from "@/components/shared/list/FlatListSkeleton";
 import { cn } from "@/utils/tw";
 
 const EmployeesScreen = () => {
@@ -87,19 +86,14 @@ const EmployeesScreen = () => {
             onSearch={onSearch}
             onClear={onSearchClear}
           />
-          <View className="flex-1 py-5 pb-0 mb-1">
-            {loading ? (
-              <FlatListSkeleton />
-            ) : (
-              <EmployeesList
-                employees={listData}
-                refreshing={refreshing}
-                onRefreshing={onRefreshing}
-                onDelete={onDeleteItem}
-                onEdit={onEditItem}
-              />
-            )}
-          </View>
+          <EmployeesList
+            loading={loading}
+            employees={listData}
+            refreshing={refreshing}
+            onRefreshing={onRefreshing}
+            onDelete={onDeleteItem}
+            onEdit={onEditItem}
+          />
         </View>
       </View>
     </SafeScreen>

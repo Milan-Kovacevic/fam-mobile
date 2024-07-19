@@ -3,7 +3,7 @@ import React from "react";
 import { Controller } from "react-hook-form";
 import MapView, { LatLng, Marker } from "react-native-maps";
 import { LocationDTO } from "@/storage/models/locations";
-import { defaultMapCoordinates } from "../screens/locations/LocationsMap";
+import { defaultMapCoordinates } from "../../screens/locations/LocationsMap";
 import mapDark from "@/assets/styles/map-dark.json";
 import mapLight from "@/assets/styles/map-light.json";
 

@@ -8,30 +8,31 @@ import {
 import React, { RefObject, forwardRef } from "react";
 import { Text } from "./Text";
 import { palette } from "@/theme/colors";
+import { cn } from "@/utils/tw";
 
 interface FormFieldProps extends ViewProps {
   title: string;
   text: string;
   error?: string;
   placeholder?: string;
-  handleChangeText: (text: string) => void;
+  readonly?: boolean;
+  handleChangeText?: (text: string) => void;
   handleSubmitted?: () => void;
-  show?: boolean;
   ref?: RefObject<TextInput>;
   keyboardType?: KeyboardTypeOptions;
   returnKeyType?: ReturnKeyTypeOptions;
 }
 
-const FormField = forwardRef<TextInput, FormFieldProps>(
+const TextField = forwardRef<TextInput, FormFieldProps>(
   (props: FormFieldProps, ref) => {
     const {
       title,
       text,
       error,
       placeholder,
+      readonly,
       handleChangeText,
       handleSubmitted,
-      show,
       keyboardType,
       returnKeyType,
       ...rest
@@ -45,8 +46,16 @@ const FormField = forwardRef<TextInput, FormFieldProps>(
         >
           {title}
         </Text>
-        <View className="border-2 border-primary-50 dark:border-primary-950 w-full px-4 h-12 justify-center bg-primary-100/80 dark:bg-primary-900/80 rounded-2xl focus:border-primary focus:dark:border-primary-400">
+        <View
+          className={cn(
+            "border-2 w-full px-4 h-12 justify-center rounded-2xl ",
+            !readonly
+              ? "border-primary-50 dark:border-primary-950 bg-primary-100/80 dark:bg-primary-900/80 focus:border-primary focus:dark:border-primary-400"
+              : "border-primary-50 dark:border-primary-950 bg-primary-100/60 dark:bg-primary-900/80"
+          )}
+        >
           <TextInput
+            readOnly={readonly}
             ref={ref}
             className="flex-1 font-pregular text-base text-black dark:text-white"
             value={text}
@@ -72,4 +81,4 @@ const FormField = forwardRef<TextInput, FormFieldProps>(
   }
 );
 
-export { FormField };
+export { TextField };

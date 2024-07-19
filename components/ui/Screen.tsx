@@ -193,10 +193,7 @@ export function SafeScreen(props: ScreenProps) {
 
   return (
     <SafeAreaView
-      className={cn(
-        "bg-primary-50/70 dark:bg-primary-950/70",
-        $containerClassName
-      )}
+      className={cn($screenBackgroundClassName, $containerClassName)}
     >
       <StatusBar style={statusBarStyle} />
 
@@ -223,3 +220,5 @@ const $innerClassName = "flex-start items-stretch";
 export const $horizontalMarginClassName = "mx-3.5";
 export const $horizontalPaddingClassName = "px-3.5";
 export const $horizontalMarginOffset = 28; // px
+export const $screenBackgroundClassName =
+  "bg-primary-50/70 dark:bg-primary-950/70";

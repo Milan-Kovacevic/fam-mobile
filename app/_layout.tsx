@@ -1,4 +1,4 @@
-import RootNavigator from "@/components/navigation/RootNavigator";
+import RootNavigator from "@/components/shared/navigation/RootNavigator";
 import StorageProvider from "@/storage/StorageProvider";
 import {
   DarkTheme,
@@ -7,12 +7,13 @@ import {
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { SQLiteProvider } from "expo-sqlite";
 import { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 import { RootSiblingParent } from "react-native-root-siblings";
+import "@/components/shared/sheet/sheets";
+import { SheetProvider } from "react-native-actions-sheet";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -34,12 +35,14 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <StorageProvider>
-        {/* For displaying native toast messages */}
-        <RootSiblingParent>
-          <GestureHandlerRootView className="h-full w-full flex-1">
-            <RootNavigator />
-          </GestureHandlerRootView>
-        </RootSiblingParent>
+        <SheetProvider>
+          {/* For displaying native toast messages */}
+          <RootSiblingParent>
+            <GestureHandlerRootView className="h-full w-full flex-1">
+              <RootNavigator />
+            </GestureHandlerRootView>
+          </RootSiblingParent>
+        </SheetProvider>
       </StorageProvider>
     </ThemeProvider>
   );

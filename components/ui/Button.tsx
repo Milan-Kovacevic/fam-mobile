@@ -1,8 +1,6 @@
-import React, { ComponentType, useEffect, useState } from "react";
+import React, { ComponentType } from "react";
 import {
   ActivityIndicator,
-  Easing,
-  PressableProps,
   StyleProp,
   TouchableOpacity,
   TouchableOpacityProps,
@@ -11,8 +9,6 @@ import {
 } from "react-native";
 import { Text, TextProps } from "@/components/ui/Text";
 import { cn } from "@/utils/tw";
-import { Icon } from "./Icon";
-import { Animated } from "react-native";
 import { palette } from "@/theme/colors";
 
 type Variant = keyof typeof $buttonVariantsClassName;
@@ -115,7 +111,7 @@ export const $buttonVariantsClassName = {
   ),
   secondary: cn(
     $baseButtonClassName,
-    "border-2 border-transparent bg-secondary-400/70 dark:bg-secondary/90"
+    "border-2 border-transparent bg-secondary-400 dark:bg-secondary/90"
   ),
   "secondary-outline": cn(
     $baseButtonClassName,

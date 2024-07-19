@@ -7,7 +7,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { StyleProp, View } from "react-native";
 import { cn } from "@/utils/tw";
-import { Text } from "../ui/Text";
+import { Text } from "../../ui/Text";
 
 export interface TabIconProps {
   icon: string;

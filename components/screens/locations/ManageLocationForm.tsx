@@ -5,10 +5,10 @@ import { LocationDTO } from "@/storage/models/locations";
 import { LatLng } from "react-native-maps";
 import { defaultMapCoordinates } from "./LocationsMap";
 import { useForm } from "react-hook-form";
-import FormInput from "@/components/form/FormInput";
+import FormInput from "@/components/shared/form/FormInput";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import FormMapSelect from "@/components/form/FormMapSelect";
+import FormMapSelect from "@/components/shared/form/FormMapSelect";
 
 export type LocationForm = {
   name: string;
@@ -67,6 +67,7 @@ const ManageLocationForm = (props: ManageLocationFormProps) => {
       <FormMapSelect
         name="coordinates"
         control={control}
+        location={location}
         onPinChange={handleChangeLocationPin}
         cityLabel={
           getValues("name") == "" ? "Enter Location" : getValues("name")

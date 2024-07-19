@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import FormInput from "@/components/form/FormInput";
+import FormInput from "@/components/shared/form/FormInput";
 
 export type EmployeeForm = {
   firstName: string;

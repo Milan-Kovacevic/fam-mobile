@@ -56,4 +56,8 @@ const $variants = {
     $baseClassName,
     "text-sm font-pregular text-gray-500  dark:text-gray-400 "
   ),
+  neutral: cn(
+    $baseClassName,
+    "text-sm font-pregular text-gray-800 dark:text-gray-200"
+  ),
 };

@@ -1,7 +1,12 @@
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { AntDesign, Entypo, Fontisto } from "@expo/vector-icons";
+import {
+  AntDesign,
+  Entypo,
+  Fontisto,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
@@ -15,7 +20,8 @@ export type IconVariant =
   | "fontawesome"
   | "feather"
   | "fontisto"
-  | "entypo";
+  | "entypo"
+  | "material-community";
 
 export interface IconProps {
   icon: string;
@@ -33,6 +39,7 @@ const iconComponents = {
   feather: Feather,
   fontisto: Fontisto,
   entypo: Entypo,
+  "material-community": MaterialCommunityIcons,
 };
 
 export function Icon(props: IconProps) {

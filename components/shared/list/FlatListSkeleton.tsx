@@ -16,7 +16,7 @@ export default FlatListSkeleton;
 const SkeletonItem = (props: ViewProps) => {
   return (
     <View
-      className="rounded-xl mb-2 h-12 bg-primary-100/60 dark:bg-primary-900/50 animate-pulse"
+      className="rounded-xl mb-2 h-12 bg-primary-100/80 dark:bg-primary-900/80 animate-pulse"
       {...props}
     ></View>
   );

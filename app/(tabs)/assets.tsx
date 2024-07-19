@@ -2,7 +2,6 @@ import { SafeScreen } from "@/components/ui/Screen";
 import { Text } from "@/components/ui/Text";
 import translate from "@/i18n";
 import { Link } from "expo-router";
-import { TouchableOpacity, View } from "react-native";
 
 export default function HomeScreen() {
   return (

@@ -1,41 +1,105 @@
-import { SafeScreen } from "@/components/ui/Screen";
-import { Text } from "@/components/ui/Text";
-import translate from "@/i18n";
-import { AssetDTO } from "@/storage/models/assets";
-import { getAllAssets } from "@/storage/repositories/assets-repository";
-import { Link } from "expo-router";
+import AssetsHeading from "@/components/screens/assets/AssetsHeading";
+import AssetsList from "@/components/screens/assets/AssetsList";
+import {
+  $horizontalPaddingClassName,
+  SafeScreen,
+} from "@/components/ui/Screen";
+import SearchInput from "@/components/ui/SearchInput";
+import useSearchableList from "@/hooks/useSearchableList";
+import {
+  deleteAsset,
+  getAllAssets,
+  searchForAssets,
+} from "@/storage/repositories/assets-repository";
+import { showToast } from "@/utils/toast";
+import { cn } from "@/utils/tw";
+import { router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
-import { useEffect, useState } from "react";
-import { View } from "react-native";
+import { useColorScheme, View } from "react-native";
 
 export default function HomeScreen() {
   const db = useSQLiteContext();
-  const [assets, setAssets] = useState<AssetDTO[]>([]);
+  const scheme = useColorScheme();
+  const {
+    searchText,
+    loading,
+    refreshing,
+    listData,
+    onSearch,
+    onSearchClear,
+    onSearchTextChanged,
+    onDeleteItem,
+    onEditItem,
+    onRefreshing,
+  } = useSearchableList({
+    fetchData: fetchAssets,
+    searchData: searchAssets,
+    onDelete: handleDeleteAsset,
+    onEdit: handleEditAsset,
+  });
 
-  useEffect(() => {
-    getAllAssets(db).then((result) => {
-      setAssets(result);
-    });
-  }, []);
+  async function fetchAssets() {
+    const result = await getAllAssets(db);
+    return result;
+  }
+  async function searchAssets(query: string) {
+    const result = await searchForAssets(db, query);
+    return result;
+  }
+
+  function handleCreateAsset() {
+    router.push("/create/asset");
+  }
+
+  function handleEditAsset(id: number) {
+    router.push({ pathname: `/edit/asset`, params: { id: id } });
+  }
+
+  async function handleDeleteAsset(id: number) {
+    var isSuccess = await deleteAsset(db, id);
+    if (isSuccess) {
+      showToast("Asset removed successfully!", scheme);
+    }
+    return isSuccess;
+  }
+
+  function handleShowAssetDetails(id: number) {
+    router.push("/create/asset");
+  }
 
   return (
-    <SafeScreen variant="scroll" className="px-2.5 py-4 flex-1">
-      <Text variant="subheading">
-        Test translation: {translate("welcomeScreen.letsGo")}
-      </Text>
-      <Link href="/create/asset" className="text-black dark:text-white">
-        Go to create
-      </Link>
-      <View className="flex-1 gap-y-2 mt-2 mx-4">
-        {assets.map((item, i) => {
-          return (
-            <View className="p-3 border border-red-50 rounded-xl">
-              <Text>
-                {item.id} - {item.name} - {item.dateCreated}
-              </Text>
-            </View>
-          );
-        })}
+    <SafeScreen
+      variant="fixed"
+      className="h-full w-full"
+      contentContainerClassName="flex-1"
+    >
+      <View
+        className={cn(
+          "pt-3.5 mb-1.5 items-center",
+          $horizontalPaddingClassName
+        )}
+      >
+        <AssetsHeading onCreateAsset={handleCreateAsset} />
+        <View className="mb-1.5">
+          <SearchInput
+            className=""
+            placeholder="Search..."
+            text={searchText}
+            onTextChange={onSearchTextChanged}
+            onSearch={onSearch}
+            onClear={onSearchClear}
+          />
+          <AssetsList
+            loading={loading}
+            assets={listData}
+            pressable={true}
+            onItemPressed={handleShowAssetDetails}
+            refreshing={refreshing}
+            onRefreshing={onRefreshing}
+            onDelete={onDeleteItem}
+            onEdit={onEditItem}
+          />
+        </View>
       </View>
     </SafeScreen>
   );

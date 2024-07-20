@@ -1,25 +1,25 @@
-import { View } from "react-native";
+import { View, ViewProps } from "react-native";
 import React from "react";
 import { Icon } from "@/components/ui/Icon";
 import { Text } from "@/components/ui/Text";
 import { Button } from "@/components/ui/Button";
 
-type EmployeesHeadingProps = {
-  onCreateEmployee: () => void;
-};
+interface AssetsHeadingProps extends ViewProps {
+  onCreateAsset: () => void;
+}
 
-const EmployeesHeading = (props: EmployeesHeadingProps) => {
-  const { onCreateEmployee } = props;
+const AssetsHeading = (props: AssetsHeadingProps) => {
+  const { onCreateAsset, ...rest } = props;
   return (
-    <View className="flex-row mb-3.5 mt-0 items-center">
+    <View className="flex-row mx-0.5 mb-3.5 mt-0 items-center" {...props}>
       <View className="flex-1 flex-row w-full items-center gap-0.5 ml-0.5 justify-start">
         <Icon
-          icon="group"
+          icon="layers"
           variant="material"
           className="text-xl text-neutral-800 dark:text-neutral-200"
         />
         <Text className="text-2xl font-psemibold tracking-tighter pt-0.5">
-          Your Employees
+          Your Assets
         </Text>
       </View>
       <View className="mr-0.5">
@@ -33,11 +33,11 @@ const EmployeesHeading = (props: EmployeesHeadingProps) => {
             />
           )}
           className="p-2 py-0.5 self-center"
-          onPressed={onCreateEmployee}
+          onPressed={onCreateAsset}
         />
       </View>
     </View>
   );
 };
 
-export default EmployeesHeading;
+export default AssetsHeading;

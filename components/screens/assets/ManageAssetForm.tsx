@@ -70,11 +70,12 @@ interface ManageAssetFormProps {
   onSubmit: (fromData: AssetForm) => void;
   asset?: AssetForm;
   loading: boolean;
+  scanCode?: boolean;
 }
 
 const ManageAssetForm = (props: ManageAssetFormProps) => {
-  const { onSubmit, loading, asset } = props;
-  const [showScanner, setShowScanner] = useState(false);
+  const { onSubmit, loading, asset, scanCode } = props;
+  const [showScanner, setShowScanner] = useState(scanCode ?? false);
 
   var initialValues = {
     name: asset?.name ?? "",
@@ -92,7 +93,6 @@ const ManageAssetForm = (props: ManageAssetFormProps) => {
   });
 
   function handleFormSubmitted(data: AssetForm) {
-    console.log(data);
     onSubmit(data);
   }
 
@@ -124,10 +124,6 @@ const ManageAssetForm = (props: ManageAssetFormProps) => {
       onEmployeeSelected: handleEmployeeSelected,
     });
   }
-  function onOpenDatePicker() {
-    DateTimePickerAndroid.open({ value: new Date() });
-  }
-
   function handleOpenSheet(sheetName: string, payload: any) {
     SheetManager.show(sheetName, {
       payload: payload,
@@ -201,7 +197,7 @@ const ManageAssetForm = (props: ManageAssetFormProps) => {
             onButtonPressed={() => setShowScanner(true)}
             icon="qr-code-scanner"
             variant="material"
-            className="mt-[18px] py-1.5 px-2.5"
+            className="mt-[18px] py-1.5 px-2.5 ml-1"
           />
         </View>
 
@@ -219,7 +215,7 @@ const ManageAssetForm = (props: ManageAssetFormProps) => {
 
         <FormSelectInput
           control={control}
-          title="Employee in charge"
+          title="Employee"
           name="employee"
           placeholder="Select employee..."
           className="flex-1"

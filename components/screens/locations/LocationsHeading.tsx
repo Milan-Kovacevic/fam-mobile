@@ -16,7 +16,7 @@ const LocationsHeading = (props: LocationsHeadingProps) => {
         <Icon
           icon="location-pin"
           variant="material"
-          className="text-xl mt-0.5 text-neutral-800 dark:text-neutral-200"
+          className="text-xl text-neutral-800 dark:text-neutral-200"
         />
         <Text className="text-2xl font-psemibold tracking-tighter pt-0.5">
           Your Locations

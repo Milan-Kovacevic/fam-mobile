@@ -54,7 +54,7 @@ const $variants = {
 
   muted: cn(
     $baseClassName,
-    "text-sm font-pregular text-gray-500  dark:text-gray-400 "
+    "text-sm font-pregular text-gray-500 dark:text-gray-400"
   ),
   neutral: cn(
     $baseClassName,

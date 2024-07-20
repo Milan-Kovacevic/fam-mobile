@@ -6,7 +6,7 @@ import { router } from "expo-router";
 
 const LandingActions = () => {
   function handleGoToCreateAssetPage() {
-    router.push("/create/asset");
+    router.push("/create/asset?scan=true");
   }
 
   function handleGoToMainPage() {

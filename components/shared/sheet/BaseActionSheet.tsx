@@ -16,7 +16,7 @@ const BaseActionSheet = (props: BaseActionSheetProps) => {
       gestureEnabled={true}
       animated={true}
       closeOnPressBack={true}
-      defaultOverlayOpacity={0.3}
+      defaultOverlayOpacity={0.5}
       indicatorStyle={{
         marginTop: 10,
         backgroundColor:
@@ -24,7 +24,7 @@ const BaseActionSheet = (props: BaseActionSheetProps) => {
       }}
       containerStyle={{
         backgroundColor:
-          scheme == "dark" ? palette.primary900 : palette.primary50,
+          scheme == "dark" ? palette.primary950 : palette.primary50,
       }}
     >
       <View className="px-3.5 pt-2 mb-3" {...rest}>

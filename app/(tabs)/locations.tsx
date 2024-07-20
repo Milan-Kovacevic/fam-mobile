@@ -38,10 +38,6 @@ const LocationsScreen = () => {
     onEdit: handleEditLocation,
   });
 
-  useEffect(() => {
-    fetchLocations();
-  }, []);
-
   async function fetchLocations() {
     const result = await getAllLocations(db);
     return result;

@@ -57,7 +57,7 @@ const FormInput = (props: FormFieldProps) => {
           fieldState: { error },
         }) => (
           <>
-            <View className="border-2 border-primary-50 dark:border-primary-950 w-full px-4 h-12 justify-center bg-primary-100/60 dark:bg-primary-900/80 rounded-2xl focus:border-primary focus:dark:border-primary-400">
+            <View className="border-2 border-primary-50 dark:border-primary-950 w-full px-4 h-12 justify-center bg-primary-100/60 dark:bg-primary-900/60 rounded-2xl focus:border-primary focus:dark:border-primary-400">
               <TextInput
                 ref={ref}
                 className="flex-1 font-pregular text-base text-black dark:text-white"

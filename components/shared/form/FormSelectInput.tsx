@@ -41,7 +41,7 @@ const FormSelectInput = (props: FormSelectInputProps) => {
             fieldState: { error },
           }) => (
             <>
-              <View className="border-2 border-primary-50 dark:border-primary-950 w-full px-4 h-12 justify-center bg-primary-100/60 dark:bg-primary-900/80 rounded-2xl">
+              <View className="border-2 border-primary-50 dark:border-primary-950 w-full px-4 h-12 justify-center bg-primary-100/60 dark:bg-primary-900/60 rounded-2xl">
                 <TextInput
                   readOnly={true}
                   className="flex-1 font-pregular text-base text-black dark:text-white"

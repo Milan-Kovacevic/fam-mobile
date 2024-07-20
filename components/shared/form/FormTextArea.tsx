@@ -37,7 +37,7 @@ const FormTextArea = (props: FormFieldProps) => {
           fieldState: { error },
         }) => (
           <>
-            <View className="border-2 min-h-[75px] border-primary-50 dark:border-primary-950 w-full px-4 py-0 justify-start bg-primary-100/60 dark:bg-primary-900/80 rounded-2xl focus:border-primary focus:dark:border-primary-400">
+            <View className="border-2 min-h-[75px] border-primary-50 dark:border-primary-950 w-full px-4 py-0 justify-start bg-primary-100/60 dark:bg-primary-900/60 rounded-2xl focus:border-primary focus:dark:border-primary-400">
               <TextInput
                 multiline
                 editable

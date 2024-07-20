@@ -46,7 +46,7 @@ const FormImagePicker = (props: FormImagePickerProps) => {
     <View className="flex-1" {...rest}>
       <Image
         resizeMode="contain"
-        className="flex-1 opacity-100 bg-primary-100/60 dark:bg-primary-900/80 rounded-xl h-[153px] w-full overflow-hidden"
+        className="flex-1 opacity-100 bg-primary-100/60 dark:bg-primary-900/60 rounded-xl h-[153px] w-full overflow-hidden"
         src={image}
       />
       <View className="absolute -bottom-2 flex-row self-center gap-x-2">

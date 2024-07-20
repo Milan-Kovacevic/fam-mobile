@@ -75,6 +75,19 @@ const ManageNavigator = () => {
             headerTitleStyle: $headerTitleStyle,
           }}
         />
+        <Stack.Screen
+          name="edit/asset"
+          options={{
+            headerShown: true,
+            title: "Edit Asset",
+            headerStyle: {
+              ...(scheme == "dark"
+                ? $darkThemeHeaderStyle
+                : $lightThemeHeaderStyle),
+            },
+            headerTitleStyle: $headerTitleStyle,
+          }}
+        />
       </Stack>
     </>
   );

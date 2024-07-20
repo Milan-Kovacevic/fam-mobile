@@ -1,26 +1,35 @@
-import { View, Text, FlatList, RefreshControl, ViewProps } from "react-native";
-import React, { ComponentType } from "react";
-import { EmployeeDTO } from "@/storage/models/employees";
-import EmployeeCard from "./EmployeeCard";
+import {
+  View,
+  RefreshControl,
+  ViewProps,
+  TouchableOpacity,
+} from "react-native";
+import React from "react";
 import EmptyListPlaceholder from "@/components/shared/list/EmptyListPlaceholder";
 import FlatListSkeleton from "@/components/shared/list/FlatListSkeleton";
+import { AssetDTO } from "@/storage/models/assets";
+import AssetCard from "./AssetCard";
+import SwipeableFlatList from "react-native-swipeable-list";
+import CardButton from "@/components/shared/card/CardButton";
+import { Text } from "@/components/ui/Text";
+import AssetCardQuickActions from "./AssetCardQuickActions";
 
-interface EmployeesListProps extends ViewProps {
-  employees: EmployeeDTO[];
+interface AssetsListProps extends ViewProps {
+  assets: AssetDTO[];
   loading: boolean;
   refreshing?: boolean;
   onRefreshing?: () => void;
   onDelete?: (id: number) => void;
   onEdit?: (id: number) => void;
+  onItemPressed?: (id: number) => void;
   readonly?: boolean;
   pressable?: boolean;
-  onItemPressed?: (id: number) => void;
   scrollEnabled?: boolean;
 }
 
-const EmployeesList = (props: EmployeesListProps) => {
+const AssetsList = (props: AssetsListProps) => {
   const {
-    employees,
+    assets,
     refreshing,
     loading,
     onRefreshing,
@@ -37,13 +46,12 @@ const EmployeesList = (props: EmployeesListProps) => {
   return (
     <View className="flex-1 py-5 pb-0 mb-1" {...rest}>
       {loading ? (
-        <FlatListSkeleton />
+        <FlatListSkeleton className="h-[90px]" />
       ) : (
-        <FlatList
+        <SwipeableFlatList
           scrollEnabled={scrollable}
-          className="px-0"
           showsVerticalScrollIndicator={false}
-          data={employees}
+          data={assets}
           keyExtractor={(item) => item.id.toString()}
           refreshControl={
             readonly ? undefined : (
@@ -55,26 +63,37 @@ const EmployeesList = (props: EmployeesListProps) => {
           }
           renderItem={({ item }) => {
             return (
-              <EmployeeCard
-                employee={item}
-                onDelete={onDelete}
-                onEdit={onEdit}
+              <AssetCard
+                key={item.id}
+                asset={item}
                 pressable={pressable}
                 readonly={readonly}
                 onPressed={onItemPressed}
               />
             );
           }}
+          renderQuickActions={({ item }) => (
+            <AssetCardQuickActions
+              onEdit={() => {
+                if (onEdit) onEdit(item.id);
+              }}
+              onDelete={() => {
+                if (onDelete) onDelete(item.id);
+              }}
+            />
+          )}
+          maxSwipeDistance={100}
+          shouldBounceOnMount={true}
           ListEmptyComponent={
             readonly ? (
               <EmptyListPlaceholder
-                title={"No Employees"}
-                description="Add some employees to be able to select them..."
+                title={"No Assets"}
+                description="Add some assets to be able to select them..."
               />
             ) : (
               <EmptyListPlaceholder
-                title={"No Employees Found"}
-                description="Parhaps you should ajust your search critera or add a new employee..."
+                title={"No Assets Found"}
+                description="Parhaps you should ajust your search critera or create a new asset..."
               />
             )
           }
@@ -84,4 +103,4 @@ const EmployeesList = (props: EmployeesListProps) => {
   );
 };
 
-export default EmployeesList;
+export default AssetsList;

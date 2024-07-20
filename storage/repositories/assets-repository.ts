@@ -1,5 +1,10 @@
 import { SQLiteDatabase } from "expo-sqlite";
-import { AssetDTO, CreateAssetDTO } from "../models/assets";
+import {
+  AssetDetailsDTO,
+  AssetDTO,
+  CreateAssetDTO,
+  UpdateAssetDTO,
+} from "../models/assets";
 
 interface AssetEntity {
   id: number;
@@ -11,6 +16,13 @@ interface AssetEntity {
   locationId: number;
   image?: string;
   dateCreated: number;
+}
+
+interface AssetDetailsEntity extends AssetEntity {
+  employeeName: string;
+  locationName: string;
+  locationLatitude: number;
+  locationLongitude: number;
 }
 
 export async function createAssetsTable(db: SQLiteDatabase) {
@@ -27,6 +39,44 @@ export async function getAllAssets(db: SQLiteDatabase): Promise<AssetDTO[]> {
   return result.map((x) => {
     return { ...x };
   });
+}
+
+export async function searchForAssets(
+  db: SQLiteDatabase,
+  query: string
+): Promise<AssetDTO[]> {
+  const searchParam = `%${query}%`;
+  var result = await db.getAllAsync<AssetEntity>(
+    "SELECT * FROM assets WHERE name LIKE ? OR barcode LIKE ?",
+    [searchParam, searchParam]
+  );
+  return result.map((x) => {
+    return { ...x };
+  });
+}
+
+export async function getAssetById(
+  db: SQLiteDatabase,
+  id: number
+): Promise<AssetDTO | null> {
+  var result = await db.getFirstSync<AssetEntity>(
+    "SELECT * FROM assets WHERE id = ?",
+    [id]
+  );
+  return result ? { ...result } : null;
+}
+
+export async function getAssetDetails(
+  db: SQLiteDatabase,
+  id: number
+): Promise<AssetDetailsDTO | null> {
+  var result = await db.getFirstSync<AssetDetailsEntity>(
+    `SELECT a.id, a.name, a.description, a.barcode, a.price, a.dateCreated, e.id as employeeId, CONCAT(e.firstName, ' ', e.lastName) as employeeName, 
+    l.id as locationId, l.name as locationName, l.latitude as locationLatitude, l.longitude as locationLongitude 
+    FROM assets a INNER JOIN employees e ON a.employeeId = e.id INNER JOIN locations l ON a.locationId = l.id WHERE a.id = ?`,
+    [id]
+  );
+  return result ? { ...result } : null;
 }
 
 export async function createAsset(
@@ -52,4 +102,32 @@ export async function createAsset(
   throw new Error(
     `Unable to insert record for a asset with name ${asset.name}, barcode: ${asset.barcode}`
   );
+}
+
+export async function updateAsset(
+  db: SQLiteDatabase,
+  asset: UpdateAssetDTO
+): Promise<boolean> {
+  const result = await db.runAsync(
+    "UPDATE assets SET name = ?, description = ?, barcode = ?, price = ?, employeeId = ?, locationId = ? WHERE id = ?",
+    [
+      asset.name,
+      asset.description ?? null,
+      asset.barcode,
+      asset.price,
+      asset.employeeId,
+      asset.locationId,
+      asset.id,
+    ]
+  );
+  return result.changes == 1;
+}
+
+export async function deleteAsset(
+  db: SQLiteDatabase,
+  id: number
+): Promise<boolean> {
+  const result = await db.runAsync("DELETE FROM assets WHERE id = ?", [id]);
+
+  return result.changes == 1;
 }

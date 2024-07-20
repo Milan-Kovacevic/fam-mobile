@@ -1,5 +1,5 @@
 import { useColorScheme, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Screen } from "@/components/ui/Screen";
 import ManageAssetForm, {
   AssetForm,
@@ -7,11 +7,12 @@ import ManageAssetForm, {
 import { useSQLiteContext } from "expo-sqlite";
 import { delay } from "@/utils/util";
 import { createAsset } from "@/storage/repositories/assets-repository";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { showToast } from "@/utils/toast";
 
 const CreateAssetScreen = () => {
   const db = useSQLiteContext();
+  const { scan } = useLocalSearchParams();
   const scheme = useColorScheme();
   const [loading, setLoading] = useState(false);
 
@@ -41,7 +42,11 @@ const CreateAssetScreen = () => {
       variant="scroll"
     >
       <View className="px-2 flex-1">
-        <ManageAssetForm loading={loading} onSubmit={handleAssetSubmitted} />
+        <ManageAssetForm
+          scanCode={scan != undefined}
+          loading={loading}
+          onSubmit={handleAssetSubmitted}
+        />
       </View>
     </Screen>
   );

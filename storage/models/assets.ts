@@ -7,7 +7,7 @@ export type AssetDTO = {
   employeeId: number;
   locationId: number;
   image?: string;
-  dateCreated: number;
+  dateCreated: string;
 };
 
 export type AssetDetailsDTO = {
@@ -23,7 +23,7 @@ export type AssetDetailsDTO = {
   locationLatitude: number;
   locationLongitude: number;
   image?: string;
-  dateCreated: number;
+  dateCreated: string;
 };
 
 export type CreateAssetDTO = {
@@ -34,7 +34,7 @@ export type CreateAssetDTO = {
   employeeId: number;
   locationId: number;
   image?: string;
-  dateCreated: number;
+  dateCreated: string;
 };
 export type UpdateAssetDTO = {
   id: number;

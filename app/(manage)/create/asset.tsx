@@ -23,7 +23,7 @@ const CreateAssetScreen = () => {
       ...formData,
       employeeId: formData.employee.id,
       locationId: formData.location.id,
-      dateCreated: new Date().getUTCMilliseconds(),
+      dateCreated: new Date().getUTCMilliseconds().toString(),
     })
       .then((data) => {
         router.push("/assets");

@@ -3,6 +3,7 @@ import {
   RefreshControl,
   ViewProps,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
 import React from "react";
 import EmptyListPlaceholder from "@/components/shared/list/EmptyListPlaceholder";
@@ -43,10 +44,51 @@ const AssetsList = (props: AssetsListProps) => {
   } = props;
   const scrollable = scrollEnabled ?? true;
 
+  const emptyListPlaceholder = () => {
+    return readonly ? (
+      <EmptyListPlaceholder
+        title={"No Assets"}
+        description="Add some assets to be able to select them..."
+      />
+    ) : (
+      <EmptyListPlaceholder
+        title={"No Assets Found"}
+        description="Parhaps you should ajust your search critera or create a new asset..."
+      />
+    );
+  };
+
   return (
     <View className="flex-1 py-5 pb-0 mb-1" {...rest}>
       {loading ? (
         <FlatListSkeleton className="h-[90px]" />
+      ) : readonly ? (
+        <FlatList
+          scrollEnabled={scrollable}
+          showsVerticalScrollIndicator={false}
+          data={assets}
+          keyExtractor={(item) => item.id.toString()}
+          refreshControl={
+            readonly ? undefined : (
+              <RefreshControl
+                refreshing={refreshing ?? false}
+                onRefresh={onRefreshing}
+              />
+            )
+          }
+          renderItem={({ item }) => {
+            return (
+              <AssetCard
+                key={item.id}
+                asset={item}
+                pressable={pressable}
+                readonly={readonly}
+                onPressed={onItemPressed}
+              />
+            );
+          }}
+          ListEmptyComponent={emptyListPlaceholder}
+        />
       ) : (
         <SwipeableFlatList
           scrollEnabled={scrollable}
@@ -72,7 +114,7 @@ const AssetsList = (props: AssetsListProps) => {
               />
             );
           }}
-          renderQuickActions={({ item }) => (
+          renderQuickActions={({ item }: { item: AssetDTO }) => (
             <AssetCardQuickActions
               onEdit={() => {
                 if (onEdit) onEdit(item.id);
@@ -84,19 +126,7 @@ const AssetsList = (props: AssetsListProps) => {
           )}
           maxSwipeDistance={100}
           shouldBounceOnMount={true}
-          ListEmptyComponent={
-            readonly ? (
-              <EmptyListPlaceholder
-                title={"No Assets"}
-                description="Add some assets to be able to select them..."
-              />
-            ) : (
-              <EmptyListPlaceholder
-                title={"No Assets Found"}
-                description="Parhaps you should ajust your search critera or create a new asset..."
-              />
-            )
-          }
+          ListEmptyComponent={emptyListPlaceholder}
         />
       )}
     </View>

@@ -9,8 +9,8 @@ const LandingDashboard = () => {
   const Stats: DashboardCardProps[] = [
     {
       variant: "primary",
-      icon: "box",
-      iconVariant: "feather",
+      icon: "inventory",
+      iconVariant: "material",
       name: "Inventory",
       href: "/assets",
       total: 3027,

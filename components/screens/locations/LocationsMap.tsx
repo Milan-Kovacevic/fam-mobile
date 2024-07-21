@@ -50,6 +50,7 @@ const LocationsMap = (props: LocationsMapProps) => {
           {locations.map((item: any, index: number) => (
             <Marker
               key={`pin-${index}`}
+              pinColor="tan"
               title={item.name}
               titleVisibility="visible"
               coordinate={{ ...item }}

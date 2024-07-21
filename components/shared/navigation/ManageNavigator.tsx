@@ -6,88 +6,65 @@ import { palette } from "@/theme/colors";
 const ManageNavigator = () => {
   const scheme = useColorScheme();
 
+  const screens = [
+    {
+      name: "create/location",
+      headerShown: true,
+      title: "Create Location",
+    },
+    {
+      name: "edit/location",
+      headerShown: true,
+      title: "Edit Location",
+    },
+    {
+      name: "create/employee",
+      headerShown: true,
+      title: "Add Employee",
+    },
+    {
+      name: "edit/employee",
+      headerShown: true,
+      title: "Update Employee",
+    },
+    {
+      name: "create/asset",
+      headerShown: true,
+      title: "Create Asset",
+    },
+    {
+      name: "edit/asset",
+      headerShown: true,
+      title: "Edit Asset",
+    },
+    {
+      name: "details/asset",
+      headerShown: false,
+      title: "",
+    },
+  ];
+
   return (
     <>
       <Stack>
-        <Stack.Screen
-          name="create/location"
-          options={{
-            headerShown: true,
-            title: "Create Location",
-            headerStyle: {
-              ...(scheme == "dark"
-                ? $darkThemeHeaderStyle
-                : $lightThemeHeaderStyle),
-            },
-            headerTitleStyle: $headerTitleStyle,
-          }}
-        />
-        <Stack.Screen
-          name="edit/location"
-          options={{
-            headerShown: true,
-
-            title: "Edit Location",
-            headerStyle: {
-              ...(scheme == "dark"
-                ? $darkThemeHeaderStyle
-                : $lightThemeHeaderStyle),
-            },
-            headerTitleStyle: $headerTitleStyle,
-          }}
-        />
-        <Stack.Screen
-          name="create/employee"
-          options={{
-            headerShown: true,
-            title: "Create Employee",
-            headerStyle: {
-              ...(scheme == "dark"
-                ? $darkThemeHeaderStyle
-                : $lightThemeHeaderStyle),
-            },
-            headerTitleStyle: $headerTitleStyle,
-          }}
-        />
-        <Stack.Screen
-          name="edit/employee"
-          options={{
-            headerShown: true,
-            title: "Update Employee",
-            headerStyle: {
-              ...(scheme == "dark"
-                ? $darkThemeHeaderStyle
-                : $lightThemeHeaderStyle),
-            },
-            headerTitleStyle: $headerTitleStyle,
-          }}
-        />
-        <Stack.Screen
-          name="create/asset"
-          options={{
-            headerShown: true,
-            title: "Create Asset",
-            headerStyle: {
-              ...(scheme == "dark"
-                ? $darkThemeHeaderStyle
-                : $lightThemeHeaderStyle),
-            },
-            headerTitleStyle: $headerTitleStyle,
-          }}
-        />
-        <Stack.Screen
-          name="edit/asset"
-          options={{
-            headerShown: true,
-            title: "Edit Asset",
-            headerStyle: {
-              ...(scheme == "dark"
-                ? $darkThemeHeaderStyle
-                : $lightThemeHeaderStyle),
-            },
-            headerTitleStyle: $headerTitleStyle,
-          }}
-        />
+        {screens.map((item, index) => {
+          return (
+            <Stack.Screen
+              key={`screen-${index}`}
+              name={item.name}
+              options={{
+                headerShown: item.headerShown,
+                title: item.title,
+                headerStyle: {
+                  ...(scheme == "dark"
+                    ? $darkThemeHeaderStyle
+                    : $lightThemeHeaderStyle),
+                },
+                headerTitleStyle: $headerTitleStyle,
+              }}
+            />
+          );
+        })}
       </Stack>
     </>
   );

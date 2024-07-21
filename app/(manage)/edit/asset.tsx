@@ -15,10 +15,10 @@ import { showToast } from "@/utils/toast";
 
 const EditAssetScreen = () => {
   const db = useSQLiteContext();
+  const scheme = useColorScheme();
   const { id } = useLocalSearchParams();
   const [assetId, setAssetId] = useState<number>();
   const [asset, setAsset] = useState<AssetForm | undefined>(undefined);
-  const scheme = useColorScheme();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {

@@ -84,7 +84,7 @@ const BarCodeScanner = (props: BarCodeScannerProps) => {
               <Icon
                 icon={"checkcircle"}
                 variant={"antdesign"}
-                className="text-2xl text-neutral-800 dark:text-neutral-200"
+                className="text-2xl text-primary-500 dark:text-primary-500"
               />
             )}
             className="p-2.5 py-1.5 self-end rounded-full z-20"

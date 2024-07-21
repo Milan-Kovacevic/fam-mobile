@@ -36,7 +36,7 @@ const AssetCard = (props: AssetCardProps) => {
           </Text>
         </View>
         <View className="self-start flex-1 mt-0.5">
-          <Text className="flex-1 text-base font-pregular text-gray-800 dark:text-gray-200">
+          <Text className="flex-1 text-base font-pregular leading-4 pt-1 text-gray-800 dark:text-gray-200">
             {asset.name}
           </Text>
           {asset.description ? (

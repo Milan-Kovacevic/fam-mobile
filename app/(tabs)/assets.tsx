@@ -64,7 +64,7 @@ export default function HomeScreen() {
   }
 
   function handleShowAssetDetails(id: number) {
-    router.push("/create/asset");
+    router.push({ pathname: `/details/asset`, params: { id: id } });
   }
 
   return (

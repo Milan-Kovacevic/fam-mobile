@@ -20,11 +20,11 @@ const BaseActionSheet = (props: BaseActionSheetProps) => {
       indicatorStyle={{
         marginTop: 10,
         backgroundColor:
-          scheme == "dark" ? palette.primary700 : palette.primary400,
+          scheme == "dark" ? palette.neutral700 : palette.neutral300,
       }}
       containerStyle={{
         backgroundColor:
-          scheme == "dark" ? palette.primary950 : palette.primary50,
+          scheme == "dark" ? palette.neutral900 : palette.neutral50,
       }}
     >
       <View className="px-3.5 pt-2 mb-3" {...rest}>

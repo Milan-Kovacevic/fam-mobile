@@ -19,7 +19,7 @@ interface HorizontalCarouselProps extends ViewProps {
 }
 
 const HorizontalCarousel = (props: HorizontalCarouselProps) => {
-  const { items } = props;
+  const { items, ...rest } = props;
   const [selectedIndex, setSelectedIndex] = useState(0);
   const CAROUSEL_WIDTH = DEVICE_WIDTH - $horizontalMarginOffset;
 
@@ -32,12 +32,12 @@ const HorizontalCarousel = (props: HorizontalCarouselProps) => {
   }
 
   return (
-    <View className={cn("flex-1 mt-5", $horizontalMarginClassName)}>
+    <View className={cn("flex-1 mt-5", $horizontalMarginClassName)} {...rest}>
       <ScrollView
         horizontal
         pagingEnabled
         snapToAlignment="start"
-        decelerationRate={"normal"}
+        decelerationRate={"fast"}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
         onMomentumScrollEnd={handleItemViewChanged}
@@ -59,7 +59,7 @@ const HorizontalCarousel = (props: HorizontalCarouselProps) => {
           <View
             key={`hover-${index}`}
             className={cn(
-              "rounded-full h-2.5 w-2.5 bg-secondary-400/70 dark:bg-secondary-400/70 opacity-80",
+              "rounded-full h-2.5 w-2.5 bg-secondary-500 dark:bg-secondary-400/70 opacity-80",
               index == selectedIndex && "w-4 opacity-100"
             )}
           />

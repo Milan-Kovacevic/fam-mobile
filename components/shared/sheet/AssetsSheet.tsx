@@ -1,44 +1,44 @@
 import React from "react";
 import { SheetProps } from "react-native-actions-sheet";
 import BaseActionSheet from "./BaseActionSheet";
-import LocationsList from "@/components/screens/locations/LocationsList";
-import { getAllLocations } from "@/storage/repositories/locations-repository";
 import { useSQLiteContext } from "expo-sqlite";
-import { LocationDTO } from "@/storage/models/locations";
 import useReadonlyList from "@/hooks/useReadonlyList";
 import { Text } from "@/components/ui/Text";
 import ScrollableSheetContainer from "./ScrollableSheetContainer";
+import { AssetDTO } from "@/storage/models/assets";
+import { getAssetsByLocation } from "@/storage/repositories/assets-repository";
+import AssetsList from "@/components/screens/assets/AssetsList";
 
-const LocationsSheet = (props: SheetProps<"locations-sheet">) => {
+const AssetsSheet = (props: SheetProps<"assets-sheet">) => {
   const { payload } = props;
   const db = useSQLiteContext();
-  const { loading, listData: locations } = useReadonlyList<LocationDTO>({
-    fetchData: fetchLocations,
+  const { loading, listData: assets } = useReadonlyList<AssetDTO>({
+    fetchData: fetchAssets,
   });
 
-  async function fetchLocations() {
-    const result = await getAllLocations(db);
+  async function fetchAssets() {
+    const result = await getAssetsByLocation(db, payload?.locationId ?? 0);
     return result;
   }
 
-  function handleLocationSelected(id: number) {
-    var location = locations.find((x) => x.id == id);
-    payload?.onLocationSelected(location);
+  function handleAssetSelected(id: number) {
+    var asset = assets.find((x) => x.id == id);
+    payload?.onAssetSelected(asset);
   }
 
   return (
     <BaseActionSheet>
       <Text variant="neutral" className="mx-2 mb-2 text-base text-center">
-        Select Location
+        Assets on this location
       </Text>
       <ScrollableSheetContainer>
-        <LocationsList
+        <AssetsList
           className="mt-1 pt-0 flex-1"
           readonly={true}
           pressable={true}
-          locations={locations}
+          assets={assets}
           loading={loading}
-          onItemPressed={handleLocationSelected}
+          onItemPressed={handleAssetSelected}
           scrollEnabled={false}
         />
       </ScrollableSheetContainer>
@@ -46,4 +46,4 @@ const LocationsSheet = (props: SheetProps<"locations-sheet">) => {
   );
 };
 
-export default LocationsSheet;
+export default AssetsSheet;

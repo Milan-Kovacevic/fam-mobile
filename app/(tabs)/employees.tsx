@@ -16,7 +16,6 @@ import {
 import EmployeesList from "@/components/screens/employees/EmployeesList";
 import SearchInput from "@/components/ui/SearchInput";
 import useSearchableList from "@/hooks/useSearchableList";
-import FlatListSkeleton from "@/components/shared/list/FlatListSkeleton";
 import { cn } from "@/utils/tw";
 
 const EmployeesScreen = () => {

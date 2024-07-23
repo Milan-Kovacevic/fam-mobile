@@ -1,7 +1,7 @@
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Entypo } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
@@ -15,7 +15,7 @@ export interface TabIconProps {
   style?: StyleProp<any>;
   className?: string;
   focused?: boolean;
-  variant?: "material" | "antdesign" | "ionicon" | "fontawesome" | "feather";
+  variant?: keyof typeof iconComponents;
 }
 
 const iconComponents = {
@@ -24,6 +24,7 @@ const iconComponents = {
   ionicon: Ionicons,
   fontawesome: FontAwesome,
   feather: Feather,
+  entypo: Entypo,
 };
 
 export function TabIcon(props: TabIconProps) {

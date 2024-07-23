@@ -3,6 +3,10 @@ import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
 import { createLocationsTable } from "./repositories/locations-repository";
 import { createEmployeesTable } from "./repositories/employees-repository";
 import { createAssetsTable } from "./repositories/assets-repository";
+import {
+  createAssetListItemsTable,
+  createAssetListsTable,
+} from "./repositories/asset-list-repository";
 
 export const DATABASE_NAME = "fam.db";
 export const DATABASE_VERSION = 1;
@@ -33,6 +37,8 @@ async function migrateDbIfNeeded(db: SQLiteDatabase) {
     await createLocationsTable(db);
     await createEmployeesTable(db);
     await createAssetsTable(db);
+    await createAssetListsTable(db);
+    await createAssetListItemsTable(db);
     console.log("Applied database migration");
   }
 

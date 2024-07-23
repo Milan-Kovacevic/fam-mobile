@@ -1,4 +1,4 @@
-import { StyleProp, View, ViewStyle } from "react-native";
+import { useColorScheme, View } from "react-native";
 import { Icon, IconVariant } from "../../ui/Icon";
 import { cn } from "@/utils/tw";
 import { Text } from "../../ui/Text";
@@ -13,14 +13,14 @@ export type DashboardCardProps = {
   name: string;
   value?: number;
   href: string;
-  style?: StyleProp<ViewStyle>;
 };
 
 const DashboardCard = (props: DashboardCardProps) => {
   const { variant, icon, iconVariant, total, name, value, href } = props;
+  const scheme = useColorScheme();
 
   function handleCardPressed() {
-    router.navigate(href);
+    router.push(href);
   }
 
   return (
@@ -28,7 +28,7 @@ const DashboardCard = (props: DashboardCardProps) => {
       <TouchableOpacity
         onPress={handleCardPressed}
         activeOpacity={0.7}
-        className="flex flex-row  w-full items-stretch flex-1 p-1.5"
+        className="flex flex-row w-full items-stretch flex-1 p-1.5"
       >
         <View
           className={cn(
@@ -68,8 +68,9 @@ const DashboardCard = (props: DashboardCardProps) => {
                 <Icon
                   icon="dollar-sign"
                   variant="feather"
-                  className="text-sm text-neutral-900 dark:text-neutral-200"
+                  className="text-sm text-neutral-900 dark:text-neutral-200 pt-[2px]"
                 />
+
                 <Text className="self-end text-sm text-neutral-900 dark:text-neutral-200 font-pbold">
                   {value}
                 </Text>

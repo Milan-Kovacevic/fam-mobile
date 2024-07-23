@@ -9,7 +9,7 @@ const BottomTabNavigator = () => {
 
   return (
     <Tabs
-      initialRouteName="locations"
+      backBehavior="history"
       screenOptions={{
         tabBarShowLabel: false,
         tabBarStyle: {
@@ -43,6 +43,20 @@ const BottomTabNavigator = () => {
               variant="feather"
               icon={focused ? "map-pin" : "map-pin"}
               name={"Locations"}
+              focused={focused}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="registrar"
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <TabIcon
+              variant="entypo"
+              icon={focused ? "list" : "list"}
+              name={"Registrar"}
               focused={focused}
             />
           ),

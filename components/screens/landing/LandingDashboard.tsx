@@ -1,48 +1,31 @@
-import { View, Text, ScrollView, FlatList } from "react-native";
-import React from "react";
+import { View, FlatList } from "react-native";
+import React, { useEffect, useState } from "react";
 import DashboardCard, { DashboardCardProps } from "./DashboardCard";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { router } from "expo-router";
+import { useSQLiteContext } from "expo-sqlite";
+import { getDashboardOverviewStats } from "@/storage/services/stats-service";
+import DashboardSkeleton from "./DashboardSkeleton";
+import { delay } from "@/utils/util";
 
 const LandingDashboard = () => {
-  const Stats: DashboardCardProps[] = [
-    {
-      variant: "primary",
-      icon: "inventory",
-      iconVariant: "material",
-      name: "Inventory",
-      href: "/assets",
-      total: 3027,
-      value: 2000,
-    },
-    {
-      variant: "secondary",
-      icon: "location-outline",
-      iconVariant: "ionicon",
-      name: "Locations",
+  const db = useSQLiteContext();
+  const [stats, setStats] = useState<DashboardCardProps[]>([]);
+  const [loading, setLoading] = useState(true);
 
-      href: "/locations",
-      total: 15,
-    },
-    {
-      variant: "secondary",
-      icon: "user",
-      iconVariant: "feather",
-      name: "Employees",
-      href: "/employees",
-      total: 8,
-    },
-    {
-      variant: "primary",
-      icon: "list",
-      iconVariant: "ionicon",
-      name: "Registrar",
-      href: "/assets",
-      total: 29,
-      value: 18000,
-    },
-  ];
+  useEffect(() => {
+    setLoading(true);
+    delay(1000).then(() => {
+      getDashboardOverviewStats(db)
+        .then((result) => {
+          setStats(result);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    });
+  }, []);
 
   function handleGoToSettings() {
     router.push("/settings");
@@ -64,19 +47,23 @@ const LandingDashboard = () => {
           )}
         />
       </View>
-      <FlatList
-        data={Stats}
-        renderItem={(props) => <DashboardCard {...props.item} />}
-        keyExtractor={(item) => item.name}
-        numColumns={2}
-        contentContainerStyle={{
-          width: "auto",
-          gap: 0,
-          height: "auto",
-          justifyContent: "center",
-          alignItems: "stretch",
-        }}
-      />
+      {loading ? (
+        <DashboardSkeleton />
+      ) : (
+        <FlatList
+          data={stats}
+          renderItem={(props) => <DashboardCard {...props.item} />}
+          keyExtractor={(item) => item.name}
+          numColumns={2}
+          contentContainerStyle={{
+            width: "auto",
+            gap: 0,
+            height: "auto",
+            justifyContent: "center",
+            alignItems: "stretch",
+          }}
+        />
+      )}
     </View>
   );
 };

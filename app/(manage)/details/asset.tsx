@@ -9,8 +9,6 @@ import { showToast } from "@/utils/toast";
 import AssetDetailsImage from "@/components/screens/assets/AssetDetailsImage";
 import AssetDetailsInfo from "@/components/screens/assets/AssetDetailsInfo";
 import HorizontalCarousel from "@/components/ui/HorizontalCarousel";
-import LocationsMap from "@/components/screens/locations/LocationsMap";
-import AssetDetailsLocationSection from "@/components/screens/assets/AssetDetailsLocationMap";
 import AssetDetailsLocationMap from "@/components/screens/assets/AssetDetailsLocationMap";
 import { SheetManager } from "react-native-actions-sheet";
 
@@ -18,7 +16,6 @@ const AssetDetailsScreen = () => {
   const db = useSQLiteContext();
   const scheme = useColorScheme();
   const { id } = useLocalSearchParams();
-  const [assetId, setAssetId] = useState<number>();
   const [asset, setAsset] = useState<AssetDetailsDTO | undefined>(undefined);
   const [loading, setLoading] = useState(false);
 
@@ -32,7 +29,7 @@ const AssetDetailsScreen = () => {
       router.push("/assets");
       return;
     }
-    setAssetId(routeId);
+
     setLoading(true);
     getAssetDetails(db, routeId)
       .then((result) => {

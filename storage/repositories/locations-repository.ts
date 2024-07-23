@@ -14,10 +14,11 @@ interface LocationEntity {
 
 export async function createLocationsTable(db: SQLiteDatabase) {
   await db.execAsync(`
-        PRAGMA journal_mode = 'wal';
-        CREATE TABLE IF NOT EXISTS locations (id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL UNIQUE, latitude DECIMAL(12,8) NOT NULL, longitude DECIMAL(12,8) NOT NULL);
-        INSERT INTO locations (name, latitude, longitude) VALUES ('Banja Luka', 44.772182, 17.191000);
-        `);
+    PRAGMA journal_mode = 'wal';
+    CREATE TABLE IF NOT EXISTS locations (id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL UNIQUE, latitude DECIMAL(12,8) NOT NULL, longitude DECIMAL(12,8) NOT NULL);
+    INSERT INTO locations (name, latitude, longitude) VALUES ('Banja Luka', 44.772182, 17.191000);
+    INSERT INTO locations (name, latitude, longitude) VALUES ('Laktasi', 44.906400, 17.301500);
+  `);
 }
 
 export async function getAllLocations(

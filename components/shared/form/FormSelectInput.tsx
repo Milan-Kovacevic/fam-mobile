@@ -3,6 +3,7 @@ import React from "react";
 import { Text } from "@/components/ui/Text";
 import { Controller } from "react-hook-form";
 import { palette } from "@/theme/colors";
+import { cn } from "@/utils/tw";
 
 interface FormSelectInputProps extends ViewProps {
   title: string;
@@ -11,6 +12,7 @@ interface FormSelectInputProps extends ViewProps {
   control: any;
   extractValue?: (value: any) => string;
   onPressed?: () => void;
+  disabled?: boolean;
 }
 
 const FormSelectInput = (props: FormSelectInputProps) => {
@@ -21,21 +23,27 @@ const FormSelectInput = (props: FormSelectInputProps) => {
     control,
     extractValue,
     onPressed,
+    disabled,
     ...rest
   } = props;
 
   return (
-    <View className={`space-y-0.5`} {...rest}>
+    <View className={cn(`space-y-0.5`, disabled && "opacity-50")} {...rest}>
       <Text
         variant="formLabel"
         className="ml-2 text-neutral-700 dark:text-neutral-300"
       >
         {title}
       </Text>
-      <TouchableOpacity activeOpacity={0.7} onPress={onPressed}>
+      <TouchableOpacity
+        disabled={disabled}
+        activeOpacity={0.7}
+        onPress={!disabled ? onPressed : undefined}
+      >
         <Controller
           control={control}
           name={name}
+          disabled={disabled}
           render={({
             field: { value, onChange, onBlur },
             fieldState: { error },

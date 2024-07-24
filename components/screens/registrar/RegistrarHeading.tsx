@@ -19,7 +19,7 @@ const RegistrarHeading = (props: RegistrarHeadingProps) => {
           variant="entypo"
           className="text-xl text-neutral-800 dark:text-neutral-200"
         />
-        <Text className="text-2xl font-psemibold tracking-tighter pt-0.5">
+        <Text className="text-2xl font-psemibold tracking-tighter pt-0.5 pl-0.5">
           Inventory List
         </Text>
       </View>

@@ -42,6 +42,11 @@ const ManageNavigator = () => {
       headerShown: false,
       title: "",
     },
+    {
+      name: "create/asset-list-item",
+      headerShown: true,
+      title: "Add Inventory Item",
+    },
   ];
 
   return (

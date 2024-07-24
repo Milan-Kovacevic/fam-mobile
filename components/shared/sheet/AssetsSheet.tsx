@@ -6,7 +6,10 @@ import useReadonlyList from "@/hooks/useReadonlyList";
 import { Text } from "@/components/ui/Text";
 import ScrollableSheetContainer from "./ScrollableSheetContainer";
 import { AssetDTO } from "@/storage/models/assets";
-import { getAssetsByLocation } from "@/storage/repositories/assets-repository";
+import {
+  getAllAssets,
+  getAssetsByLocation,
+} from "@/storage/repositories/assets-repository";
 import AssetsList from "@/components/screens/assets/AssetsList";
 
 const AssetsSheet = (props: SheetProps<"assets-sheet">) => {
@@ -17,7 +20,10 @@ const AssetsSheet = (props: SheetProps<"assets-sheet">) => {
   });
 
   async function fetchAssets() {
-    const result = await getAssetsByLocation(db, payload?.locationId ?? 0);
+    var result: AssetDTO[] = [];
+    if (payload?.locationId)
+      result = await getAssetsByLocation(db, payload?.locationId ?? 0);
+    else result = await getAllAssets(db);
     return result;
   }
 

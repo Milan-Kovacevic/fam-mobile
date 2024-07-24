@@ -42,7 +42,7 @@ const LandingDashboard = () => {
             <Icon
               icon="gear"
               variant="fontawesome"
-              className="text-2xl text-gray-500 dark:text-gray-400"
+              className="text-2xl text-gray-500 dark:text-gray-300/80"
             />
           )}
         />

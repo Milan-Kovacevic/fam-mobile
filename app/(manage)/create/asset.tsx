@@ -1,5 +1,5 @@
 import { useColorScheme, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Screen } from "@/components/ui/Screen";
 import ManageAssetForm, {
   AssetForm,
@@ -23,7 +23,7 @@ const CreateAssetScreen = () => {
       ...formData,
       employeeId: formData.employee.id,
       locationId: formData.location.id,
-      dateCreated: new Date().getUTCMilliseconds().toString(),
+      dateCreated: new Date().getTime().toString(),
     })
       .then((data) => {
         router.push("/assets");

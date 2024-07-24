@@ -9,8 +9,8 @@ const LandingActions = () => {
     router.push("/create/asset?scan=true");
   }
 
-  function handleGoToMainPage() {
-    router.push("/assets");
+  function handleGoToRegistrar() {
+    router.push("/registrar?create=true");
   }
 
   return (
@@ -34,7 +34,7 @@ const LandingActions = () => {
         text="Create List"
         className="self-center py-0"
         variant="secondary-outline"
-        onPressed={handleGoToMainPage}
+        onPressed={handleGoToRegistrar}
         textClassName="pt-2 px-0 text-sm pb-1.5 text-[12px]"
         LeftAccessory={() => (
           <Icon

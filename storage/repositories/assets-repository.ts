@@ -10,7 +10,9 @@ export async function createAssetsTable(db: SQLiteDatabase) {
   await db.execAsync(`
     PRAGMA journal_mode = 'wal';
     CREATE TABLE IF NOT EXISTS assets (id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL, description TEXT,
-    barcode TEXT NOT NULL, price DECIMAL(12,4) NOT NULL, employeeId INTEGER NOT NULL, locationId INTEGER NOT NULL, dateCreated TEXT NOT NULL);
+    barcode TEXT NOT NULL, price DECIMAL(12,4) NOT NULL, employeeId INTEGER NOT NULL, locationId INTEGER NOT NULL, dateCreated TEXT NOT NULL, 
+    FOREIGN KEY (employeeId) REFERENCES employees(id) ON DELETE CASCADE, FOREIGN KEY (locationId) REFERENCES locations(id) ON DELETE CASCADE);
+    
     INSERT INTO assets (name, barcode, price, employeeId, locationId, dateCreated) VALUES ('Laptop', '1234567890', 999.49, 1, 1, '1721416620493');
     INSERT INTO assets (name, barcode, price, employeeId, locationId, dateCreated) VALUES ('Tastatura', '0000099999', 39.99, 2, 2, '1721416493');
     `);
@@ -51,6 +53,19 @@ export async function getAssetById(
   var result = await db.getFirstAsync<AssetDTO>(
     "SELECT * FROM assets WHERE id = ?",
     [id]
+  );
+  return result ?? null;
+}
+
+export async function getAssetDetailsByBarcode(
+  db: SQLiteDatabase,
+  code: string
+): Promise<AssetDetailsDTO | null> {
+  var result = await db.getFirstAsync<AssetDetailsDTO>(
+    `SELECT a.id, a.name, a.description, a.barcode, a.price, a.dateCreated, e.id as employeeId, CONCAT(e.firstName, ' ', e.lastName) as employeeName, 
+    l.id as locationId, l.name as locationName, l.latitude as locationLatitude, l.longitude as locationLongitude 
+    FROM assets a INNER JOIN employees e ON a.employeeId = e.id INNER JOIN locations l ON a.locationId = l.id WHERE a.barcode = ?`,
+    [code]
   );
   return result ?? null;
 }

@@ -18,12 +18,12 @@ const CardButton = (props: CardButtonProps) => {
         <Icon
           icon={icon}
           variant={iconVariant}
+          {...rest}
           className="text-xl text-neutral-700 dark:text-neutral-400"
         />
       )}
       className="p-2 py-0.5 self-center"
       onPressed={onPressed}
-      {...rest}
     />
   );
 };

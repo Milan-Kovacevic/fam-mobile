@@ -4,13 +4,20 @@ import {
   AssetListDTO,
   AssetListItemDTO,
   CreateAssetListDTO,
+  UpdateAssetListDTO,
   UpdateAssetListItemDTO,
 } from "../models/asset-lists";
 
 export async function createAssetListsTable(db: SQLiteDatabase) {
   await db.execAsync(`
     PRAGMA journal_mode = 'wal';
+    PRAGMA foreign_keys = ON;
     CREATE TABLE IF NOT EXISTS asset_lists (id INTEGER PRIMARY KEY NOT NULL, dateCreated TEXT NOT NULL, dateUpdated TEXT);
+    `);
+}
+
+export async function seedAssetListsTable(db: SQLiteDatabase) {
+  await db.execAsync(`
     INSERT INTO asset_lists (dateCreated) VALUES ('1721416660493');
     `);
 }
@@ -18,11 +25,17 @@ export async function createAssetListsTable(db: SQLiteDatabase) {
 export async function createAssetListItemsTable(db: SQLiteDatabase) {
   await db.execAsync(`
     PRAGMA journal_mode = 'wal';
+    PRAGMA foreign_keys = ON;
     CREATE TABLE IF NOT EXISTS asset_list_items (id INTEGER PRIMARY KEY NOT NULL, listId INTEGER NOT NULL, assetId INTEGER NOT NULL,
     previousLocationId INTEGER NOT NULL, currentLocationId INTEGER NOT NULL, previousEmployeeId INTEGER NOT NULL, currentEmployeeId INTEGER NOT NULL,
     FOREIGN KEY (listId) REFERENCES asset_lists(id) ON DELETE CASCADE, FOREIGN KEY (assetId) REFERENCES assets(id) ON DELETE CASCADE, 
     FOREIGN KEY (previousLocationId) REFERENCES locations(id) ON DELETE CASCADE, FOREIGN KEY (currentLocationId) REFERENCES locations(id) ON DELETE CASCADE,
     FOREIGN KEY (previousEmployeeId) REFERENCES employees(id) ON DELETE CASCADE, FOREIGN KEY (currentEmployeeId) REFERENCES employees(id) ON DELETE CASCADE);
+    `);
+}
+
+export async function seedAssetListItemsTable(db: SQLiteDatabase) {
+  await db.execAsync(`
     INSERT INTO asset_list_items (listId, assetId, previousLocationId, currentLocationId, previousEmployeeId, currentEmployeeId) VALUES (1, 1, 1, 2, 1, 2);
     INSERT INTO asset_list_items (listId, assetId, previousLocationId, currentLocationId, previousEmployeeId, currentEmployeeId) VALUES (1, 2, 2, 2, 2, 2);
     `);
@@ -55,17 +68,29 @@ export async function getAllAssetLists(
 
 export async function createAssetList(
   db: SQLiteDatabase,
-  assetList: CreateAssetListDTO
+  request: CreateAssetListDTO
 ): Promise<AssetListDTO> {
   const result = await db.runAsync(
     "INSERT INTO asset_lists (dateCreated) VALUES (?)",
-    [assetList.dateCreated]
+    [request.dateCreated]
   );
 
   const listId = result.lastInsertRowId;
-  if (result.changes == 1) return { id: listId, ...assetList, items: [] };
+  if (result.changes == 1) return { id: listId, ...request, items: [] };
 
   throw new Error(`Unable to insert record for a asset list`);
+}
+
+export async function updateAssetList(
+  db: SQLiteDatabase,
+  request: UpdateAssetListDTO
+): Promise<boolean> {
+  const result = await db.runAsync(
+    "UPDATE asset_lists SET dateUpdated = ? WHERE id = ?",
+    [request.dateUpdated, request.id]
+  );
+
+  return result.changes == 1;
 }
 
 export async function deleteAssetList(
@@ -131,6 +156,12 @@ export async function updateAssetListItem(
       request.id,
     ]
   );
+}
+
+export async function getAllAssetListItems(db: SQLiteDatabase) {
+  const result = await db.getAllAsync("SELECT * from asset_list_items");
+
+  return result;
 }
 
 export async function deleteAssetListItem(

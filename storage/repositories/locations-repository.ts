@@ -15,10 +15,22 @@ interface LocationEntity {
 export async function createLocationsTable(db: SQLiteDatabase) {
   await db.execAsync(`
     PRAGMA journal_mode = 'wal';
-    CREATE TABLE IF NOT EXISTS locations (id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL UNIQUE, latitude DECIMAL(12,8) NOT NULL, longitude DECIMAL(12,8) NOT NULL);
+    CREATE TABLE IF NOT EXISTS locations (id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL UNIQUE, latitude DECIMAL(12,8) NOT NULL, 
+    longitude DECIMAL(12,8) NOT NULL);
+  `);
+}
+
+export async function seedLocationsTable(db: SQLiteDatabase) {
+  await db.execAsync(`
     INSERT INTO locations (name, latitude, longitude) VALUES ('Banja Luka', 44.772182, 17.191000);
     INSERT INTO locations (name, latitude, longitude) VALUES ('Laktasi', 44.906400, 17.301500);
-  `);
+    INSERT INTO locations (name, latitude, longitude) VALUES ('Gradiska', 45.146853, 17.254242);
+    INSERT INTO locations (name, latitude, longitude) VALUES ('Čelinac', 44.725256, 17.322873);
+    INSERT INTO locations (name, latitude, longitude) VALUES ('Aleksandrovac', 44.968482, 17.318019);
+    INSERT INTO locations (name, latitude, longitude) VALUES ('Prnjavor', 44.866936, 17.662874);
+    INSERT INTO locations (name, latitude, longitude) VALUES ('Teslić', 44.606888, 17.858124);
+    INSERT INTO locations (name, latitude, longitude) VALUES ('Srbac', 45.098527, 17.524289);
+    `);
 }
 
 export async function getAllLocations(

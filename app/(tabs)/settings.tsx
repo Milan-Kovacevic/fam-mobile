@@ -1,26 +1,36 @@
 import { Button } from "@/components/ui/Button";
-import { Icon } from "@/components/ui/Icon";
 import {
   $horizontalPaddingClassName,
   SafeScreen,
 } from "@/components/ui/Screen";
-import { Text } from "@/components/ui/Text";
 import React, { useState } from "react";
-import { View } from "react-native";
+import { useColorScheme, View } from "react-native";
 import RadioGroup from "@/components/ui/RadioGroup";
 import translate, { i18n } from "@/i18n";
 import { reloadAppAsync } from "expo";
 import { cn } from "@/utils/tw";
 import SettingsHeading from "@/components/screens/settings/SettingsHeading";
+import { clearDatabase } from "@/storage/StorageProvider";
+import { useSQLiteContext } from "expo-sqlite";
+import { showToast } from "@/utils/toast";
 
 export default function SettingsScreen() {
   const [language, setLanguage] = useState<string>(i18n.locale);
   const [key, setKey] = useState(0);
+  const db = useSQLiteContext();
+  const scheme = useColorScheme();
 
-  async function handleSaveSettings() {
-    i18n.locale = language;
+  async function handleChangeSettings(id: string) {
+    i18n.locale = id;
+    setLanguage(id);
     await reloadAppAsync();
-    setKey((prevKey) => prevKey + 1);
+  }
+
+  async function handleClearData() {
+    clearDatabase(db).then((_) => {
+      showToast(translate("settings.clearedDataMessage"), scheme);
+    });
+    await reloadAppAsync();
   }
 
   return (
@@ -40,7 +50,7 @@ export default function SettingsScreen() {
         <View className="mx-0.5 mt-3">
           <RadioGroup
             selectedId={language}
-            onSelectionChange={setLanguage}
+            onSelectionChange={handleChangeSettings}
             title={translate("settings.displayLanguageLabel")}
             options={[
               {
@@ -57,8 +67,8 @@ export default function SettingsScreen() {
           />
           <Button
             variant="primary"
-            text={translate("settings.saveChangesLabel")}
-            onPressed={handleSaveSettings}
+            text={translate("settings.clearDataLabel")}
+            onPressed={handleClearData}
             className="mt-6 flex-1"
             loading={false}
           />

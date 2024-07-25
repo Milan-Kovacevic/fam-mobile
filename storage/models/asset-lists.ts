@@ -26,6 +26,11 @@ export type CreateAssetListDTO = {
   dateCreated: string;
 };
 
+export type UpdateAssetListDTO = {
+  id: number;
+  dateUpdated: string;
+};
+
 export type AddAssetListItemDTO = {
   listId: number;
   assetId: number;

@@ -1,11 +1,22 @@
 import React from "react";
 import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
-import { createLocationsTable } from "./repositories/locations-repository";
-import { createEmployeesTable } from "./repositories/employees-repository";
-import { createAssetsTable } from "./repositories/assets-repository";
+import {
+  createLocationsTable,
+  seedLocationsTable,
+} from "./repositories/locations-repository";
+import {
+  createEmployeesTable,
+  seedEmployeesTable,
+} from "./repositories/employees-repository";
+import {
+  createAssetsTable,
+  seedAssetsTable,
+} from "./repositories/assets-repository";
 import {
   createAssetListItemsTable,
   createAssetListsTable,
+  seedAssetListItemsTable,
+  seedAssetListsTable,
 } from "./repositories/asset-list-repository";
 
 export const DATABASE_NAME = "fam.db";
@@ -39,8 +50,21 @@ async function migrateDbIfNeeded(db: SQLiteDatabase) {
     await createAssetsTable(db);
     await createAssetListsTable(db);
     await createAssetListItemsTable(db);
+    await seedLocationsTable(db);
+    await seedEmployeesTable(db);
+    await seedAssetsTable(db);
+    await seedAssetListsTable(db);
+    await seedAssetListItemsTable(db);
     console.log("Applied database migration");
   }
 
   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
+}
+
+export async function clearDatabase(db: SQLiteDatabase) {
+  await db.execAsync("DELETE FROM locations");
+  await db.execAsync("DELETE FROM employees");
+  await db.execAsync("DELETE FROM assets");
+  await db.execAsync("DELETE FROM asset_lists");
+  await db.execAsync("DELETE FROM asset_list_items");
 }

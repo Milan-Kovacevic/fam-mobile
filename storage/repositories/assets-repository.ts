@@ -9,12 +9,18 @@ import {
 export async function createAssetsTable(db: SQLiteDatabase) {
   await db.execAsync(`
     PRAGMA journal_mode = 'wal';
+    PRAGMA foreign_keys = ON;
     CREATE TABLE IF NOT EXISTS assets (id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL, description TEXT,
     barcode TEXT NOT NULL, price DECIMAL(12,4) NOT NULL, employeeId INTEGER NOT NULL, locationId INTEGER NOT NULL, dateCreated TEXT NOT NULL, 
     FOREIGN KEY (employeeId) REFERENCES employees(id) ON DELETE CASCADE, FOREIGN KEY (locationId) REFERENCES locations(id) ON DELETE CASCADE);
-    
+    `);
+}
+
+export async function seedAssetsTable(db: SQLiteDatabase) {
+  await db.execAsync(`
     INSERT INTO assets (name, barcode, price, employeeId, locationId, dateCreated) VALUES ('Laptop', '1234567890', 999.49, 1, 1, '1721416620493');
-    INSERT INTO assets (name, barcode, price, employeeId, locationId, dateCreated) VALUES ('Tastatura', '0000099999', 39.99, 2, 2, '1721416493');
+    INSERT INTO assets (name, barcode, price, employeeId, locationId, dateCreated) VALUES ('Tastatura', '0000099999', 39.99, 2, 2, '1721416620493');
+    INSERT INTO assets (name, barcode, price, employeeId, locationId, dateCreated) VALUES ('Mis', '0000099998', 28.89, 3, 2, '1721416620493');
     `);
 }
 

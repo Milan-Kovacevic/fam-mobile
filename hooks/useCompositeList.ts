@@ -14,7 +14,7 @@ type UseCompositeListProps<T extends BaseListData> = {
   searchData: (query: string) => Promise<T[]>;
   onDelete: (id: number) => Promise<boolean>;
   onCreate: () => Promise<T | null>;
-  onDeleteItem: (id: number) => Promise<boolean>;
+  onDeleteItem: (listId: number, itemId: number) => Promise<boolean>;
   onEditItem: (id: number) => Promise<void>;
 };
 
@@ -24,6 +24,7 @@ function useCompositeList<T extends BaseListData>(
   const { fetchData, searchData, onDelete, onCreate, onDeleteItem } = props;
   const [listData, setListData] = useState<T[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
@@ -43,6 +44,13 @@ function useCompositeList<T extends BaseListData>(
     const result = await searchData(query);
     setListData(result);
     setLoading(false);
+  }
+
+  async function onRefreshing() {
+    setRefreshing(true);
+    await loadListData();
+    setRefreshing(false);
+    setSearchText("");
   }
 
   async function onSearchClear() {
@@ -83,7 +91,7 @@ function useCompositeList<T extends BaseListData>(
     var list = listData.find((x) => x.id == listId);
     if (!list) return;
 
-    var isSuccess = await onDeleteItem(itemId);
+    var isSuccess = await onDeleteItem(listId, itemId);
     if (isSuccess) {
       const newItems = [...list.items.filter((x) => x.id != itemId)];
 
@@ -99,6 +107,8 @@ function useCompositeList<T extends BaseListData>(
     listData,
     loading,
     searchText,
+    refreshing,
+    onRefreshing,
     onSearchTextChanged,
     onSearchClear,
     onSearch,

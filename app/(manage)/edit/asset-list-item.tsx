@@ -12,14 +12,16 @@ import ManageRegistrarForm, {
 import { getAssetDetailsByBarcode } from "@/storage/repositories/assets-repository";
 import { showToast } from "@/utils/toast";
 import {
-  getAssetListItemDetails,
-  updateAssetListItem,
-} from "@/storage/repositories/asset-list-repository";
+  getInventoryListItemDetails,
+  updateInventoryListItem,
+} from "@/storage/services/registrar-service";
+import { AssetListItemDTO } from "@/storage/models/asset-lists";
 
 const EditAssetListItemScreen = () => {
   const db = useSQLiteContext();
   const { id } = useLocalSearchParams();
   const [itemId, setItemId] = useState<number>();
+  const [inventoryList, setInventoryList] = useState<AssetListItemDTO>();
   const [registrarItem, setRegistrarItem] = useState<RegistrarItemFormType>();
   const scheme = useColorScheme();
   const [loading, setLoading] = useState(false);
@@ -36,14 +38,14 @@ const EditAssetListItemScreen = () => {
     }
     setItemId(routeId);
     setLoading(true);
-    getAssetListItemDetails(db, routeId)
+    getInventoryListItemDetails(db, routeId)
       .then((result) => {
         if (result == null) {
           showToast("Inventory item was not found, try again later.", scheme);
           router.push("/registrar");
           return;
         }
-
+        setInventoryList(result);
         setRegistrarItem({
           asset: {
             id: result.assetId,
@@ -75,10 +77,13 @@ const EditAssetListItemScreen = () => {
   }, []);
 
   async function handleRegistrarItemSubmitted(formData: RegistrarItemFormType) {
+    if (!itemId || !inventoryList?.listId) return;
+
     setLoading(true);
     await delay(750);
-    updateAssetListItem(db, {
-      id: itemId!,
+    updateInventoryListItem(db, {
+      id: itemId,
+      listId: inventoryList?.listId,
       assetId: formData.asset.id,
       previousLocationId: formData.previousLocation.id,
       currentLocationId: formData.isSameLocation

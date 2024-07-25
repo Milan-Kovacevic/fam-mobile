@@ -9,15 +9,17 @@ import RegistrarHeading from "@/components/screens/registrar/RegistrarHeading";
 import SearchInput from "@/components/ui/SearchInput";
 import RegistrarList from "@/components/screens/registrar/RegistrarList";
 import { useSQLiteContext } from "expo-sqlite";
-import {
-  createAssetList,
-  deleteAssetList,
-  deleteAssetListItem,
-  getAllAssetLists,
-} from "@/storage/repositories/asset-list-repository";
 import { showToast } from "@/utils/toast";
 import useCompositeList from "@/hooks/useCompositeList";
 import { router, useLocalSearchParams } from "expo-router";
+import {
+  createEmptyRegistrarItem,
+  deleteInventoryListItem,
+  deleteRegistrarItem,
+  getAssetRegistrar,
+  searchAssetRegistrar,
+} from "@/storage/services/registrar-service";
+import { getAllAssetListItems } from "@/storage/repositories/asset-list-repository";
 
 const RegistrarScreen = () => {
   const db = useSQLiteContext();
@@ -27,6 +29,8 @@ const RegistrarScreen = () => {
     searchText,
     loading,
     listData,
+    refreshing,
+    onRefreshing,
     onSearch,
     onSearchClear,
     onSearchTextChanged,
@@ -51,20 +55,16 @@ const RegistrarScreen = () => {
   }, []);
 
   async function fetchInventoryLists() {
-    const result = await getAllAssetLists(db);
-    return result;
+    return await getAssetRegistrar(db);
   }
 
   async function searchInventoryLists(query: string) {
-    const result = await getAllAssetLists(db);
-    return result;
+    return await searchAssetRegistrar(db, query);
   }
 
   async function handleCreateRegistrarItem() {
     try {
-      var item = await createAssetList(db, {
-        dateCreated: new Date().getTime().toString(),
-      });
+      var item = await createEmptyRegistrarItem(db);
       showToast("Created empty Inventory list...", scheme);
       return item;
     } catch {
@@ -74,13 +74,13 @@ const RegistrarScreen = () => {
   }
 
   async function handleDeleteRegistrarItem(id: number) {
-    var isSuccess = await deleteAssetList(db, id);
+    var isSuccess = await deleteRegistrarItem(db, id);
     if (isSuccess) showToast("Inventory list removed successfully!", scheme);
     return isSuccess;
   }
 
-  async function handleDeleteInventoryListItem(itemId: number) {
-    var isSuccess = await deleteAssetListItem(db, itemId);
+  async function handleDeleteInventoryListItem(listId: number, itemId: number) {
+    var isSuccess = await deleteInventoryListItem(db, listId, itemId);
     if (isSuccess)
       showToast("Inventory list item removed successfully!", scheme);
     return isSuccess;
@@ -124,6 +124,8 @@ const RegistrarScreen = () => {
           />
           <RegistrarList
             loading={loading}
+            refreshing={refreshing}
+            onRefreshing={onRefreshing}
             registrar={listData}
             onDeleteList={onDeleteList}
             onDeleteListItem={onDeleteListItem}

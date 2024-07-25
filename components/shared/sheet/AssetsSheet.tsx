@@ -35,7 +35,7 @@ const AssetsSheet = (props: SheetProps<"assets-sheet">) => {
   return (
     <BaseActionSheet>
       <Text variant="neutral" className="mx-2 mb-2 text-base text-center">
-        Assets on this location
+        {payload?.locationId ? "Assets on this location" : "Select Asset"}
       </Text>
       <ScrollableSheetContainer>
         <AssetsList

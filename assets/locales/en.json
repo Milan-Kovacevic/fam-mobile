@@ -14,6 +14,7 @@
     "displayLanguageLabel": "Display Language",
     "displayLanguageEn": "English",
     "displayLanguageSr": "Serbian",
-    "saveChangesLabel": "Apply Changes"
+    "clearDataLabel": "Clear Data",
+    "clearedDataMessage": "Data cleared successfully!"
   }
 }

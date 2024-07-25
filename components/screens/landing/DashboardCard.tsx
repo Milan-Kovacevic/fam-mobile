@@ -68,11 +68,11 @@ const DashboardCard = (props: DashboardCardProps) => {
                 <Icon
                   icon="dollar-sign"
                   variant="feather"
-                  className="text-sm text-neutral-900 dark:text-neutral-200 pt-[2px]"
+                  className="text-sm text-neutral-900 dark:text-neutral-200 pt-[2.5px]"
                 />
 
                 <Text className="self-end text-sm text-neutral-900 dark:text-neutral-200 font-pbold">
-                  {value}
+                  {value.toFixed(2)}
                 </Text>
               </>
             )}

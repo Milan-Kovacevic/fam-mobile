@@ -12,6 +12,8 @@ import ManageRegistrarForm, {
 import { getAssetDetailsByBarcode } from "@/storage/repositories/assets-repository";
 import { showToast } from "@/utils/toast";
 import { addAssetListItem } from "@/storage/repositories/asset-list-repository";
+import { addInventoryListItem } from "@/storage/services/registrar-service";
+import { AddAssetListItemDTO } from "@/storage/models/asset-lists";
 
 const CreateAssetListItemScreen = () => {
   const db = useSQLiteContext();
@@ -37,8 +39,7 @@ const CreateAssetListItemScreen = () => {
     if (!listId) return;
 
     setLoading(true);
-    await delay(750);
-    addAssetListItem(db, {
+    var request: AddAssetListItemDTO = {
       listId: listId!,
       assetId: formData.asset.id,
       previousLocationId: formData.previousLocation.id,
@@ -49,11 +50,12 @@ const CreateAssetListItemScreen = () => {
       currentEmployeeId: formData.isSameEmployee
         ? formData.previousEmployee.id
         : formData.currentEmployee?.id!,
-    })
+    };
+    addInventoryListItem(db, request)
       .then(() => {
         router.push("/registrar");
       })
-      .catch((err) => {
+      .catch(() => {
         showToast("Unable to add inventory item. Try again later.", scheme);
       })
       .finally(() => {

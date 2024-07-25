@@ -1,13 +1,16 @@
-import { TouchableOpacity, View } from "react-native";
+import { RefreshControl, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import Accordion from "react-native-collapsible/Accordion";
 import { AssetListDTO } from "@/storage/models/asset-lists";
 import { RegistrarItemContent, RegistrarItemHeader } from "./RegistrarItem";
 import FlatListSkeleton from "@/components/shared/list/FlatListSkeleton";
+import EmptyListPlaceholder from "@/components/shared/list/EmptyListPlaceholder";
 
 type RegistrarListProps = {
   registrar: AssetListDTO[];
   loading: boolean;
+  refreshing: boolean;
+  onRefreshing: () => void;
   onDeleteList: (id: number) => void;
   onDeleteListItem: (listId: number, itemId: number) => void;
   onEditListItem: (itemId: number) => void;
@@ -18,6 +21,8 @@ const RegistrarList = (props: RegistrarListProps) => {
   const {
     registrar,
     loading,
+    refreshing,
+    onRefreshing,
     onDeleteList,
     onDeleteListItem,
     onEditListItem,
@@ -31,7 +36,7 @@ const RegistrarList = (props: RegistrarListProps) => {
   };
 
   return (
-    <View className="flex-1 py-5 pb-0 mb-1">
+    <View className="flex-1 py-5 mb-6 pb-0">
       {loading ? (
         <FlatListSkeleton className="h-[66px]" />
       ) : (
@@ -42,6 +47,18 @@ const RegistrarList = (props: RegistrarListProps) => {
           containerStyle={{ backgroundColor: "transparent" }}
           sectionContainerStyle={{ backgroundColor: "transparent" }}
           renderAsFlatList={true}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing ?? false}
+              onRefresh={onRefreshing}
+            />
+          }
+          ListEmptyComponent={
+            <EmptyListPlaceholder
+              title={"No Inventory Lists Found"}
+              description="Parhaps you should ajust your search critera or add a new inventory list..."
+            />
+          }
           touchableComponent={TouchableOpacity}
           touchableProps={{
             activeOpacity: 0.8,

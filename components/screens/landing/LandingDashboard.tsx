@@ -1,4 +1,4 @@
-import { View, FlatList } from "react-native";
+import { View, FlatList, RefreshControl } from "react-native";
 import React, { useEffect, useState } from "react";
 import DashboardCard, { DashboardCardProps } from "./DashboardCard";
 import { Button } from "@/components/ui/Button";
@@ -8,15 +8,21 @@ import { useSQLiteContext } from "expo-sqlite";
 import { getDashboardOverviewStats } from "@/storage/services/stats-service";
 import DashboardSkeleton from "./DashboardSkeleton";
 import { delay } from "@/utils/util";
+import Skeleton from "@/components/ui/Skeleton";
 
 const LandingDashboard = () => {
   const db = useSQLiteContext();
   const [stats, setStats] = useState<DashboardCardProps[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
+    loadStats();
+  }, []);
+
+  async function loadStats() {
     setLoading(true);
-    delay(1000).then(() => {
+    await delay(1000).then(() => {
       getDashboardOverviewStats(db)
         .then((result) => {
           setStats(result);
@@ -25,10 +31,16 @@ const LandingDashboard = () => {
           setLoading(false);
         });
     });
-  }, []);
+  }
 
   function handleGoToSettings() {
     router.push("/settings");
+  }
+
+  async function onRefreshing() {
+    setRefreshing(true);
+    await loadStats();
+    setRefreshing(false);
   }
 
   return (
@@ -55,6 +67,12 @@ const LandingDashboard = () => {
           renderItem={(props) => <DashboardCard {...props.item} />}
           keyExtractor={(item) => item.name}
           numColumns={2}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing ?? false}
+              onRefresh={onRefreshing}
+            />
+          }
           contentContainerStyle={{
             width: "auto",
             gap: 0,

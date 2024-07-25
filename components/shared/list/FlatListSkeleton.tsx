@@ -1,5 +1,6 @@
 import { View, ViewProps } from "react-native";
 import React from "react";
+import Skeleton from "@/components/ui/Skeleton";
 
 const FlatListSkeleton = (props: ViewProps) => {
   return (
@@ -14,10 +15,5 @@ const FlatListSkeleton = (props: ViewProps) => {
 export default FlatListSkeleton;
 
 const SkeletonItem = (props: ViewProps) => {
-  return (
-    <View
-      className="rounded-xl mb-2 h-12 bg-gray-300/30 dark:bg-gray-400/20 animate-pulse"
-      {...props}
-    ></View>
-  );
+  return <Skeleton className="mb-2 h-12" {...props}></Skeleton>;
 };

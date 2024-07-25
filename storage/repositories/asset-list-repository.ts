@@ -19,6 +19,7 @@ export async function createAssetListsTable(db: SQLiteDatabase) {
 export async function seedAssetListsTable(db: SQLiteDatabase) {
   await db.execAsync(`
     INSERT INTO asset_lists (dateCreated) VALUES ('1721416660493');
+    INSERT INTO asset_lists (dateCreated) VALUES ('1721416660493');
     `);
 }
 
@@ -38,6 +39,7 @@ export async function seedAssetListItemsTable(db: SQLiteDatabase) {
   await db.execAsync(`
     INSERT INTO asset_list_items (listId, assetId, previousLocationId, currentLocationId, previousEmployeeId, currentEmployeeId) VALUES (1, 1, 1, 2, 1, 2);
     INSERT INTO asset_list_items (listId, assetId, previousLocationId, currentLocationId, previousEmployeeId, currentEmployeeId) VALUES (1, 2, 2, 2, 2, 2);
+    INSERT INTO asset_list_items (listId, assetId, previousLocationId, currentLocationId, previousEmployeeId, currentEmployeeId) VALUES (2, 3, 2, 3, 3, 3);
     `);
 }
 
@@ -61,6 +63,47 @@ export async function getAllAssetLists(
       [lists[i].id]
     );
     result.push({ ...lists[i], items: listItems });
+  }
+
+  return result;
+}
+
+export async function searchAssetLists(
+  db: SQLiteDatabase,
+  query: string
+): Promise<AssetListDTO[]> {
+  var lists = await db.getAllAsync<AssetListDTO>(`SELECT l.* FROM asset_lists l
+    INNER JOIN asset_list_items ai ON ai.listId = l.id 
+    INNER JOIN assets a ON a.id = ai.assetId 
+    INNER JOIN locations pl ON pl.id = ai.previousLocationId 
+    INNER JOIN locations cl ON cl.id = ai.currentLocationId 
+    INNER JOIN employees pe ON pe.id = ai.previousEmployeeId 
+    INNER JOIN employees ce ON ce.id = ai.currentEmployeeId GROUP BY l.id
+    `);
+
+  var result: AssetListDTO[] = [];
+  const searchParam = `%${query}%`;
+  for (let i = 0; i < lists.length; i++) {
+    var listItems = await db.getAllAsync<AssetListItemDTO>(
+      `SELECT ai.*, a.name as assetName, pl.name as previousLocationName, cl.name as currentLocationName, 
+        CONCAT(pe.firstName, ' ', pe.lastName) as previousEmployeeName, CONCAT(ce.firstName, ' ', ce.lastName) as currentEmployeeName 
+        FROM asset_list_items ai 
+        INNER JOIN assets a ON a.id = ai.assetId 
+        INNER JOIN locations pl ON pl.id = ai.previousLocationId 
+        INNER JOIN locations cl ON cl.id = ai.currentLocationId 
+        INNER JOIN employees pe ON pe.id = ai.previousEmployeeId 
+        INNER JOIN employees ce ON ce.id = ai.currentEmployeeId 
+      WHERE ai.listId = ? AND (a.name LIKE ? OR pl.name LIKE ? OR cl.name LIKE ? OR concat(pe.firstName, ' ', pe.lastName) LIKE ? OR concat(ce.firstName, ' ', ce.lastName) LIKE ?)`,
+      [
+        lists[i].id,
+        searchParam,
+        searchParam,
+        searchParam,
+        searchParam,
+        searchParam,
+      ]
+    );
+    if (listItems.length > 0) result.push({ ...lists[i], items: listItems });
   }
 
   return result;

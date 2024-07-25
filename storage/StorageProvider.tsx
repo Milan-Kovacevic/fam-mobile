@@ -45,11 +45,13 @@ async function migrateDbIfNeeded(db: SQLiteDatabase) {
     return;
   }
   if (currentDbVersion === 0) {
-    await createLocationsTable(db);
-    await createEmployeesTable(db);
-    await createAssetsTable(db);
-    await createAssetListsTable(db);
-    await createAssetListItemsTable(db);
+    await Promise.all([
+      createLocationsTable(db),
+      createEmployeesTable(db),
+      createAssetsTable(db),
+      createAssetListsTable(db),
+      createAssetListItemsTable(db),
+    ]);
     await seedLocationsTable(db);
     await seedEmployeesTable(db);
     await seedAssetsTable(db);

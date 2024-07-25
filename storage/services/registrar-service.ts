@@ -6,6 +6,7 @@ import {
   deleteAssetListItem,
   getAllAssetLists,
   getAssetListItemDetails,
+  searchAssetLists,
   updateAssetList,
   updateAssetListItem,
 } from "../repositories/asset-list-repository";
@@ -21,7 +22,7 @@ export async function getAssetRegistrar(db: SQLiteDatabase) {
 }
 
 export async function searchAssetRegistrar(db: SQLiteDatabase, query: string) {
-  return await getAllAssetLists(db);
+  return await searchAssetLists(db, query);
 }
 
 export async function createEmptyRegistrarItem(db: SQLiteDatabase) {

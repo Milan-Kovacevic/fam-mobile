@@ -66,7 +66,7 @@ const RegistrarItemHeader = (props: RegistrarItemHeaderProps) => {
 type RegistrarItemContentProps = {
   assetList: AssetListDTO;
   onDeleteListItem: (listId: number, itemId: number) => void;
-  onEditListItem: (listId: number, itemId: number) => void;
+  onEditListItem: (itemId: number) => void;
   onAddListItem: (listId: number) => void;
 };
 
@@ -116,7 +116,7 @@ const RegistrarItemContent = (props: RegistrarItemContentProps) => {
                 assetItem={item}
                 key={`asset-${index}`}
                 border={index < assetList.items.length - 1}
-                onEdit={() => onEditListItem(assetList.id, item.id)}
+                onEdit={() => onEditListItem(item.id)}
                 onDelete={() => onDeleteListItem(assetList.id, item.id)}
               />
             );

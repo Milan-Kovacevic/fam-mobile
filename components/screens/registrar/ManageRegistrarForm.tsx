@@ -1,4 +1,4 @@
-import { useColorScheme, View } from "react-native";
+import { View } from "react-native";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { z } from "zod";
@@ -11,12 +11,8 @@ import { EmployeeDTO } from "@/storage/models/employees";
 import FormSelectInput from "@/components/shared/form/FormSelectInput";
 import BarCodeScanner from "../assets/BarCodeScanner";
 import { AssetDetailsDTO, AssetDTO } from "@/storage/models/assets";
-import Switch from "@/components/ui/Switch";
 import { Text } from "@/components/ui/Text";
 import FormSwitch from "@/components/shared/form/FormSwitch";
-import { searchForAssets } from "@/storage/repositories/assets-repository";
-import { useSQLiteContext } from "expo-sqlite";
-import { showToast } from "@/utils/toast";
 
 const formSchema = z
   .object({
@@ -107,15 +103,25 @@ const ManageRegistrarForm = (props: ManageRegistrarFormProps) => {
   const { onSubmit, loading, registrarItem, scanCode, onBarcodeScanned } =
     props;
   const [showScanner, setShowScanner] = useState(scanCode ?? false);
-  const [sameLocation, setSameLocation] = useState(false);
-  const [sameEmployee, setSameEmployee] = useState(false);
+  const [sameLocation, setSameLocation] = useState(
+    registrarItem?.isSameLocation
+  );
+  const [sameEmployee, setSameEmployee] = useState(
+    registrarItem?.isSameEmployee
+  );
 
   var initialValues = {
     asset: registrarItem?.asset ?? undefined,
     previousLocation: registrarItem?.previousLocation ?? undefined,
-    currentLocation: registrarItem?.currentLocation ?? undefined,
+    currentLocation: registrarItem?.isSameLocation
+      ? undefined
+      : registrarItem?.currentLocation ?? undefined,
     previousEmployee: registrarItem?.previousEmployee ?? undefined,
-    currentEmployee: registrarItem?.currentEmployee ?? undefined,
+    currentEmployee: registrarItem?.isSameEmployee
+      ? undefined
+      : registrarItem?.currentEmployee ?? undefined,
+    isSameLocation: registrarItem?.isSameLocation ?? false,
+    isSameEmployee: registrarItem?.isSameEmployee ?? false,
   };
 
   const { control, handleSubmit, setValue } = useForm<RegistrarItemFormType>({

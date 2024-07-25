@@ -4,6 +4,7 @@ import {
   AssetListDTO,
   AssetListItemDTO,
   CreateAssetListDTO,
+  UpdateAssetListItemDTO,
 } from "../models/asset-lists";
 
 export async function createAssetListsTable(db: SQLiteDatabase) {
@@ -78,6 +79,25 @@ export async function deleteAssetList(
   return result.changes == 1;
 }
 
+export async function getAssetListItemDetails(
+  db: SQLiteDatabase,
+  id: number
+): Promise<AssetListItemDTO | null> {
+  var result = await db.getFirstAsync<AssetListItemDTO>(
+    `SELECT a.*, aa.name as assetName, pl.name as previousLocationName, cl.name as currentLocationName, 
+        CONCAT(pe.firstName, ' ', pe.lastName) as previousEmployeeName, CONCAT(ce.firstName, ' ', ce.lastName) as currentEmployeeName 
+        FROM asset_list_items a 
+        INNER JOIN assets aa ON aa.id = a.assetId 
+        INNER JOIN locations pl ON pl.id = a.previousLocationId 
+        INNER JOIN locations cl ON cl.id = a.currentLocationId 
+        INNER JOIN employees pe ON pe.id = a.previousEmployeeId 
+        INNER JOIN employees ce ON ce.id = a.currentEmployeeId 
+      WHERE a.id = ?`,
+    [id]
+  );
+  return result;
+}
+
 export async function addAssetListItem(
   db: SQLiteDatabase,
   request: AddAssetListItemDTO
@@ -91,6 +111,24 @@ export async function addAssetListItem(
       request.currentLocationId,
       request.previousEmployeeId,
       request.currentEmployeeId,
+    ]
+  );
+}
+
+export async function updateAssetListItem(
+  db: SQLiteDatabase,
+  request: UpdateAssetListItemDTO
+) {
+  console.log(request);
+  await db.runAsync(
+    "UPDATE asset_list_items SET assetId = ?, previousLocationId = ?, currentLocationId = ?, previousEmployeeId = ?, currentEmployeeId = ? WHERE id = ?",
+    [
+      request.assetId,
+      request.previousLocationId,
+      request.currentLocationId,
+      request.previousEmployeeId,
+      request.currentEmployeeId,
+      request.id,
     ]
   );
 }

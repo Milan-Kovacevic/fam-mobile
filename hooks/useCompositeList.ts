@@ -67,21 +67,6 @@ function useCompositeList<T extends BaseListData>(
     }
   }
 
-  async function onDeleteListItem(listId: number, itemId: number) {
-    if (!onDelete) return;
-
-    var list = listData.find((x) => x.id == listId);
-    if (!list) return;
-
-    var isSuccess = await onDeleteItem(itemId);
-    const newItems = [...list.items.filter((x) => x.id != itemId)];
-    list = { ...list, items: newItems };
-
-    if (isSuccess) {
-      setListData([...listData.filter((x) => x.id != listId), list]);
-    }
-  }
-
   async function onCreateList() {
     if (!onCreate) return;
     var listItem = await onCreate();
@@ -90,6 +75,21 @@ function useCompositeList<T extends BaseListData>(
     }
 
     return listItem;
+  }
+
+  async function onDeleteListItem(listId: number, itemId: number) {
+    if (!onDelete) return;
+
+    var list = listData.find((x) => x.id == listId);
+    if (!list) return;
+
+    var isSuccess = await onDeleteItem(itemId);
+    if (isSuccess) {
+      const newItems = [...list.items.filter((x) => x.id != itemId)];
+
+      const newList = { ...list, items: newItems };
+      setListData(listData.map((x) => (x.id === newList.id ? newList : x)));
+    }
   }
 
   return {

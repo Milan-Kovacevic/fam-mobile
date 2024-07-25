@@ -47,6 +47,11 @@ const ManageNavigator = () => {
       headerShown: true,
       title: "Add Inventory Item",
     },
+    {
+      name: "edit/asset-list-item",
+      headerShown: true,
+      title: "Update Inventory Item",
+    },
   ];
 
   return (
@@ -79,9 +84,6 @@ export default ManageNavigator;
 
 const $headerTitleStyle = {
   fontFamily: "poppinsMedium",
-};
-const $headerStyle = {
-  height: 20,
 };
 const $darkThemeHeaderStyle = {
   backgroundColor: palette.primary950,

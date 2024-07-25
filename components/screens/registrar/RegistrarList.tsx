@@ -9,9 +9,8 @@ type RegistrarListProps = {
   registrar: AssetListDTO[];
   loading: boolean;
   onDeleteList: (id: number) => void;
-
   onDeleteListItem: (listId: number, itemId: number) => void;
-  onEditListItem: (listId: number, itemId: number) => void;
+  onEditListItem: (itemId: number) => void;
   onAddListItem: (listId: number) => void;
 };
 

@@ -34,3 +34,12 @@ export type AddAssetListItemDTO = {
   previousEmployeeId: number;
   currentEmployeeId: number;
 };
+
+export type UpdateAssetListItemDTO = {
+  id: number;
+  assetId: number;
+  previousLocationId: number;
+  currentLocationId: number;
+  previousEmployeeId: number;
+  currentEmployeeId: number;
+};

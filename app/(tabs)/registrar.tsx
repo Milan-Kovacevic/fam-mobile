@@ -79,16 +79,18 @@ const RegistrarScreen = () => {
     return isSuccess;
   }
 
-  async function handleDeleteInventoryListItem(id: number) {
-    var isSuccess = await deleteAssetListItem(db, id);
+  async function handleDeleteInventoryListItem(itemId: number) {
+    var isSuccess = await deleteAssetListItem(db, itemId);
     if (isSuccess)
       showToast("Inventory list item removed successfully!", scheme);
     return isSuccess;
   }
 
-  async function handleEditInventoryListItem(id: number) {
-    showToast("Inventory list update invoked!", scheme);
-    // TODO
+  async function handleEditInventoryListItem(itemId: number) {
+    router.push({
+      pathname: "/edit/asset-list-item",
+      params: { id: itemId },
+    });
   }
 
   async function handleAddInventoryListItem(listId: number) {

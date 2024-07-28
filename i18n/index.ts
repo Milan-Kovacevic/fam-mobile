@@ -1,37 +1,45 @@
-import { I18n, TranslateOptions } from "i18n-js";
-import * as Localization from "expo-localization";
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
 import sr from "@/assets/locales/sr.json";
 import en from "@/assets/locales/en.json";
-import { I18nManager } from "react-native";
+import * as Localization from "expo-localization";
+import i18next from "i18next";
 
 type Translations = typeof en;
-
-const i18n = new I18n({ en, sr });
-i18n.enableFallback = true;
-i18n.defaultLocale = "en";
-const fallbackLocale = "en-US";
-const systemLocale = Localization.getLocales()[0];
-const systemLocaleTag = systemLocale?.languageTag ?? fallbackLocale;
-
-if (Object.prototype.hasOwnProperty.call(i18n.translations, systemLocaleTag)) {
-  // if specific locales like en-FI or en-US is available, set it
-  i18n.locale = systemLocaleTag;
-} else {
-  // otherwise try to fallback to the general locale (dropping the -XX suffix)
-  const generalLocale = systemLocaleTag.split("-")[0];
-  if (Object.prototype.hasOwnProperty.call(i18n.translations, generalLocale)) {
-    i18n.locale = generalLocale;
-  } else {
-    i18n.locale = fallbackLocale;
-  }
-}
-
-// handle RTL languages
-const isRTL = systemLocale?.textDirection === "rtl";
-I18nManager.allowRTL(isRTL);
-I18nManager.forceRTL(isRTL);
-
 type TxKeyPath = RecursiveKeyOf<Translations>;
+
+const resources = {
+  en: { translation: en },
+  sr: { translation: sr },
+};
+
+const initI18n = async () => {
+  const fallbackLocale = "en";
+  let savedLanguage;
+
+  if (!savedLanguage) {
+    const systemLocale = Localization.getLocales()[0];
+    const systemLocaleTag = systemLocale?.languageTag ?? fallbackLocale;
+
+    const generalLocale = systemLocaleTag.split("-")[0];
+    savedLanguage = generalLocale;
+  }
+
+  i18n.use(initReactI18next).init(
+    {
+      compatibilityJSON: "v3",
+      resources,
+      lng: savedLanguage,
+      fallbackLng: fallbackLocale,
+      interpolation: {
+        escapeValue: false,
+      },
+    },
+    () => {}
+  );
+};
+
+initI18n();
 
 // via: https://stackoverflow.com/a/65333050
 type RecursiveKeyOf<TObj extends object> = {
@@ -57,10 +65,5 @@ type RecursiveKeyOfHandleValue<
   ? Text | `${Text}${RecursiveKeyOfInner<TValue>}`
   : Text;
 
-export { isRTL, i18n, TxKeyPath };
-export default function translate(
-  key: TxKeyPath,
-  options?: TranslateOptions
-): string {
-  return i18n.t(key, options);
-}
+export default i18n.t;
+export { TxKeyPath };

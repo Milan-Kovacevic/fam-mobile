@@ -6,6 +6,7 @@ import Separator from "@/components/ui/Separator";
 import AssetDetailsHeading from "./AssetDetailsHeading";
 import { Text } from "@/components/ui/Text";
 import { Icon } from "@/components/ui/Icon";
+import { useTranslation } from "react-i18next";
 
 interface AssetDetailsInfoProps extends ViewProps {
   asset: AssetDetailsDTO;
@@ -13,6 +14,8 @@ interface AssetDetailsInfoProps extends ViewProps {
 
 const AssetDetailsInfo = (props: AssetDetailsInfoProps) => {
   const { asset } = props;
+  const { t } = useTranslation();
+
   return (
     <View className={cn("flex-1")}>
       <View className="">
@@ -31,10 +34,10 @@ const AssetDetailsInfo = (props: AssetDetailsInfoProps) => {
               className="text-lg text-gray-500 dark:text-gray-400"
             />
             <Text
-              className="text-base font-pregular text-gray-700 dark:text-gray-300 pt-0.5"
+              className="text-sm font-pregular text-gray-700 dark:text-gray-300 pt-0.5"
               variant="neutral"
             >
-              Mon 19th Nov 2024
+              {new Date(parseInt(asset.dateCreated)).toLocaleString()}
             </Text>
           </View>
 
@@ -44,9 +47,11 @@ const AssetDetailsInfo = (props: AssetDetailsInfoProps) => {
                 {asset.description}
               </Text>
             ) : (
-              <Text variant="muted" className="text-sm font-pregular italic">
-                No description...
-              </Text>
+              <Text
+                tx={"assets.noDescription"}
+                variant="muted"
+                className="text-sm font-pregular italic"
+              />
             )}
           </View>
           <Text
@@ -62,7 +67,7 @@ const AssetDetailsInfo = (props: AssetDetailsInfoProps) => {
         <AssetDetailsHeading
           icon="user"
           iconVariant="feather"
-          text={" Employee in charge"}
+          text={t("assets.employeeDetailsLabel")}
           variant="subtitle"
         />
         <View className="self-start">
@@ -76,7 +81,7 @@ const AssetDetailsInfo = (props: AssetDetailsInfoProps) => {
         <AssetDetailsHeading
           icon="map-pin"
           iconVariant="feather"
-          text={"Asset location"}
+          text={t("assets.locationDetailsLabel")}
           variant="subtitle"
         />
         <View className="self-start mx-1">

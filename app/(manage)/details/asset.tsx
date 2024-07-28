@@ -11,8 +11,10 @@ import AssetDetailsInfo from "@/components/screens/assets/AssetDetailsInfo";
 import HorizontalCarousel from "@/components/ui/HorizontalCarousel";
 import AssetDetailsLocationMap from "@/components/screens/assets/AssetDetailsLocationMap";
 import { SheetManager } from "react-native-actions-sheet";
+import { useTranslation } from "react-i18next";
 
 const AssetDetailsScreen = () => {
+  const { t } = useTranslation();
   const db = useSQLiteContext();
   const scheme = useColorScheme();
   const { id } = useLocalSearchParams();
@@ -34,7 +36,7 @@ const AssetDetailsScreen = () => {
     getAssetDetails(db, routeId)
       .then((result) => {
         if (result == null) {
-          showToast("Asset was not found, try again later.", scheme);
+          showToast(t("assets.notFoundError"), scheme);
           router.push("/assets");
           return;
         }

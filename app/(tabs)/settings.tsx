@@ -6,29 +6,28 @@ import {
 import React, { useState } from "react";
 import { useColorScheme, View } from "react-native";
 import RadioGroup from "@/components/ui/RadioGroup";
-import translate, { i18n } from "@/i18n";
 import { reloadAppAsync } from "expo";
 import { cn } from "@/utils/tw";
 import SettingsHeading from "@/components/screens/settings/SettingsHeading";
 import { clearDatabase } from "@/storage/StorageProvider";
 import { useSQLiteContext } from "expo-sqlite";
 import { showToast } from "@/utils/toast";
+import { useTranslation } from "react-i18next";
 
 export default function SettingsScreen() {
-  const [language, setLanguage] = useState<string>(i18n.locale);
-  const [key, setKey] = useState(0);
+  const { t, i18n } = useTranslation();
+
+  const [language, setLanguage] = useState<string>(i18n.language);
   const db = useSQLiteContext();
   const scheme = useColorScheme();
 
   async function handleChangeSettings(id: string) {
-    i18n.locale = id;
+    i18n.changeLanguage(id);
     setLanguage(id);
-    await reloadAppAsync();
   }
-
   async function handleClearData() {
     clearDatabase(db).then((_) => {
-      showToast(translate("settings.clearedDataMessage"), scheme);
+      showToast(t("settings.clearedDataMessage"), scheme);
     });
     await reloadAppAsync();
   }
@@ -40,7 +39,6 @@ export default function SettingsScreen() {
       contentContainerClassName="flex-1"
     >
       <View
-        key={key}
         className={cn(
           "pt-3.5 mb-1.5 items-stretch flex-1",
           $horizontalPaddingClassName
@@ -51,23 +49,23 @@ export default function SettingsScreen() {
           <RadioGroup
             selectedId={language}
             onSelectionChange={handleChangeSettings}
-            title={translate("settings.displayLanguageLabel")}
+            title={t("settings.displayLanguageLabel")}
             options={[
               {
                 id: "en",
                 value: "en",
-                label: translate("settings.displayLanguageEn"),
+                label: t("settings.displayLanguageEn"),
               },
               {
                 id: "sr",
                 value: "sr",
-                label: translate("settings.displayLanguageSr"),
+                label: t("settings.displayLanguageSr"),
               },
             ]}
           />
           <Button
             variant="primary"
-            text={translate("settings.clearDataLabel")}
+            text={t("settings.clearDataLabel")}
             onPressed={handleClearData}
             className="mt-6 flex-1"
             loading={false}

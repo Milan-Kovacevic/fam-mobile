@@ -15,8 +15,10 @@ import { showToast } from "@/utils/toast";
 import useSearchableList from "@/hooks/useSearchableList";
 import HorizontalCarousel from "@/components/ui/HorizontalCarousel";
 import LocationsMap from "@/components/screens/locations/LocationsMap";
+import { useTranslation } from "react-i18next";
 
 const LocationsScreen = () => {
+  const { t } = useTranslation();
   const db = useSQLiteContext();
   const scheme = useColorScheme();
 
@@ -58,7 +60,7 @@ const LocationsScreen = () => {
   async function handleDeleteLocation(id: number) {
     var isSuccess = await deleteLocation(db, id);
     if (isSuccess) {
-      showToast("Location removed successfully!", scheme);
+      showToast(t("locations.removeToastMessage"), scheme);
     }
     return isSuccess;
   }
@@ -78,7 +80,7 @@ const LocationsScreen = () => {
         <View className="mb-0 flex-1">
           <View className={$horizontalMarginClassName}>
             <SearchInput
-              placeholder="Search..."
+              placeholder={t("common.searchPlaceholder")}
               text={searchText}
               onTextChange={onSearchTextChanged}
               onSearch={onSearch}

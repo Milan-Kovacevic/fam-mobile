@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TextField } from "@/components/ui/TextField";
+import { useTranslation } from "react-i18next";
 
 type BarCodeScannerProps = {
   onBarCodeRead: (data: string) => void;
@@ -14,6 +15,7 @@ type BarCodeScannerProps = {
 
 const BarCodeScanner = (props: BarCodeScannerProps) => {
   const { onBarCodeRead, onCanceled } = props;
+  const { t } = useTranslation();
   const [hasPermission, setHasPermission] = useState(true);
   const [barcode, setBarcode] = useState<string>();
 
@@ -27,7 +29,7 @@ const BarCodeScanner = (props: BarCodeScannerProps) => {
   if (!hasPermission)
     return (
       <View>
-        <Text variant="heading">Camera Permission not granted</Text>
+        <Text variant="heading">{t("modals.barCodeNoPermission")}</Text>
       </View>
     );
 
@@ -54,7 +56,7 @@ const BarCodeScanner = (props: BarCodeScannerProps) => {
               className="text-3xl ml-1"
             />
             <Text className="ml-2" variant="heading">
-              Scan A Barcode
+              {t("modals.barCodeTitle")}
             </Text>
           </View>
           <Button
@@ -74,8 +76,8 @@ const BarCodeScanner = (props: BarCodeScannerProps) => {
           <TextField
             readonly={true}
             text={barcode ?? ""}
-            placeholder="Scan a barcode..."
-            title="Scanned Barcode"
+            placeholder={t("modals.formBarCodePlaceholder")}
+            title={t("modals.formBarCodeLabel")}
             className="flex-1"
           />
           <Button

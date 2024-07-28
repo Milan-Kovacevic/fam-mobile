@@ -1,12 +1,11 @@
-import { TouchableOpacity, View } from "react-native";
-import React, { ReactNode } from "react";
-import { Button } from "../../ui/Button";
-import { Icon, IconVariant } from "../../ui/Icon";
+import { View } from "react-native";
+import React from "react";
+import { Icon } from "../../ui/Icon";
 import { cn } from "@/utils/tw";
 import { Text } from "@/components/ui/Text";
 import CardContainer from "@/components/shared/card/CardContainer";
 import { AssetDTO } from "@/storage/models/assets";
-import CardButton from "@/components/shared/card/CardButton";
+import { useTranslation } from "react-i18next";
 
 type AssetCardProps = {
   asset: AssetDTO;
@@ -17,6 +16,8 @@ type AssetCardProps = {
 
 const AssetCard = (props: AssetCardProps) => {
   const { asset, onPressed, pressable, readonly } = props;
+  const { t } = useTranslation();
+
   return (
     <CardContainer
       selectable={pressable ?? false}
@@ -47,10 +48,9 @@ const AssetCard = (props: AssetCardProps) => {
           ) : (
             <Text
               variant="muted"
+              tx="assets.noDescription"
               className="flex-1 text-[11px] font-pregular italic"
-            >
-              No description...
-            </Text>
+            ></Text>
           )}
         </View>
       </View>

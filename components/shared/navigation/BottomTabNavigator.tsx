@@ -3,8 +3,10 @@ import React from "react";
 import { TabIcon } from "./TabIcon";
 import { useColorScheme, ViewStyle } from "react-native";
 import { palette } from "@/theme/colors";
+import { useTranslation } from "react-i18next";
 
 const BottomTabNavigator = () => {
+  const { t } = useTranslation();
   const scheme = useColorScheme();
 
   return (
@@ -28,7 +30,7 @@ const BottomTabNavigator = () => {
             <TabIcon
               variant="feather"
               icon={focused ? "layers" : "layers"}
-              name="Assets"
+              name={t("navigation.assets")}
               focused={focused}
             />
           ),
@@ -42,7 +44,7 @@ const BottomTabNavigator = () => {
             <TabIcon
               variant="feather"
               icon={focused ? "map-pin" : "map-pin"}
-              name={"Locations"}
+              name={t("navigation.locations")}
               focused={focused}
             />
           ),
@@ -56,7 +58,7 @@ const BottomTabNavigator = () => {
             <TabIcon
               variant="entypo"
               icon={focused ? "list" : "list"}
-              name={"Registrar"}
+              name={t("navigation.registrar")}
               focused={focused}
             />
           ),
@@ -70,7 +72,7 @@ const BottomTabNavigator = () => {
             <TabIcon
               variant="feather"
               icon={focused ? "user" : "user"}
-              name={"Employees"}
+              name={t("navigation.employees")}
               focused={focused}
             />
           ),
@@ -84,7 +86,7 @@ const BottomTabNavigator = () => {
             <TabIcon
               variant="feather"
               icon={focused ? "settings" : "settings"}
-              name={"Settings"}
+              name={t("navigation.settings")}
               focused={focused}
             />
           ),

@@ -14,8 +14,10 @@ import ManageLocationForm, {
 } from "@/components/screens/locations/ManageLocationForm";
 import { delay } from "@/utils/util";
 import { showToast } from "@/utils/toast";
+import { useTranslation } from "react-i18next";
 
 const EditLocationScreen = () => {
+  const { t } = useTranslation();
   const db = useSQLiteContext();
   const { id } = useLocalSearchParams();
   const [locationId, setLocationId] = useState<number>();
@@ -38,7 +40,7 @@ const EditLocationScreen = () => {
     getLocationById(db, routeId)
       .then((result) => {
         if (result == null) {
-          showToast("Location was not found, try again later.", scheme);
+          showToast(t("locations.notFoundError"), scheme);
           router.push("/locations");
           return;
         }
@@ -60,11 +62,11 @@ const EditLocationScreen = () => {
       .then((isSuccess) => {
         if (isSuccess) router.push("/locations");
         else {
-          showToast("Unable to update location.", scheme);
+          showToast(t("locations.updateError"), scheme);
         }
       })
       .catch((err) => {
-        showToast("Unable to update location. Possible duplicate name", scheme);
+        showToast(t("locations.duplicateError"), scheme);
       })
       .finally(() => {
         setLoading(false);
@@ -76,7 +78,7 @@ const EditLocationScreen = () => {
       <View className="px-2">
         <ManageLocationHeading
           className="mb-6"
-          text="Please enter the required data and press 'Submit' to update your location."
+          text={t("locations.editDescription")}
         />
         {location && (
           <ManageLocationForm

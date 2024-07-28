@@ -3,8 +3,11 @@ import React from "react";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { router } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 const LandingActions = () => {
+  const { t } = useTranslation();
+
   function handleGoToCreateAssetPage() {
     router.push("/create/asset?scan=true");
   }
@@ -16,7 +19,7 @@ const LandingActions = () => {
   return (
     <View className="flex-row gap-1.5 items-center justify-center">
       <Button
-        text="Scan Now"
+        text={t("landing.scanNowAction")}
         className="self-center py-0"
         variant="primary-outline"
         onPressed={handleGoToCreateAssetPage}
@@ -31,7 +34,7 @@ const LandingActions = () => {
       />
 
       <Button
-        text="Create List"
+        text={t("landing.createListAction")}
         className="self-center py-0"
         variant="secondary-outline"
         onPressed={handleGoToRegistrar}

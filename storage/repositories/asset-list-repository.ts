@@ -187,7 +187,6 @@ export async function updateAssetListItem(
   db: SQLiteDatabase,
   request: UpdateAssetListItemDTO
 ) {
-  console.log(request);
   await db.runAsync(
     "UPDATE asset_list_items SET assetId = ?, previousLocationId = ?, currentLocationId = ?, previousEmployeeId = ?, currentEmployeeId = ? WHERE id = ?",
     [

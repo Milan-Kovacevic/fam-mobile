@@ -2,45 +2,47 @@ import React from "react";
 import { Stack } from "expo-router";
 import { useColorScheme } from "react-native";
 import { palette } from "@/theme/colors";
+import { useTranslation } from "react-i18next";
 
 const ManageNavigator = () => {
   const scheme = useColorScheme();
+  const { t } = useTranslation();
 
   const screens = [
     {
-      name: "create/location",
-      headerShown: true,
-      title: "Create Location",
-    },
-    {
-      name: "edit/location",
-      headerShown: true,
-      title: "Edit Location",
-    },
-    {
-      name: "create/employee",
-      headerShown: true,
-      title: "Add Employee",
-    },
-    {
-      name: "edit/employee",
-      headerShown: true,
-      title: "Update Employee",
-    },
-    {
       name: "create/asset",
       headerShown: true,
-      title: "Create Asset",
+      title: t("assets.createTitle"),
     },
     {
       name: "edit/asset",
       headerShown: true,
-      title: "Edit Asset",
+      title: t("assets.editTitle"),
     },
     {
       name: "details/asset",
       headerShown: false,
       title: "",
+    },
+    {
+      name: "create/location",
+      headerShown: true,
+      title: t("locations.createTitle"),
+    },
+    {
+      name: "edit/location",
+      headerShown: true,
+      title: t("locations.editTitle"),
+    },
+    {
+      name: "create/employee",
+      headerShown: true,
+      title: t("employees.createTitle"),
+    },
+    {
+      name: "edit/employee",
+      headerShown: true,
+      title: t("employees.editTitle"),
     },
     {
       name: "create/asset-list-item",

@@ -9,6 +9,7 @@ import FormInput from "@/components/shared/form/FormInput";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import FormMapSelect from "@/components/shared/form/FormMapSelect";
+import { useTranslation } from "react-i18next";
 
 export type LocationForm = {
   name: string;
@@ -18,14 +19,6 @@ export type LocationForm = {
   };
 };
 
-const formSchema = z.object({
-  name: z.string().min(1, "City name is required."),
-  coordinates: z.object({
-    latitude: z.number(),
-    longitude: z.number(),
-  }),
-});
-
 type ManageLocationFormProps = {
   onSubmit: (fromData: LocationForm) => void;
   location?: LocationDTO;
@@ -34,6 +27,15 @@ type ManageLocationFormProps = {
 
 const ManageLocationForm = (props: ManageLocationFormProps) => {
   const { onSubmit, loading, location } = props;
+  const { t } = useTranslation();
+
+  const formSchema = z.object({
+    name: z.string().min(1, t("locations.formCityRequired")),
+    coordinates: z.object({
+      latitude: z.number(),
+      longitude: z.number(),
+    }),
+  });
 
   const { control, handleSubmit, getValues, setValue } = useForm<LocationForm>({
     defaultValues: {
@@ -57,10 +59,10 @@ const ManageLocationForm = (props: ManageLocationFormProps) => {
   return (
     <View>
       <FormInput
-        title={"City name"}
+        title={t("locations.formCityLabel")}
         name="name"
         control={control}
-        placeholder="ex. Banja Luka"
+        placeholder={t("locations.formCityPlaceholder")}
         onSubmitted={handleSubmit(handleFormSubmitted)}
       />
 
@@ -70,13 +72,15 @@ const ManageLocationForm = (props: ManageLocationFormProps) => {
         location={location}
         onPinChange={handleChangeLocationPin}
         cityLabel={
-          getValues("name") == "" ? "Enter Location" : getValues("name")
+          getValues("name") == ""
+            ? t("locations.formMapLabel")
+            : getValues("name")
         }
       />
 
       <Button
         variant="primary"
-        text="Submit"
+        text={t("common.submitButtonLabel")}
         onPressed={handleSubmit(handleFormSubmitted)}
         className="mt-6"
         loading={loading}

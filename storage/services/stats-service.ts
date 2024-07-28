@@ -2,7 +2,8 @@ import { SQLiteDatabase } from "expo-sqlite";
 import { StatItem } from "../models/dashboard";
 
 export async function getDashboardOverviewStats(
-  db: SQLiteDatabase
+  db: SQLiteDatabase,
+  names: string[]
 ): Promise<StatItem[]> {
   var inventoryStats = await db.getFirstAsync<StatItem>(
     `SELECT COUNT(a.id) as total, SUM(a.price) as value from assets a`
@@ -22,7 +23,7 @@ export async function getDashboardOverviewStats(
       variant: "primary",
       icon: "inventory",
       iconVariant: "material",
-      name: "Inventory",
+      name: names[0],
       href: "/assets",
       total: inventoryStats?.total ?? 0,
       value: inventoryStats?.value ?? 0,
@@ -31,7 +32,7 @@ export async function getDashboardOverviewStats(
       variant: "secondary",
       icon: "location-outline",
       iconVariant: "ionicon",
-      name: "Locations",
+      name: names[1],
       href: "/locations",
       total: locationsStats?.total ?? 0,
       value: locationsStats?.value,
@@ -40,7 +41,7 @@ export async function getDashboardOverviewStats(
       variant: "secondary",
       icon: "user",
       iconVariant: "feather",
-      name: "Employees",
+      name: names[2],
       href: "/employees",
       total: employeesStats?.total ?? 0,
       value: employeesStats?.value,
@@ -49,7 +50,7 @@ export async function getDashboardOverviewStats(
       variant: "primary",
       icon: "list",
       iconVariant: "ionicon",
-      name: "Registrar",
+      name: names[3],
       href: "/registrar",
       total: registrarStats?.total ?? 0,
       value: registrarStats?.value ?? 0,

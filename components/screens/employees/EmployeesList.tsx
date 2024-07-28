@@ -4,6 +4,7 @@ import { EmployeeDTO } from "@/storage/models/employees";
 import EmployeeCard from "./EmployeeCard";
 import EmptyListPlaceholder from "@/components/shared/list/EmptyListPlaceholder";
 import FlatListSkeleton from "@/components/shared/list/FlatListSkeleton";
+import { useTranslation } from "react-i18next";
 
 interface EmployeesListProps extends ViewProps {
   employees: EmployeeDTO[];
@@ -33,6 +34,7 @@ const EmployeesList = (props: EmployeesListProps) => {
     ...rest
   } = props;
   const scrollable = scrollEnabled ?? true;
+  const { t } = useTranslation();
 
   return (
     <View className="flex-1 py-5 pb-0 mb-1" {...rest}>
@@ -68,13 +70,13 @@ const EmployeesList = (props: EmployeesListProps) => {
           ListEmptyComponent={
             readonly ? (
               <EmptyListPlaceholder
-                title={"No Employees"}
-                description="Add some employees to be able to select them..."
+                title={t("employees.emptySheetTitle")}
+                description={t("employees.emptySheetDescription")}
               />
             ) : (
               <EmptyListPlaceholder
-                title={"No Employees Found"}
-                description="Parhaps you should ajust your search critera or add a new employee..."
+                title={t("employees.emptyListTitle")}
+                description={t("employees.emptyListDescription")}
               />
             )
           }

@@ -1,8 +1,7 @@
 import { View, Text } from "react-native";
 import React from "react";
 import { cn } from "@/utils/tw";
-import { Icon, IconVariant } from "@/components/ui/Icon";
-import { Button } from "@/components/ui/Button";
+import { Icon } from "@/components/ui/Icon";
 import { EmployeeDTO } from "@/storage/models/employees";
 import CardContainer from "@/components/shared/card/CardContainer";
 import CardButton from "@/components/shared/card/CardButton";

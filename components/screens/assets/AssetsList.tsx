@@ -1,19 +1,12 @@
-import {
-  View,
-  RefreshControl,
-  ViewProps,
-  TouchableOpacity,
-  FlatList,
-} from "react-native";
+import { View, RefreshControl, ViewProps, FlatList } from "react-native";
 import React from "react";
 import EmptyListPlaceholder from "@/components/shared/list/EmptyListPlaceholder";
 import FlatListSkeleton from "@/components/shared/list/FlatListSkeleton";
 import { AssetDTO } from "@/storage/models/assets";
 import AssetCard from "./AssetCard";
 import SwipeableFlatList from "react-native-swipeable-list";
-import CardButton from "@/components/shared/card/CardButton";
-import { Text } from "@/components/ui/Text";
 import AssetCardQuickActions from "./AssetCardQuickActions";
+import { useTranslation } from "react-i18next";
 
 interface AssetsListProps extends ViewProps {
   assets: AssetDTO[];
@@ -43,17 +36,18 @@ const AssetsList = (props: AssetsListProps) => {
     ...rest
   } = props;
   const scrollable = scrollEnabled ?? true;
+  const { t } = useTranslation();
 
   const emptyListPlaceholder = () => {
     return readonly ? (
       <EmptyListPlaceholder
-        title={"No Assets"}
-        description="Add some assets to be able to select them..."
+        title={t("assets.emptySheetTitle")}
+        description={t("assets.emptySheetDescription")}
       />
     ) : (
       <EmptyListPlaceholder
-        title={"No Assets Found"}
-        description="Parhaps you should ajust your search critera or create a new asset..."
+        title={t("assets.emptyListTitle")}
+        description={t("assets.emptyListDescription")}
       />
     );
   };
@@ -94,7 +88,7 @@ const AssetsList = (props: AssetsListProps) => {
           scrollEnabled={scrollable}
           showsVerticalScrollIndicator={false}
           data={assets}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item: AssetDTO) => item.id.toString()}
           refreshControl={
             readonly ? undefined : (
               <RefreshControl
@@ -103,7 +97,7 @@ const AssetsList = (props: AssetsListProps) => {
               />
             )
           }
-          renderItem={({ item }) => {
+          renderItem={({ item }: { item: AssetDTO }) => {
             return (
               <AssetCard
                 key={item.id}

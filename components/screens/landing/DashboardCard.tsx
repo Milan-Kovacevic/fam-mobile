@@ -24,7 +24,7 @@ const DashboardCard = (props: DashboardCardProps) => {
   }
 
   return (
-    <View className="flex items-stretch self-stretch basis-1/2">
+    <View className="items-stretch self-stretch basis-1/2">
       <TouchableOpacity
         onPress={handleCardPressed}
         activeOpacity={0.7}

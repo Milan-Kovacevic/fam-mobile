@@ -8,8 +8,10 @@ import { getAllEmployees } from "@/storage/repositories/employees-repository";
 import EmployeesList from "@/components/screens/employees/EmployeesList";
 import { Text } from "@/components/ui/Text";
 import ScrollableSheetContainer from "./ScrollableSheetContainer";
+import { useTranslation } from "react-i18next";
 
 const EmployeesSheet = (props: SheetProps<"employees-sheet">) => {
+  const { t } = useTranslation();
   const { payload } = props;
   const db = useSQLiteContext();
   const { loading, listData: employees } = useReadonlyList<EmployeeDTO>({
@@ -29,7 +31,7 @@ const EmployeesSheet = (props: SheetProps<"employees-sheet">) => {
   return (
     <BaseActionSheet>
       <Text variant="neutral" className="mx-2 mb-2 text-base text-center">
-        Select Employee
+        {t("sheets.employeesTitle")}
       </Text>
       <ScrollableSheetContainer>
         <EmployeesList

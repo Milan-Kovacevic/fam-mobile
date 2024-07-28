@@ -6,6 +6,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import FormInput from "@/components/shared/form/FormInput";
+import { useTranslation } from "react-i18next";
 
 export type EmployeeForm = {
   firstName: string;
@@ -18,13 +19,14 @@ type ManageEmployeeFormProps = {
   loading: boolean;
 };
 
-const formSchema = z.object({
-  firstName: z.string().min(1, "First name is required."),
-  lastName: z.string().min(1, "Last name is required."),
-});
-
 const ManageEmployeeForm = (props: ManageEmployeeFormProps) => {
   const { onSubmit, loading, employee } = props;
+  const { t } = useTranslation();
+
+  const formSchema = z.object({
+    firstName: z.string().min(1, t("employees.formFirstNameRequired")),
+    lastName: z.string().min(1, t("employees.formLastNameRequired")),
+  });
 
   const { control, handleSubmit, setFocus } = useForm<EmployeeForm>({
     defaultValues: {
@@ -41,27 +43,27 @@ const ManageEmployeeForm = (props: ManageEmployeeFormProps) => {
   return (
     <View>
       <FormInput
-        title={"First Name"}
+        title={t("employees.formFirstNameLabel")}
         name="firstName"
         control={control}
-        placeholder="ex. Marko"
+        placeholder={t("employees.formFirstNamePlaceholder")}
         onSubmitted={() => {
           setFocus("lastName");
         }}
         returnKeyType="next"
       />
       <FormInput
-        title={"Last Name"}
+        title={t("employees.formLastNameLabel")}
         name="lastName"
         control={control}
-        placeholder="ex. Markovic"
+        placeholder={t("employees.formLastNamePlaceholder")}
         onSubmitted={handleSubmit(handleFormSubmitted)}
         returnKeyType="done"
         className="mt-2"
       />
       <Button
         variant="primary"
-        text="Submit"
+        text={t("common.submitButtonLabel")}
         onPressed={handleSubmit(handleFormSubmitted)}
         className="mt-5 mx-1"
         loading={loading}

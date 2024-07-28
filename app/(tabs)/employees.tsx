@@ -17,8 +17,10 @@ import EmployeesList from "@/components/screens/employees/EmployeesList";
 import SearchInput from "@/components/ui/SearchInput";
 import useSearchableList from "@/hooks/useSearchableList";
 import { cn } from "@/utils/tw";
+import { useTranslation } from "react-i18next";
 
 const EmployeesScreen = () => {
+  const { t } = useTranslation();
   const db = useSQLiteContext();
   const scheme = useColorScheme();
   const {
@@ -59,7 +61,7 @@ const EmployeesScreen = () => {
 
   async function handleDeleteEmployee(id: number) {
     var isSuccess = await deleteEmployee(db, id);
-    if (isSuccess) showToast("Employee removed successfully!", scheme);
+    if (isSuccess) showToast(t("employees.removeToastMessage"), scheme);
     return isSuccess;
   }
 
@@ -78,8 +80,7 @@ const EmployeesScreen = () => {
         <EmployeesHeading onCreateEmployee={handleCreateEmployee} />
         <View className="mb-1.5">
           <SearchInput
-            className=""
-            placeholder="Search..."
+            placeholder={t("common.searchPlaceholder")}
             text={searchText}
             onTextChange={onSearchTextChanged}
             onSearch={onSearch}

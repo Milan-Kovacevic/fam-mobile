@@ -8,9 +8,10 @@ import { useSQLiteContext } from "expo-sqlite";
 import { getDashboardOverviewStats } from "@/storage/services/stats-service";
 import DashboardSkeleton from "./DashboardSkeleton";
 import { delay } from "@/utils/util";
-import Skeleton from "@/components/ui/Skeleton";
+import { useTranslation } from "react-i18next";
 
 const LandingDashboard = () => {
+  const { t } = useTranslation();
   const db = useSQLiteContext();
   const [stats, setStats] = useState<DashboardCardProps[]>([]);
   const [loading, setLoading] = useState(true);
@@ -18,12 +19,17 @@ const LandingDashboard = () => {
 
   useEffect(() => {
     loadStats();
-  }, []);
+  }, [t]);
 
   async function loadStats() {
     setLoading(true);
     await delay(1000).then(() => {
-      getDashboardOverviewStats(db)
+      getDashboardOverviewStats(db, [
+        t("landing.inventoryLabel"),
+        t("landing.locationsLabel"),
+        t("landing.employeesLabel"),
+        t("landing.registrarLabel"),
+      ])
         .then((result) => {
           setStats(result);
         })
@@ -63,6 +69,7 @@ const LandingDashboard = () => {
         <DashboardSkeleton />
       ) : (
         <FlatList
+          className=""
           data={stats}
           renderItem={(props) => <DashboardCard {...props.item} />}
           keyExtractor={(item) => item.name}

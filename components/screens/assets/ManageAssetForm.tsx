@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import FormInput from "@/components/shared/form/FormInput";
 import FormTextArea from "@/components/shared/form/FormTextArea";
-import BarCodeScanner from "./BarCodeScanner";
+import BarCodeScanner from "../../shared/modal/BarCodeScanner";
 import FormImagePicker from "@/components/shared/form/FormImagePicker";
 import FormActionButton from "@/components/shared/form/FormActionButton";
 import { SheetManager } from "react-native-actions-sheet";
@@ -14,6 +14,7 @@ import { LocationDTO } from "@/storage/models/locations";
 import { EmployeeDTO } from "@/storage/models/employees";
 import FormSelectInput from "@/components/shared/form/FormSelectInput";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
+import { useTranslation } from "react-i18next";
 
 export type AssetForm = {
   name: string;
@@ -31,41 +32,6 @@ export type AssetForm = {
   image?: string;
 };
 
-const formSchema = z.object({
-  name: z.string().min(1, "Name is required."),
-  description: z
-    .string()
-    .max(500, "Maximum description length is 500 characters.")
-    .optional(),
-  barcode: z
-    .string({ invalid_type_error: "Invalid input" })
-    .refine((value) => value ?? false, "Barcode is required.")
-    .refine((value) => Number.isInteger(Number(value)), "Invalid number.")
-    .refine((value) => Number(value) > 0, "Barcode must be positive integer."),
-  price: z.coerce
-    .number({ invalid_type_error: "Invalid input" })
-    .positive("Price must be positive."),
-  employee: z
-    .object(
-      {
-        id: z.coerce.number(),
-        label: z.coerce.string(),
-      },
-      { required_error: "Employee is required." }
-    )
-    .required(),
-  location: z
-    .object(
-      {
-        id: z.number(),
-        label: z.string(),
-      },
-      { required_error: "Location is required." }
-    )
-    .required(),
-  image: z.string().optional(),
-});
-
 interface ManageAssetFormProps {
   onSubmit: (fromData: AssetForm) => void;
   asset?: AssetForm;
@@ -75,7 +41,46 @@ interface ManageAssetFormProps {
 
 const ManageAssetForm = (props: ManageAssetFormProps) => {
   const { onSubmit, loading, asset, scanCode } = props;
+  const { t } = useTranslation();
   const [showScanner, setShowScanner] = useState(scanCode ?? false);
+
+  const formSchema = z.object({
+    name: z.string().min(1, t("assets.form.nameRequired")),
+    description: z
+      .string()
+      .max(500, t("assets.form.maxDescriptionLength"))
+      .optional(),
+    barcode: z
+      .string({ invalid_type_error: t("common.invalidInputLabel") })
+      .refine((value) => value ?? false, t("assets.form.barCodeRequired"))
+      .refine(
+        (value) => Number.isInteger(Number(value)),
+        t("assets.form.barCodeInvalid")
+      )
+      .refine((value) => Number(value) > 0, t("assets.form.barCodePositive")),
+    price: z.coerce
+      .number({ invalid_type_error: t("common.invalidInputLabel") })
+      .positive(t("assets.form.pricePositive")),
+    employee: z
+      .object(
+        {
+          id: z.coerce.number(),
+          label: z.coerce.string(),
+        },
+        { required_error: t("assets.form.employeeRequired") }
+      )
+      .required(),
+    location: z
+      .object(
+        {
+          id: z.number(),
+          label: z.string(),
+        },
+        { required_error: t("assets.form.locationRequired") }
+      )
+      .required(),
+    image: z.string().optional(),
+  });
 
   var initialValues = {
     name: asset?.name ?? "",
@@ -165,28 +170,28 @@ const ManageAssetForm = (props: ManageAssetFormProps) => {
         />
 
         <FormInput
-          title={"Name"}
+          title={t("assets.form.nameLabel")}
           name="name"
           control={control}
-          placeholder="Asset name..."
+          placeholder={t("assets.form.namePlaceholder")}
           onSubmitted={() => {
             setFocus("description");
           }}
           returnKeyType="next"
         />
         <FormTextArea
-          title={"Description"}
+          title={t("assets.form.descriptionLabel")}
           name="description"
           control={control}
-          placeholder="This is optional..."
+          placeholder={t("assets.form.descriptionPlaceholder")}
         />
         <View className="flex-1 flex-row w-full">
           <FormInput
             type="number"
-            title={"Bar Code"}
+            title={t("assets.form.barCodeLabel")}
             name="barcode"
             control={control}
-            placeholder="ex. 123"
+            placeholder={t("assets.form.barCodePlaceholder")}
             returnKeyType="next"
             onSubmitted={() => {
               setFocus("price");
@@ -203,10 +208,10 @@ const ManageAssetForm = (props: ManageAssetFormProps) => {
 
         <FormInput
           type="number"
-          title={"Price"}
+          title={t("assets.form.priceLabel")}
           name="price"
           control={control}
-          placeholder="ex. 19.49"
+          placeholder={t("assets.form.pricePlaceholder")}
           onSubmitted={() => {
             onOpenEmployeesSheet();
           }}
@@ -215,18 +220,18 @@ const ManageAssetForm = (props: ManageAssetFormProps) => {
 
         <FormSelectInput
           control={control}
-          title="Employee"
+          title={t("assets.form.employeeLabel")}
           name="employee"
-          placeholder="Select employee..."
+          placeholder={t("assets.form.employeePlaceholder")}
           className="flex-1"
           extractValue={(value) => value?.label ?? ""}
           onPressed={onOpenEmployeesSheet}
         />
         <FormSelectInput
           control={control}
-          title="Asset location"
+          title={t("assets.form.locationLabel")}
           name="location"
-          placeholder="Select location..."
+          placeholder={t("assets.form.locationPlaceholder")}
           className="flex-1"
           extractValue={(value) => value?.label ?? ""}
           onPressed={onOpenLocationsSheet}
@@ -235,7 +240,7 @@ const ManageAssetForm = (props: ManageAssetFormProps) => {
 
       <Button
         variant="primary"
-        text="Submit"
+        text={t("common.submitButtonLabel")}
         onPressed={handleSubmit(handleFormSubmitted)}
         className="mt-6"
         loading={loading}

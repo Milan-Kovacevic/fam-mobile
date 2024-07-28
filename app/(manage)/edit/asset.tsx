@@ -12,8 +12,10 @@ import {
 } from "@/storage/repositories/assets-repository";
 import { router, useLocalSearchParams } from "expo-router";
 import { showToast } from "@/utils/toast";
+import { useTranslation } from "react-i18next";
 
 const EditAssetScreen = () => {
+  const { t } = useTranslation();
   const db = useSQLiteContext();
   const scheme = useColorScheme();
   const { id } = useLocalSearchParams();
@@ -36,7 +38,7 @@ const EditAssetScreen = () => {
     getAssetDetails(db, routeId)
       .then((result) => {
         if (result == null) {
-          showToast("Asset was not found, try again later.", scheme);
+          showToast(t("assets.notFoundError"), scheme);
           router.push("/assets");
           return;
         }
@@ -65,7 +67,7 @@ const EditAssetScreen = () => {
         router.push("/assets");
       })
       .catch((err) => {
-        showToast("Unable to update asset. Try again later.", scheme);
+        showToast(t("assets.updateError"), scheme);
       })
       .finally(() => {
         setLoading(false);

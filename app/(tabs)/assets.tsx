@@ -15,9 +15,11 @@ import { showToast } from "@/utils/toast";
 import { cn } from "@/utils/tw";
 import { router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
+import { useTranslation } from "react-i18next";
 import { useColorScheme, View } from "react-native";
 
 export default function HomeScreen() {
+  const { t } = useTranslation();
   const db = useSQLiteContext();
   const scheme = useColorScheme();
   const {
@@ -58,7 +60,7 @@ export default function HomeScreen() {
   async function handleDeleteAsset(id: number) {
     var isSuccess = await deleteAsset(db, id);
     if (isSuccess) {
-      showToast("Asset removed successfully!", scheme);
+      showToast(t("assets.removeToastMessage"), scheme);
     }
     return isSuccess;
   }
@@ -82,8 +84,7 @@ export default function HomeScreen() {
         <AssetsHeading onCreateAsset={handleCreateAsset} />
         <View className="mb-1.5">
           <SearchInput
-            className=""
-            placeholder="Search..."
+            placeholder={t("common.searchPlaceholder")}
             text={searchText}
             onTextChange={onSearchTextChanged}
             onSearch={onSearch}

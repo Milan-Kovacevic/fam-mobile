@@ -9,8 +9,10 @@ import { delay } from "@/utils/util";
 import { createAsset } from "@/storage/repositories/assets-repository";
 import { router, useLocalSearchParams } from "expo-router";
 import { showToast } from "@/utils/toast";
+import { useTranslation } from "react-i18next";
 
 const CreateAssetScreen = () => {
+  const { t } = useTranslation();
   const db = useSQLiteContext();
   const { scan } = useLocalSearchParams();
   const scheme = useColorScheme();
@@ -29,7 +31,7 @@ const CreateAssetScreen = () => {
         router.push("/assets");
       })
       .catch((err) => {
-        showToast("Unable to create asset. Try again later.", scheme);
+        showToast(t("assets.createError"), scheme);
       })
       .finally(() => {
         setLoading(false);

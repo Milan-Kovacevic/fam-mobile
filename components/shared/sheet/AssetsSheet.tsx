@@ -11,8 +11,10 @@ import {
   getAssetsByLocation,
 } from "@/storage/repositories/assets-repository";
 import AssetsList from "@/components/screens/assets/AssetsList";
+import { useTranslation } from "react-i18next";
 
 const AssetsSheet = (props: SheetProps<"assets-sheet">) => {
+  const { t } = useTranslation();
   const { payload } = props;
   const db = useSQLiteContext();
   const { loading, listData: assets } = useReadonlyList<AssetDTO>({
@@ -35,7 +37,9 @@ const AssetsSheet = (props: SheetProps<"assets-sheet">) => {
   return (
     <BaseActionSheet>
       <Text variant="neutral" className="mx-2 mb-2 text-base text-center">
-        {payload?.locationId ? "Assets on this location" : "Select Asset"}
+        {payload?.locationId
+          ? t("sheets.assetsByLocationTitle")
+          : t("sheets.allAssetsTitle")}
       </Text>
       <ScrollableSheetContainer>
         <AssetsList

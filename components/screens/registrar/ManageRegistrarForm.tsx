@@ -9,7 +9,7 @@ import { SheetManager } from "react-native-actions-sheet";
 import { LocationDTO } from "@/storage/models/locations";
 import { EmployeeDTO } from "@/storage/models/employees";
 import FormSelectInput from "@/components/shared/form/FormSelectInput";
-import BarCodeScanner from "../assets/BarCodeScanner";
+import BarCodeScanner from "../../shared/modal/BarCodeScanner";
 import { AssetDetailsDTO, AssetDTO } from "@/storage/models/assets";
 import { Text } from "@/components/ui/Text";
 import FormSwitch from "@/components/shared/form/FormSwitch";

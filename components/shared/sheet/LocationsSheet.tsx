@@ -8,8 +8,10 @@ import { LocationDTO } from "@/storage/models/locations";
 import useReadonlyList from "@/hooks/useReadonlyList";
 import { Text } from "@/components/ui/Text";
 import ScrollableSheetContainer from "./ScrollableSheetContainer";
+import { useTranslation } from "react-i18next";
 
 const LocationsSheet = (props: SheetProps<"locations-sheet">) => {
+  const { t } = useTranslation();
   const { payload } = props;
   const db = useSQLiteContext();
   const { loading, listData: locations } = useReadonlyList<LocationDTO>({
@@ -29,7 +31,7 @@ const LocationsSheet = (props: SheetProps<"locations-sheet">) => {
   return (
     <BaseActionSheet>
       <Text variant="neutral" className="mx-2 mb-2 text-base text-center">
-        Select Location
+        {t("sheets.locationsTitle")}
       </Text>
       <ScrollableSheetContainer>
         <LocationsList

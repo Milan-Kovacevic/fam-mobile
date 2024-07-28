@@ -1,4 +1,3 @@
-import i18n from "i18n-js";
 import React from "react";
 import {
   StyleProp,
@@ -6,24 +5,25 @@ import {
   TextProps as RNTextProps,
   TextStyle,
 } from "react-native";
-import translate, { TxKeyPath } from "@/i18n";
+import { TxKeyPath } from "@/i18n";
 import { cn } from "@/utils/tw";
+import { useTranslation } from "react-i18next";
 
 type Variant = keyof typeof $variants;
 
 export interface TextProps extends RNTextProps {
   tx?: TxKeyPath;
   text?: string;
-  txOptions?: i18n.TranslateOptions;
   style?: StyleProp<TextStyle>;
   variant?: Variant;
   children?: React.ReactNode;
 }
 
 export function Text(props: TextProps) {
-  const { tx, txOptions, text, children, style, ...rest } = props;
+  const { t } = useTranslation();
+  const { tx, text, children, style, ...rest } = props;
 
-  const i18nText = tx && translate(tx, txOptions);
+  const i18nText = tx && t(tx);
   const content = i18nText || text || children;
 
   const variant: Variant = props.variant ?? "default";

@@ -4,6 +4,7 @@ import { LocationDTO } from "@/storage/models/locations";
 import LocationCard from "./LocationCard";
 import EmptyListPlaceholder from "@/components/shared/list/EmptyListPlaceholder";
 import FlatListSkeleton from "@/components/shared/list/FlatListSkeleton";
+import { useTranslation } from "react-i18next";
 
 interface LocationsListProps extends ViewProps {
   loading: boolean;
@@ -33,6 +34,7 @@ const LocationsList = (props: LocationsListProps) => {
     ...rest
   } = props;
   const scrollable = scrollEnabled ?? true;
+  const { t } = useTranslation();
 
   return (
     <View className="flex-1" {...rest}>
@@ -67,13 +69,13 @@ const LocationsList = (props: LocationsListProps) => {
           ListEmptyComponent={
             readonly ? (
               <EmptyListPlaceholder
-                title={"No Locations"}
-                description="Add some locations to be able to select them..."
+                title={t("locations.emptyLocationsSheetTitle")}
+                description={t("locations.emptyLocationsSheetDescription")}
               />
             ) : (
               <EmptyListPlaceholder
-                title={"No Locations Found"}
-                description="Parhaps you should ajust your search critera or create a new location..."
+                title={t("locations.emptyLocationsListTitle")}
+                description={t("locations.emptyLocationsListDescription")}
               />
             )
           }

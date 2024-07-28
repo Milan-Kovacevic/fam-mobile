@@ -12,8 +12,10 @@ import {
 } from "@/storage/repositories/employees-repository";
 import ManageEmployeeForm from "@/components/screens/employees/ManageEmployeeForm";
 import ManageEmployeeHeading from "@/components/screens/employees/ManageEmployeeHeading";
+import { useTranslation } from "react-i18next";
 
 const EditEmployeeScreen = () => {
+  const { t } = useTranslation();
   const db = useSQLiteContext();
   const { id } = useLocalSearchParams();
   const [employeeId, setEmployeeId] = useState<number>();
@@ -36,7 +38,7 @@ const EditEmployeeScreen = () => {
     getEmployeeById(db, routeId)
       .then((result) => {
         if (result == null) {
-          showToast("Employee was not found, try again later.", scheme);
+          showToast(t("employees.notFoundError"), scheme);
           router.push("/employees");
           return;
         }
@@ -61,11 +63,11 @@ const EditEmployeeScreen = () => {
       .then((isSuccess) => {
         if (isSuccess) router.push("/employees");
         else {
-          showToast("Unable to update employee.", scheme);
+          showToast(t("employees.updateError"), scheme);
         }
       })
       .catch((err) => {
-        showToast("Unable to update employee.", scheme);
+        showToast(t("employees.updateError"), scheme);
       })
       .finally(() => {
         setLoading(false);
@@ -75,7 +77,7 @@ const EditEmployeeScreen = () => {
   return (
     <Screen className="h-full w-full px-4 py-4 mt-10" variant="scroll">
       <View className="px-2">
-        <ManageEmployeeHeading text="Please enter the required data and press 'Submit' to update employee info." />
+        <ManageEmployeeHeading text={t("employees.editDescription")} />
         {employee && (
           <ManageEmployeeForm
             loading={loading}

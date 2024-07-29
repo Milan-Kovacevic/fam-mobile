@@ -19,9 +19,10 @@ import {
   getAssetRegistrar,
   searchAssetRegistrar,
 } from "@/storage/services/registrar-service";
-import { getAllAssetListItems } from "@/storage/repositories/asset-list-repository";
+import { useTranslation } from "react-i18next";
 
 const RegistrarScreen = () => {
+  const { t } = useTranslation();
   const db = useSQLiteContext();
   const { create } = useLocalSearchParams();
   const scheme = useColorScheme();
@@ -65,24 +66,23 @@ const RegistrarScreen = () => {
   async function handleCreateRegistrarItem() {
     try {
       var item = await createEmptyRegistrarItem(db);
-      showToast("Created empty Inventory list...", scheme);
+      showToast(t("registrar.createdListMessage"), scheme);
       return item;
     } catch {
-      showToast("Error creating Inventory list", scheme);
+      showToast(t("registrar.createListError"), scheme);
       return null;
     }
   }
 
   async function handleDeleteRegistrarItem(id: number) {
     var isSuccess = await deleteRegistrarItem(db, id);
-    if (isSuccess) showToast("Inventory list removed successfully!", scheme);
+    if (isSuccess) showToast(t("registrar.removedListMessage"), scheme);
     return isSuccess;
   }
 
   async function handleDeleteInventoryListItem(listId: number, itemId: number) {
     var isSuccess = await deleteInventoryListItem(db, listId, itemId);
-    if (isSuccess)
-      showToast("Inventory list item removed successfully!", scheme);
+    if (isSuccess) showToast(t("registrar.removedListItemMessage"), scheme);
     return isSuccess;
   }
 
@@ -116,7 +116,7 @@ const RegistrarScreen = () => {
         <View className="mb-1.5">
           <SearchInput
             className=""
-            placeholder="Search..."
+            placeholder={t("common.searchPlaceholder")}
             text={searchText}
             onTextChange={onSearchTextChanged}
             onSearch={onSearch}

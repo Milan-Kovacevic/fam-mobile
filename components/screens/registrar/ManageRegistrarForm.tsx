@@ -13,83 +13,32 @@ import BarCodeScanner from "../../shared/modal/BarCodeScanner";
 import { AssetDetailsDTO, AssetDTO } from "@/storage/models/assets";
 import { Text } from "@/components/ui/Text";
 import FormSwitch from "@/components/shared/form/FormSwitch";
+import { useTranslation } from "react-i18next";
 
-const formSchema = z
-  .object({
-    asset: z
-      .object(
-        {
-          id: z.coerce.number(),
-          label: z.coerce.string(),
-        },
-        { required_error: "Asset is required." }
-      )
-      .required(),
-    previousLocation: z
-      .object(
-        {
-          id: z.coerce.number(),
-          label: z.coerce.string(),
-        },
-        { required_error: "Previous location is required." }
-      )
-      .required(),
-    currentLocation: z
-      .object(
-        {
-          id: z.coerce.number(),
-          label: z.coerce.string(),
-        },
-        { required_error: "Current location is required." }
-      )
-      .optional(),
-    isSameLocation: z.boolean().optional(),
-    previousEmployee: z
-      .object(
-        {
-          id: z.coerce.number(),
-          label: z.coerce.string(),
-        },
-        { required_error: "Previous employee is required." }
-      )
-      .required(),
-    isSameEmployee: z.boolean().optional(),
-    currentEmployee: z
-      .object(
-        {
-          id: z.coerce.number(),
-          label: z.coerce.string(),
-        },
-        { required_error: "Current employee is required." }
-      )
-      .optional(),
-  })
-  .refine(
-    (data) => {
-      return (
-        (!data.isSameLocation && data.currentLocation != undefined) ||
-        (data.isSameLocation && data.currentLocation == undefined)
-      );
-    },
-    {
-      message: "New location is required if same location is not checked",
-      path: ["currentLocation"],
-    }
-  )
-  .refine(
-    (data) => {
-      return (
-        (!data.isSameEmployee && data.currentEmployee != undefined) ||
-        (data.isSameEmployee && data.currentEmployee == undefined)
-      );
-    },
-    {
-      message: "New employee is required if same employee is not checked",
-      path: ["currentEmployee"],
-    }
-  );
-
-export type RegistrarItemFormType = z.infer<typeof formSchema>;
+export type RegistrarItemFormType = {
+  asset: {
+    id: number;
+    label: string;
+  };
+  previousLocation: {
+    id: number;
+    label: string;
+  };
+  currentLocation: {
+    id: number;
+    label: string;
+  };
+  previousEmployee: {
+    id: number;
+    label: string;
+  };
+  currentEmployee: {
+    id: number;
+    label: string;
+  };
+  isSameLocation: boolean;
+  isSameEmployee: boolean;
+};
 
 interface ManageRegistrarFormProps {
   onSubmit: (fromData: RegistrarItemFormType) => void;
@@ -102,6 +51,7 @@ interface ManageRegistrarFormProps {
 const ManageRegistrarForm = (props: ManageRegistrarFormProps) => {
   const { onSubmit, loading, registrarItem, scanCode, onBarcodeScanned } =
     props;
+  const { t } = useTranslation();
   const [showScanner, setShowScanner] = useState(scanCode ?? false);
   const [sameLocation, setSameLocation] = useState(
     registrarItem?.isSameLocation
@@ -109,6 +59,81 @@ const ManageRegistrarForm = (props: ManageRegistrarFormProps) => {
   const [sameEmployee, setSameEmployee] = useState(
     registrarItem?.isSameEmployee
   );
+
+  const formSchema = z
+    .object({
+      asset: z
+        .object(
+          {
+            id: z.coerce.number(),
+            label: z.coerce.string(),
+          },
+          { required_error: t("registrar.form.assetRequired") }
+        )
+        .required(),
+      previousLocation: z
+        .object(
+          {
+            id: z.coerce.number(),
+            label: z.coerce.string(),
+          },
+          { required_error: t("registrar.form.currentLocationRequired") }
+        )
+        .required(),
+      currentLocation: z
+        .object(
+          {
+            id: z.coerce.number(),
+            label: z.coerce.string(),
+          },
+          { required_error: t("registrar.form.newLocationRequired") }
+        )
+        .optional(),
+      isSameLocation: z.boolean().optional(),
+      previousEmployee: z
+        .object(
+          {
+            id: z.coerce.number(),
+            label: z.coerce.string(),
+          },
+          { required_error: t("registrar.form.currentEmployeeRequired") }
+        )
+        .required(),
+      isSameEmployee: z.boolean().optional(),
+      currentEmployee: z
+        .object(
+          {
+            id: z.coerce.number(),
+            label: z.coerce.string(),
+          },
+          { required_error: t("registrar.form.newEmployeeRequired") }
+        )
+        .optional(),
+    })
+    .refine(
+      (data) => {
+        return (
+          (!data.isSameLocation && data.currentLocation != undefined) ||
+          (data.isSameLocation && data.currentLocation == undefined)
+        );
+      },
+      {
+        message: t("registrar.form.newLocationRequired"),
+        path: ["currentLocation"],
+      }
+    )
+    .refine(
+      (data) => {
+        return (
+          (!data.isSameEmployee && data.currentEmployee != undefined) ||
+          (data.isSameEmployee && data.currentEmployee == undefined)
+        );
+      },
+      {
+        message: t("registrar.form.newEmployeeRequired"),
+        path: ["currentEmployee"],
+      }
+    );
 
   var initialValues = {
     asset: registrarItem?.asset ?? undefined,
@@ -259,9 +284,9 @@ const ManageRegistrarForm = (props: ManageRegistrarFormProps) => {
         <View className="flex-1 flex-row w-full">
           <FormSelectInput
             control={control}
-            title="Asset"
+            title={t("registrar.form.assetLabel")}
             name="asset"
-            placeholder="Select asset..."
+            placeholder={t("registrar.form.assetPlaceholder")}
             className="flex-1"
             extractValue={(value) => value?.label ?? ""}
             onPressed={onOpenAssetsSheet}
@@ -276,9 +301,9 @@ const ManageRegistrarForm = (props: ManageRegistrarFormProps) => {
 
         <FormSelectInput
           control={control}
-          title="Current Location"
+          title={t("registrar.form.currentLocationLabel")}
           name="previousLocation"
-          placeholder="Select current location..."
+          placeholder={t("registrar.form.currentLocationPlaceholder")}
           className="flex-1"
           extractValue={(value) => value?.label ?? ""}
           onPressed={() => onOpenLocationsSheet(false)}
@@ -286,9 +311,9 @@ const ManageRegistrarForm = (props: ManageRegistrarFormProps) => {
         <FormSelectInput
           control={control}
           disabled={sameLocation}
-          title="New Location"
+          title={t("registrar.form.newLocationLabel")}
           name="currentLocation"
-          placeholder="Select new location..."
+          placeholder={t("registrar.form.newLocationPlaceholder")}
           className="flex-1"
           extractValue={(value) => value?.label ?? ""}
           onPressed={() => onOpenLocationsSheet(true)}
@@ -301,14 +326,14 @@ const ManageRegistrarForm = (props: ManageRegistrarFormProps) => {
             onChange={handleChangeSameLocation}
           />
           <Text variant="neutral" className="text-xs ml-0.5">
-            Same location
+            {t("registrar.form.sameLocation")}
           </Text>
         </View>
         <FormSelectInput
           control={control}
-          title="Current Employee"
+          title={t("registrar.form.currentEmployeeLabel")}
           name="previousEmployee"
-          placeholder="Select current employee..."
+          placeholder={t("registrar.form.currentEmployeePlaceholder")}
           className="flex-1"
           extractValue={(value) => value?.label ?? ""}
           onPressed={() => onOpenEmployeesSheet(false)}
@@ -317,9 +342,9 @@ const ManageRegistrarForm = (props: ManageRegistrarFormProps) => {
         <FormSelectInput
           control={control}
           disabled={sameEmployee}
-          title="New Employee"
+          title={t("registrar.form.newEmployeeLabel")}
           name="currentEmployee"
-          placeholder="Select new employee..."
+          placeholder={t("registrar.form.newEmployeePlaceholder")}
           className="flex-1"
           extractValue={(value) => value?.label ?? ""}
           onPressed={() => onOpenEmployeesSheet(true)}
@@ -332,14 +357,14 @@ const ManageRegistrarForm = (props: ManageRegistrarFormProps) => {
             onChange={handleChangeSameEmployee}
           />
           <Text variant="neutral" className="text-xs ">
-            Same employee
+            {t("registrar.form.sameEmployee")}
           </Text>
         </View>
       </View>
 
       <Button
         variant="primary"
-        text="Submit"
+        text={t("common.submitButtonLabel")}
         onPressed={handleSubmit(handleFormSubmitted)}
         className="mt-6"
         loading={loading}

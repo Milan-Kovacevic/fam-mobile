@@ -2,12 +2,12 @@ import { View } from "react-native";
 import React from "react";
 import { AssetListDTO } from "@/storage/models/asset-lists";
 import { Text } from "@/components/ui/Text";
-import CardContainer from "@/components/shared/card/CardContainer";
 import { cn } from "@/utils/tw";
 import { Icon } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/Button";
 import CardButton from "@/components/shared/card/CardButton";
 import AssetListCard from "./AssetListCard";
+import { useTranslation } from "react-i18next";
 
 type RegistrarItemHeaderProps = {
   assetList: AssetListDTO;
@@ -16,6 +16,7 @@ type RegistrarItemHeaderProps = {
 
 const RegistrarItemHeader = (props: RegistrarItemHeaderProps) => {
   const { assetList, onDelete } = props;
+  const { t } = useTranslation();
 
   return (
     <View
@@ -30,19 +31,19 @@ const RegistrarItemHeader = (props: RegistrarItemHeaderProps) => {
             {assetList.items.length}
           </Text>
           <Text className="text-base font-pregular text-gray-800 dark:text-gray-300">
-            Items
+            {t("registrar.itemsLabel")}
           </Text>
         </View>
 
         <View className="flex-row gap-x-1 items-center">
           <Text className="text-xs text-gray-700 dark:text-gray-300/70">
-            Created:
+            {t("registrar.createdLabel")}:
           </Text>
           <Text
             className="text-xs font-pregular text-gray-800/80 dark:text-gray-300/90"
             variant="neutral"
           >
-            {new Date(parseInt(assetList.dateCreated)).toDateString()}
+            {new Date(parseInt(assetList.dateCreated)).toLocaleString()}
           </Text>
           <Icon
             icon="calendar"
@@ -72,6 +73,7 @@ type RegistrarItemContentProps = {
 
 const RegistrarItemContent = (props: RegistrarItemContentProps) => {
   const { assetList, onDeleteListItem, onEditListItem, onAddListItem } = props;
+  const { t } = useTranslation();
 
   const dateUpdated = assetList.dateUpdated
     ? new Date(parseInt(assetList.dateUpdated))
@@ -86,11 +88,11 @@ const RegistrarItemContent = (props: RegistrarItemContentProps) => {
             variant="feather"
             className="text-xs text-gray-600 dark:text-gray-500 pt-px -mr-px"
           />
-          <Text className="font-pregular text-xs text-neutral-700 dark:text-neutral-300">
-            Updated:
+          <Text className="font-pregular text-xs text-gray-700/80 dark:text-gray-300/80">
+            {t("registrar.updatedLabel")}:
           </Text>
-          <Text className="text-xs font-psemibold text-neutral-700 dark:text-neutral-300">
-            {dateUpdated?.toDateString() ?? "Never"}
+          <Text className="text-xs font-pmedium text-neutral-700 dark:text-neutral-300">
+            {dateUpdated?.toLocaleString() ?? t("registrar.neverLabel")}
           </Text>
         </View>
         <View className="mr-0.5">
@@ -124,7 +126,7 @@ const RegistrarItemContent = (props: RegistrarItemContentProps) => {
         ) : (
           <View className="px-2">
             <Text variant="muted" className="font-pregular text-xs italic">
-              There are no items to show...
+              {t("registrar.emptyListItems")}
             </Text>
           </View>
         )}

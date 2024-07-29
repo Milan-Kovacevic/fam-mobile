@@ -4,6 +4,7 @@ import sr from "@/assets/locales/sr.json";
 import en from "@/assets/locales/en.json";
 import * as Localization from "expo-localization";
 import i18next from "i18next";
+import { getSettings } from "@/storage/repositories/settings-repository";
 
 type Translations = typeof en;
 type TxKeyPath = RecursiveKeyOf<Translations>;
@@ -14,8 +15,10 @@ const resources = {
 };
 
 const initI18n = async () => {
+  var settings = await getSettings();
   const fallbackLocale = "en";
   let savedLanguage;
+  if (settings && settings.language) savedLanguage = settings.language;
 
   if (!savedLanguage) {
     const systemLocale = Localization.getLocales()[0];

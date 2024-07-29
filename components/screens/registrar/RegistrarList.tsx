@@ -5,6 +5,7 @@ import { AssetListDTO } from "@/storage/models/asset-lists";
 import { RegistrarItemContent, RegistrarItemHeader } from "./RegistrarItem";
 import FlatListSkeleton from "@/components/shared/list/FlatListSkeleton";
 import EmptyListPlaceholder from "@/components/shared/list/EmptyListPlaceholder";
+import { useTranslation } from "react-i18next";
 
 type RegistrarListProps = {
   registrar: AssetListDTO[];
@@ -28,7 +29,7 @@ const RegistrarList = (props: RegistrarListProps) => {
     onEditListItem,
     onAddListItem,
   } = props;
-
+  const { t } = useTranslation();
   const [activeSections, setActiveSections] = useState<number[]>([]);
 
   const updateSections = (activeSections: number[]) => {
@@ -55,8 +56,8 @@ const RegistrarList = (props: RegistrarListProps) => {
           }
           ListEmptyComponent={
             <EmptyListPlaceholder
-              title={"No Inventory Lists Found"}
-              description="Parhaps you should ajust your search critera or add a new inventory list..."
+              title={t("registrar.emptyListTitle")}
+              description={t("registrar.emptyListDescription")}
             />
           }
           touchableComponent={TouchableOpacity}

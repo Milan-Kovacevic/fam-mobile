@@ -16,8 +16,10 @@ import {
   updateInventoryListItem,
 } from "@/storage/services/registrar-service";
 import { AssetListItemDTO } from "@/storage/models/asset-lists";
+import { useTranslation } from "react-i18next";
 
 const EditAssetListItemScreen = () => {
+  const { t } = useTranslation();
   const db = useSQLiteContext();
   const { id } = useLocalSearchParams();
   const [itemId, setItemId] = useState<number>();
@@ -41,7 +43,7 @@ const EditAssetListItemScreen = () => {
     getInventoryListItemDetails(db, routeId)
       .then((result) => {
         if (result == null) {
-          showToast("Inventory item was not found, try again later.", scheme);
+          showToast(t("registrar.itemNotFoundError"), scheme);
           router.push("/registrar");
           return;
         }
@@ -98,7 +100,7 @@ const EditAssetListItemScreen = () => {
         router.push("/registrar");
       })
       .catch(() => {
-        showToast("Unable to update inventory item. Try again later.", scheme);
+        showToast(t("registrar.updateListItemError"), scheme);
       })
       .finally(() => {
         setLoading(false);
@@ -108,10 +110,7 @@ const EditAssetListItemScreen = () => {
   async function handleBarcodeScanned(code: string) {
     var asset = await getAssetDetailsByBarcode(db, code);
     if (!asset)
-      showToast(
-        `Inventory item with the code '${code}' was not found.`,
-        scheme
-      );
+      showToast(t("registrar.invalidBarcodeError", { code: code }), scheme);
     return asset;
   }
 
@@ -123,7 +122,7 @@ const EditAssetListItemScreen = () => {
       <View className="px-2 flex-1">
         <ManageRegistrarHeading
           className="mb-6"
-          text="Please enter the required data, or scan the barcode to automatically fill in the data."
+          text={t("registrar.editDescription")}
         />
         {registrarItem && (
           <ManageRegistrarForm

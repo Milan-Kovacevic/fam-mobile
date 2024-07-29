@@ -3,6 +3,7 @@ import React from "react";
 import { Icon } from "@/components/ui/Icon";
 import { Text } from "@/components/ui/Text";
 import { Button } from "@/components/ui/Button";
+import { useTranslation } from "react-i18next";
 
 type RegistrarHeadingProps = {
   onCreateList: () => void;
@@ -10,6 +11,7 @@ type RegistrarHeadingProps = {
 
 const RegistrarHeading = (props: RegistrarHeadingProps) => {
   const { onCreateList } = props;
+  const { t } = useTranslation();
 
   return (
     <View className="flex-row mb-3.5 mt-0 items-center" {...props}>
@@ -20,7 +22,7 @@ const RegistrarHeading = (props: RegistrarHeadingProps) => {
           className="text-xl text-neutral-800 dark:text-neutral-200"
         />
         <Text className="text-2xl font-psemibold tracking-tighter pt-0.5 pl-0.5">
-          Inventory List
+          {t("registrar.title")}
         </Text>
       </View>
       <View className="mr-0.5">

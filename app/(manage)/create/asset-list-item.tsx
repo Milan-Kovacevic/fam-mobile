@@ -2,7 +2,6 @@ import { useColorScheme, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Screen } from "@/components/ui/Screen";
 import { useSQLiteContext } from "expo-sqlite";
-import { delay } from "@/utils/util";
 import { router, useLocalSearchParams } from "expo-router";
 
 import ManageRegistrarHeading from "@/components/screens/registrar/ManageRegistrarHeading";
@@ -14,8 +13,10 @@ import { showToast } from "@/utils/toast";
 import { addAssetListItem } from "@/storage/repositories/asset-list-repository";
 import { addInventoryListItem } from "@/storage/services/registrar-service";
 import { AddAssetListItemDTO } from "@/storage/models/asset-lists";
+import { useTranslation } from "react-i18next";
 
 const CreateAssetListItemScreen = () => {
+  const { t } = useTranslation();
   const db = useSQLiteContext();
   const { scan, id } = useLocalSearchParams();
   const [listId, setListId] = useState<number>();
@@ -56,7 +57,7 @@ const CreateAssetListItemScreen = () => {
         router.push("/registrar");
       })
       .catch(() => {
-        showToast("Unable to add inventory item. Try again later.", scheme);
+        showToast(t("registrar.createListItemError"), scheme);
       })
       .finally(() => {
         setLoading(false);
@@ -66,10 +67,7 @@ const CreateAssetListItemScreen = () => {
   async function handleBarcodeScanned(code: string) {
     var asset = await getAssetDetailsByBarcode(db, code);
     if (!asset)
-      showToast(
-        `Inventory item with the code '${code}' was not found.`,
-        scheme
-      );
+      showToast(t("registrar.invalidBarcodeError", { code: code }), scheme);
     return asset;
   }
 
@@ -81,7 +79,7 @@ const CreateAssetListItemScreen = () => {
       <View className="px-2 flex-1">
         <ManageRegistrarHeading
           className="mb-6"
-          text="Please enter the required data, or scan the barcode to automatically fill in the data."
+          text={t("registrar.createDescription")}
         />
         <ManageRegistrarForm
           scanCode={scan != undefined}

@@ -47,12 +47,12 @@ const ManageNavigator = () => {
     {
       name: "create/asset-list-item",
       headerShown: true,
-      title: "Add Inventory Item",
+      title: t("registrar.createTitle"),
     },
     {
       name: "edit/asset-list-item",
       headerShown: true,
-      title: "Update Inventory Item",
+      title: t("registrar.editTitle"),
     },
   ];
 

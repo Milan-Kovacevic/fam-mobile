@@ -21,7 +21,6 @@ export interface ButtonAccessoryProps {
 export interface ButtonProps extends TouchableOpacityProps {
   tx?: TextProps["tx"];
   text?: TextProps["text"];
-  txOptions?: TextProps["txOptions"];
   variant?: Variant;
   RightAccessory?: ComponentType<ButtonAccessoryProps>;
   LeftAccessory?: ComponentType<ButtonAccessoryProps>;
@@ -36,7 +35,6 @@ export function Button(props: ButtonProps) {
   const {
     tx,
     text,
-    txOptions,
     children,
     RightAccessory,
     LeftAccessory,
@@ -79,12 +77,7 @@ export function Button(props: ButtonProps) {
         )
       )}
 
-      <Text
-        tx={tx}
-        text={text}
-        txOptions={txOptions}
-        className={$buttonTextClassName}
-      >
+      <Text tx={tx} text={text} className={$buttonTextClassName}>
         {children}
       </Text>
       {!!RightAccessory && (

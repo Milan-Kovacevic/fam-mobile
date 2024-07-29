@@ -4,7 +4,7 @@ import {
   SafeScreen,
 } from "@/components/ui/Screen";
 import React, { useEffect, useState } from "react";
-import { useColorScheme, View } from "react-native";
+import { ActivityIndicator, useColorScheme, View } from "react-native";
 import RadioGroup from "@/components/ui/RadioGroup";
 import { reloadAppAsync } from "expo";
 import { cn } from "@/utils/tw";
@@ -20,36 +20,44 @@ import {
 } from "@/storage/repositories/settings-repository";
 import { Text } from "@/components/ui/Text";
 import { Icon } from "@/components/ui/Icon";
+import { palette } from "@/theme/colors";
 
 export default function SettingsScreen() {
   const { t, i18n } = useTranslation();
   const db = useSQLiteContext();
   const scheme = useColorScheme();
-
+  const [loading, setLoading] = useState(false);
   const [language, setLanguage] = useState<string>(i18n.language);
   const [lastDataWipe, setLastDataWipe] = useState<string>();
 
   useEffect(() => {
-    getSettings().then((data) => {
-      setLanguage(data?.language ?? i18n.language);
-      setLastDataWipe(data?.lastDataWipe);
-    });
+    setLoading(true);
+    getSettings()
+      .then((data) => {
+        setLanguage(data?.language ?? i18n.language);
+        setLastDataWipe(data?.lastDataWipe);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   async function handleChangeSettings(id: string) {
     var request: SaveSettingsDTO = {
       language: id,
     };
+    setLoading(true);
     await saveSettings(request);
     i18n.changeLanguage(id);
     setLanguage(id);
+    setLoading(false);
   }
   async function handleClearData() {
     clearDatabase(db).then(() => {
+      const wipeDate = new Date().getTime().toString();
       var request: SaveSettingsDTO = {
         language: language,
-        lastDataWipe: new Date().getTime().toString(),
+        lastDataWipe: wipeDate,
       };
+      setLastDataWipe(wipeDate);
       saveSettings(request).finally(() => {
         showToast(t("settings.clearedDataMessage"), scheme);
       });
@@ -69,6 +77,15 @@ export default function SettingsScreen() {
           $horizontalPaddingClassName
         )}
       >
+        {loading && (
+          <ActivityIndicator
+            size="small"
+            color={scheme == "dark" ? palette.gray200 : palette.gray800}
+            className={cn(
+              "mr-2 absolute top-2 p-1.5 self-center bg-primary-300 dark:bg-primary rounded-full"
+            )}
+          ></ActivityIndicator>
+        )}
         <SettingsHeading />
         <View className="mx-0.5 mt-3">
           <RadioGroup
@@ -109,6 +126,7 @@ export default function SettingsScreen() {
             className="w-auto self-stretch"
             textClassName="py-1.5 h-auto text-xs"
             loading={false}
+            disabled={loading}
           />
           <Text className="text-[11px] mx-1 my-1" variant="muted">
             {t("settings.lastDataWipeLabel")}:{" "}

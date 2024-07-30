@@ -15,6 +15,7 @@ import {
   UpdateAssetListItemDTO,
 } from "../models/asset-lists";
 import { delay } from "@/utils/util";
+import { updateAssetDetails } from "../repositories/assets-repository";
 
 /* ASSET REGISTRAR */
 export async function getAssetRegistrar(db: SQLiteDatabase) {
@@ -53,6 +54,11 @@ export async function addInventoryListItem(
     id: request.listId,
     dateUpdated: new Date().getTime().toString(),
   });
+  await updateAssetDetails(db, {
+    id: request.assetId,
+    locationId: request.currentLocationId,
+    employeeId: request.currentEmployeeId,
+  });
 }
 
 export async function updateInventoryListItem(
@@ -64,6 +70,11 @@ export async function updateInventoryListItem(
   await updateAssetList(db, {
     id: request.listId,
     dateUpdated: new Date().getTime().toString(),
+  });
+  await updateAssetDetails(db, {
+    id: request.assetId,
+    locationId: request.currentLocationId,
+    employeeId: request.currentEmployeeId,
   });
 }
 

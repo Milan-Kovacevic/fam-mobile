@@ -92,10 +92,11 @@ const ManageAssetForm = (props: ManageAssetFormProps) => {
     employee: asset?.employee ?? undefined,
   };
 
-  const { control, handleSubmit, setFocus, setValue } = useForm<AssetForm>({
-    defaultValues: initialValues,
-    resolver: zodResolver(formSchema),
-  });
+  const { control, handleSubmit, setFocus, setValue, getValues } =
+    useForm<AssetForm>({
+      defaultValues: initialValues,
+      resolver: zodResolver(formSchema),
+    });
 
   function handleFormSubmitted(data: AssetForm) {
     onSubmit(data);
@@ -166,7 +167,7 @@ const ManageAssetForm = (props: ManageAssetFormProps) => {
         <FormImagePicker
           className=" mb-1.5 pt-2"
           onImageSelected={handleImageSelected}
-          image={initialValues.image}
+          image={getValues("image")}
         />
 
         <FormInput

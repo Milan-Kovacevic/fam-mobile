@@ -46,3 +46,9 @@ export type UpdateAssetDTO = {
   locationId: number;
   image?: string;
 };
+
+export type UpdateAssetDetailsDTO = {
+  id: number;
+  employeeId: number;
+  locationId: number;
+};

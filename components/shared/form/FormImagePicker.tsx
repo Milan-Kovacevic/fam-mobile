@@ -37,9 +37,14 @@ const FormImagePicker = (props: FormImagePickerProps) => {
     });
 
     if (!result.canceled) {
-      onImageSelected(result.assets[0].uri);
       setImage(result.assets[0].uri);
+      onImageSelected(result.assets[0].uri);
     }
+  }
+
+  function handleClearPicture() {
+    setImage("");
+    onImageSelected("");
   }
 
   return (
@@ -49,24 +54,37 @@ const FormImagePicker = (props: FormImagePickerProps) => {
         className="flex-1 opacity-100 bg-primary-100/60 dark:bg-primary-900/60 rounded-xl h-[153px] w-full overflow-hidden"
         src={image}
       />
+      {image && (
+        <View className="absolute bg-primary-50 -right-1.5 self-center dark:bg-primary-950 rounded-full">
+          <Button
+            variant="ghost"
+            LeftAccessory={() => (
+              <Icon icon="close" variant="material" className="text-xl" />
+            )}
+            className="px-1 py-0 rounded-full self-stretch"
+            onPressed={handleClearPicture}
+          />
+        </View>
+      )}
+
       <View className="absolute -bottom-2 flex-row self-center gap-x-2">
         <View className="bg-primary-50 self-center dark:bg-primary-950 rounded-full">
           <Button
-            variant="secondary"
+            variant="primary-outline"
             LeftAccessory={() => (
               <Icon
-                icon="camera-plus-outline"
-                variant="material-community"
+                icon="camera-outline"
+                variant="ionicon"
                 className="text-xl"
               />
             )}
-            className="p-2 py-1 rounded-full bg-secondary-200 dark:bg-secondary-600"
+            className="p-2 py-1 rounded-full self-center"
             onPressed={handleTakePicture}
           />
         </View>
         <View className="bg-primary-50 self-center dark:bg-primary-950 rounded-full">
           <Button
-            variant="secondary"
+            variant="primary-outline"
             LeftAccessory={() => (
               <Icon
                 icon="image-outline"
@@ -74,7 +92,7 @@ const FormImagePicker = (props: FormImagePickerProps) => {
                 className="text-xl"
               />
             )}
-            className="p-2 py-1 rounded-full bg-secondary-200 dark:bg-secondary-600"
+            className="p-2 py-1 rounded-full min-w-0 w-auto"
             onPressed={handleSelectImage}
           />
         </View>

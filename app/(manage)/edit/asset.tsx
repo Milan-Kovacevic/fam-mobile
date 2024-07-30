@@ -6,13 +6,11 @@ import ManageAssetForm, {
 } from "@/components/screens/assets/ManageAssetForm";
 import { useSQLiteContext } from "expo-sqlite";
 import { delay } from "@/utils/util";
-import {
-  getAssetDetails,
-  updateAsset,
-} from "@/storage/repositories/assets-repository";
+import { getAssetDetails } from "@/storage/repositories/assets-repository";
 import { router, useLocalSearchParams } from "expo-router";
 import { showToast } from "@/utils/toast";
 import { useTranslation } from "react-i18next";
+import { updateFixedAsset } from "@/storage/services/assets-service";
 
 const EditAssetScreen = () => {
   const { t } = useTranslation();
@@ -57,7 +55,7 @@ const EditAssetScreen = () => {
   async function handleAssetSubmitted(formData: AssetForm) {
     setLoading(true);
     await delay(750);
-    updateAsset(db, {
+    updateFixedAsset(db, {
       id: assetId!,
       ...formData,
       employeeId: formData.employee.id,

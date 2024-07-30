@@ -7,10 +7,10 @@ import {
 import SearchInput from "@/components/ui/SearchInput";
 import useSearchableList from "@/hooks/useSearchableList";
 import {
-  deleteAsset,
   getAllAssets,
   searchForAssets,
 } from "@/storage/repositories/assets-repository";
+import { deleteFixedAsset } from "@/storage/services/assets-service";
 import { showToast } from "@/utils/toast";
 import { cn } from "@/utils/tw";
 import { router } from "expo-router";
@@ -58,7 +58,7 @@ export default function HomeScreen() {
   }
 
   async function handleDeleteAsset(id: number) {
-    var isSuccess = await deleteAsset(db, id);
+    var isSuccess = await deleteFixedAsset(db, id);
     if (isSuccess) {
       showToast(t("assets.removeToastMessage"), scheme);
     }

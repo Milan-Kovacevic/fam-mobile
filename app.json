@@ -21,9 +21,9 @@
         "backgroundColor": "#cccccc"
       },
       "permissions": [
-        "CAMERA",
-        "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE"
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
       ]
     },
     "web": {
@@ -36,7 +36,6 @@
       "expo-font",
       "expo-localization",
       "expo-image-picker",
-
       "expo-camera"
     ],
     "experiments": {

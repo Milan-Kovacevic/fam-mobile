@@ -6,10 +6,10 @@ import ManageAssetForm, {
 } from "@/components/screens/assets/ManageAssetForm";
 import { useSQLiteContext } from "expo-sqlite";
 import { delay } from "@/utils/util";
-import { createAsset } from "@/storage/repositories/assets-repository";
 import { router, useLocalSearchParams } from "expo-router";
 import { showToast } from "@/utils/toast";
 import { useTranslation } from "react-i18next";
+import { createFixedAsset } from "@/storage/services/assets-service";
 
 const CreateAssetScreen = () => {
   const { t } = useTranslation();
@@ -21,7 +21,7 @@ const CreateAssetScreen = () => {
   async function handleAssetSubmitted(formData: AssetForm) {
     setLoading(true);
     await delay(750);
-    createAsset(db, {
+    createFixedAsset(db, {
       ...formData,
       employeeId: formData.employee.id,
       locationId: formData.location.id,

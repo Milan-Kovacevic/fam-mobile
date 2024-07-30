@@ -3,6 +3,7 @@ import {
   AssetDetailsDTO,
   AssetDTO,
   CreateAssetDTO,
+  UpdateAssetDetailsDTO,
   UpdateAssetDTO,
 } from "../models/assets";
 
@@ -11,7 +12,7 @@ export async function createAssetsTable(db: SQLiteDatabase) {
     PRAGMA journal_mode = 'wal';
     PRAGMA foreign_keys = ON;
     CREATE TABLE IF NOT EXISTS assets (id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL, description TEXT,
-    barcode TEXT NOT NULL, price DECIMAL(12,4) NOT NULL, employeeId INTEGER NOT NULL, locationId INTEGER NOT NULL, dateCreated TEXT NOT NULL, 
+    barcode TEXT NOT NULL UNIQUE, price DECIMAL(12,4) NOT NULL, employeeId INTEGER NOT NULL, locationId INTEGER NOT NULL, dateCreated TEXT NOT NULL, image TEXT,
     FOREIGN KEY (employeeId) REFERENCES employees(id) ON DELETE CASCADE, FOREIGN KEY (locationId) REFERENCES locations(id) ON DELETE CASCADE);
     `);
 }
@@ -68,7 +69,7 @@ export async function getAssetDetailsByBarcode(
   code: string
 ): Promise<AssetDetailsDTO | null> {
   var result = await db.getFirstAsync<AssetDetailsDTO>(
-    `SELECT a.id, a.name, a.description, a.barcode, a.price, a.dateCreated, e.id as employeeId, CONCAT(e.firstName, ' ', e.lastName) as employeeName, 
+    `SELECT a.id, a.name, a.description, a.barcode, a.price, a.image, a.dateCreated, e.id as employeeId, CONCAT(e.firstName, ' ', e.lastName) as employeeName, 
     l.id as locationId, l.name as locationName, l.latitude as locationLatitude, l.longitude as locationLongitude 
     FROM assets a INNER JOIN employees e ON a.employeeId = e.id INNER JOIN locations l ON a.locationId = l.id WHERE a.barcode = ?`,
     [code]
@@ -81,7 +82,7 @@ export async function getAssetDetails(
   id: number
 ): Promise<AssetDetailsDTO | null> {
   var result = await db.getFirstAsync<AssetDetailsDTO>(
-    `SELECT a.id, a.name, a.description, a.barcode, a.price, a.dateCreated, e.id as employeeId, CONCAT(e.firstName, ' ', e.lastName) as employeeName, 
+    `SELECT a.id, a.name, a.description, a.barcode, a.price, a.image, a.dateCreated, e.id as employeeId, CONCAT(e.firstName, ' ', e.lastName) as employeeName, 
     l.id as locationId, l.name as locationName, l.latitude as locationLatitude, l.longitude as locationLongitude 
     FROM assets a INNER JOIN employees e ON a.employeeId = e.id INNER JOIN locations l ON a.locationId = l.id WHERE a.id = ?`,
     [id]
@@ -94,7 +95,7 @@ export async function createAsset(
   asset: CreateAssetDTO
 ): Promise<AssetDTO> {
   const result = await db.runAsync(
-    "INSERT INTO assets (name, description, barcode, price, employeeId, locationId, dateCreated) VALUES (?, ?, ?, ?, ?, ?, ?)",
+    "INSERT INTO assets (name, description, barcode, price, employeeId, locationId, dateCreated, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
     [
       asset.name,
       asset.description ?? null,
@@ -103,6 +104,7 @@ export async function createAsset(
       asset.employeeId,
       asset.locationId,
       asset.dateCreated,
+      asset.image ?? null,
     ]
   );
 
@@ -119,16 +121,28 @@ export async function updateAsset(
   asset: UpdateAssetDTO
 ): Promise<boolean> {
   const result = await db.runAsync(
-    "UPDATE assets SET name = ?, description = ?, barcode = ?, price = ?, employeeId = ?, locationId = ? WHERE id = ?",
+    "UPDATE assets SET name = ?, description = ?, barcode = ?, price = ?, image = ?, employeeId = ?, locationId = ? WHERE id = ?",
     [
       asset.name,
       asset.description ?? null,
       asset.barcode,
       asset.price,
+      asset.image ?? null,
       asset.employeeId,
       asset.locationId,
       asset.id,
     ]
+  );
+  return result.changes == 1;
+}
+
+export async function updateAssetDetails(
+  db: SQLiteDatabase,
+  asset: UpdateAssetDetailsDTO
+): Promise<boolean> {
+  const result = await db.runAsync(
+    "UPDATE assets SET employeeId = ?, locationId = ? WHERE id = ?",
+    [asset.employeeId, asset.locationId, asset.id]
   );
   return result.changes == 1;
 }

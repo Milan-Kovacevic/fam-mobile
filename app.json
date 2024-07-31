@@ -1,24 +1,30 @@
 {
+  "name": "etfbl-fam",
   "expo": {
     "name": "etfbl-fam",
     "slug": "etfbl-fam",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/app-icon.png",
     "scheme": "fam",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/splash-logo-all.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#F6F2EF"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#cccccc"
+        "foregroundImage": "./assets/images/adaptive-icon-android.png",
+        "backgroundColor": "#F6F2EF"
+      },
+      "splash": {
+        "image": "./assets/images/splash-logo-android.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#F6F2EF"
       },
       "permissions": [
         "android.permission.CAMERA",
@@ -29,7 +35,7 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/favicon-web.png"
     },
     "plugins": [
       "expo-router",

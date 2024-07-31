@@ -21,7 +21,7 @@
     "barCodeTitle": "Skenirajte barkod",
     "formBarCodeLabel": "Skeniran kod",
     "formBarCodePlaceholder": "Skenirajte barkod...",
-    "barCodeNoPermission": "Dozvola za kameru nije omogućena"
+    "barCodePermissionError": "Dozvola za kameru je neophodna da biste skenirali barkod."
   },
   "landing": {
     "title": "FAM",
@@ -66,13 +66,15 @@
       "locationRequired": "Lokacija je obavezna.",
       "locationPlaceholder": "Izaberite lokaciju..."
     },
+    "imageLibraryError": "Nije moguće pokrenuti album slika.",
+    "cameraPermissionError": "Dozvola za kameru je neophodna da biste snimili sliku.",
     "employeeDetailsLabel": "Zaduženi zaposleni",
     "locationDetailsLabel": "Lokacija osnovnog sredstva",
     "noDescription": "Nema opisa...",
     "editTitle": "Izmijenite sredstvo",
-    "createError": "Nije moguće kreirati osnovno sredstvo. Probajte ponovo poslije.",
+    "createError": "Nije moguće kreirati osnovno sredstvo. Moguće podudaranje barkoda.",
     "notFoundError": "Osnovno sredstvo nije pronađeno, pokušajte ponovo.",
-    "updateError": "Nije moguće izmijeniti lokaciju osnovno sredstvo. Probajte ponovo poslije.",
+    "updateError": "Nije moguće izmijeniti lokaciju osnovno sredstvo. Moguće podudaranje barkoda.",
     "removeToastMessage": "Osnovno sredstvo uspješno obrisano!"
   },
   "locations": {

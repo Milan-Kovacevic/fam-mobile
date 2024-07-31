@@ -1,7 +1,7 @@
 import { useColorScheme, View, ViewProps } from "react-native";
 import React from "react";
 import { Controller } from "react-hook-form";
-import MapView, { LatLng, Marker } from "react-native-maps";
+import MapView, { LatLng, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { LocationDTO } from "@/storage/models/locations";
 import { defaultMapCoordinates } from "../../screens/locations/LocationsMap";
 import mapDark from "@/assets/styles/map-dark.json";
@@ -36,6 +36,7 @@ const FormMapSelect = (props: FormMapProps) => {
         render={({ field: { value } }) => (
           <MapView
             className="flex-1 "
+            provider={PROVIDER_GOOGLE}
             initialRegion={initalRegion}
             loadingEnabled
             onPress={(e) => onPinChange(e.nativeEvent.coordinate)}

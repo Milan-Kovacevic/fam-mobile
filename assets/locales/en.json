@@ -21,7 +21,7 @@
     "barCodeTitle": "Scan a Barcode",
     "formBarCodeLabel": "Scanned Barcode",
     "formBarCodePlaceholder": "Scan a barcode...",
-    "barCodeNoPermission": "Camera Permission not granted"
+    "barCodePermissionError": "Camera permission is required to scan a barcode."
   },
   "landing": {
     "title": "FAM",
@@ -66,13 +66,15 @@
       "locationRequired": "Location is required.",
       "locationPlaceholder": "Select location..."
     },
+    "imageLibraryError": "Unable to launch image library.",
+    "cameraPermissionError": "Camera permission is required to take a picture.",
     "employeeDetailsLabel": "Employee in charge",
     "locationDetailsLabel": "Asset location",
     "noDescription": "No description...",
     "editTitle": "Edit Asset",
-    "createError": "Unable to create asset. Try again later.",
+    "createError": "Unable to create asset. Possible duplicate barcode.",
     "notFoundError": "Asset was not found, try again later.",
-    "updateError": "Unable to update asset. Try again later.",
+    "updateError": "Unable to update asset. Possible duplicate barcode.",
     "removeToastMessage": "Asset removed successfully!"
   },
   "locations": {

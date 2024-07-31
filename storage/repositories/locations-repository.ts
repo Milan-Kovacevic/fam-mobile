@@ -15,6 +15,7 @@ interface LocationEntity {
 export async function createLocationsTable(db: SQLiteDatabase) {
   await db.execAsync(`
     PRAGMA journal_mode = 'wal';
+    PRAGMA foreign_keys = ON;
     CREATE TABLE IF NOT EXISTS locations (id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL UNIQUE, latitude DECIMAL(12,8) NOT NULL, 
     longitude DECIMAL(12,8) NOT NULL);
   `);

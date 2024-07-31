@@ -102,6 +102,10 @@ const ManageAssetForm = (props: ManageAssetFormProps) => {
     onSubmit(data);
   }
 
+  function handleOpenBarcodeScanner() {
+    setShowScanner(true);
+  }
+
   function handleBarcodeScanned(data: string) {
     setValue("barcode", data, { shouldValidate: true });
     setShowScanner(false);
@@ -109,15 +113,6 @@ const ManageAssetForm = (props: ManageAssetFormProps) => {
 
   function handleImageSelected(image: string) {
     setValue("image", image, { shouldValidate: true });
-  }
-
-  if (showScanner) {
-    return (
-      <BarCodeScanner
-        onCanceled={() => setShowScanner(false)}
-        onBarCodeRead={handleBarcodeScanned}
-      />
-    );
   }
 
   function onOpenLocationsSheet() {
@@ -161,6 +156,15 @@ const ManageAssetForm = (props: ManageAssetFormProps) => {
     }
   }
 
+  if (showScanner) {
+    return (
+      <BarCodeScanner
+        onCanceled={() => setShowScanner(false)}
+        onScanned={handleBarcodeScanned}
+      />
+    );
+  }
+
   return (
     <View className="flex-1">
       <View className="flex-1 gap-y-1.5">
@@ -200,7 +204,7 @@ const ManageAssetForm = (props: ManageAssetFormProps) => {
             className="flex-1"
           />
           <FormActionButton
-            onButtonPressed={() => setShowScanner(true)}
+            onButtonPressed={handleOpenBarcodeScanner}
             icon="qr-code-scanner"
             variant="material"
             className="mt-[18px] py-1.5 px-2.5 ml-1"

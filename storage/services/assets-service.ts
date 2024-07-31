@@ -21,7 +21,7 @@ export async function createFixedAsset(
       to: imagePath,
     });
   }
-  createAsset(db, { ...asset, image: imagePath });
+  return await createAsset(db, { ...asset, image: imagePath });
 }
 
 export async function updateFixedAsset(
@@ -50,7 +50,7 @@ export async function updateFixedAsset(
     });
   }
 
-  updateAsset(db, { ...asset, image: imagePath });
+  return await updateAsset(db, { ...asset, image: imagePath });
 }
 
 export async function deleteFixedAsset(db: SQLiteDatabase, id: number) {

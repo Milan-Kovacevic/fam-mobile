@@ -17,9 +17,15 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "org.unibl.etf.fam",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon-android.png",
         "backgroundColor": "#F6F2EF"
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyA8RffsG7SHWK6AKGVRpgkajNYKTuHE3sU"
+        }
       },
       "splash": {
         "image": "./assets/images/splash-logo-android.png",

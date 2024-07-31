@@ -1,9 +1,11 @@
-import { View, ViewProps } from "react-native";
+import { useColorScheme, View, ViewProps } from "react-native";
 import React, { useState } from "react";
 import { Image } from "react-native";
 import { Button } from "../../ui/Button";
 import { Icon } from "../../ui/Icon";
 import * as ImagePicker from "expo-image-picker";
+import { showToast } from "@/utils/toast";
+import { useTranslation } from "react-i18next";
 
 interface FormImagePickerProps extends ViewProps {
   onImageSelected: (image: string) => void;
@@ -13,32 +15,44 @@ interface FormImagePickerProps extends ViewProps {
 const FormImagePicker = (props: FormImagePickerProps) => {
   const { image: $image, onImageSelected, ...rest } = props;
   const [image, setImage] = useState<string>($image ?? "");
+  const scheme = useColorScheme();
+  const { t } = useTranslation();
 
   async function handleSelectImage() {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [16, 7],
-      quality: 1,
-    });
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [16, 7],
+        quality: 1,
+      });
 
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-      onImageSelected(result.assets[0].uri);
+      if (!result.canceled) {
+        setImage(result.assets[0].uri);
+        onImageSelected(result.assets[0].uri);
+      }
+    } catch (err) {
+      showToast(t("assets.imageLibraryError"), scheme);
+      console.log(err);
     }
   }
 
   async function handleTakePicture() {
-    let result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [16, 7],
-      quality: 1,
-    });
+    try {
+      let result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [16, 7],
+        quality: 1,
+      });
 
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-      onImageSelected(result.assets[0].uri);
+      if (!result.canceled) {
+        setImage(result.assets[0].uri);
+        onImageSelected(result.assets[0].uri);
+      }
+    } catch (err) {
+      showToast(t("assets.cameraPermissionError"), scheme);
+      console.log(err);
     }
   }
 

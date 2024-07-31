@@ -1,4 +1,4 @@
-import { View, Modal } from "react-native";
+import { View, Modal, useColorScheme, BackHandler } from "react-native";
 import React, { useEffect, useState } from "react";
 import { BarcodeScanningResult, Camera, CameraView } from "expo-camera";
 import { Text } from "@/components/ui/Text";
@@ -7,43 +7,53 @@ import { Icon } from "@/components/ui/Icon";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TextField } from "@/components/ui/TextField";
 import { useTranslation } from "react-i18next";
+import { showToast } from "@/utils/toast";
 
 type BarCodeScannerProps = {
-  onBarCodeRead: (data: string) => void;
+  onScanned: (data: string) => void;
   onCanceled: () => void;
 };
 
 const BarCodeScanner = (props: BarCodeScannerProps) => {
-  const { onBarCodeRead, onCanceled } = props;
-  const { t } = useTranslation();
+  const { onScanned, onCanceled } = props;
+  const [pending, setPending] = useState(true);
   const [hasPermission, setHasPermission] = useState(true);
   const [barcode, setBarcode] = useState<string>();
 
-  useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status == "granted");
-    })();
-  }, []);
+  const { t } = useTranslation();
+  const scheme = useColorScheme();
 
-  if (!hasPermission)
-    return (
-      <View>
-        <Text variant="heading">{t("modals.barCodeNoPermission")}</Text>
-      </View>
-    );
+  async function checkPermissions() {
+    setPending(true);
 
-  function handleBarCodeScanned(scanningResult: BarcodeScanningResult) {
+    const { status } = await Camera.requestCameraPermissionsAsync();
+    setHasPermission(status == "granted");
+    setPending(false);
+  }
+
+  function onBarcodeScanned(scanningResult: BarcodeScanningResult) {
     setBarcode(scanningResult.data);
   }
 
+  useEffect(() => {
+    if (!hasPermission) {
+      showToast(t("modals.barCodePermissionError"), scheme);
+      onCanceled();
+      return;
+    }
+    checkPermissions();
+  }, [hasPermission]);
+
+  if (pending) return <View></View>;
+
   function handleBarCodeAccepted() {
-    if (barcode) onBarCodeRead(barcode);
+    if (barcode) onScanned(barcode);
   }
 
   return (
     <Modal
       animationType="slide"
+      onRequestClose={() => onCanceled()}
       transparent={true}
       className="justify-center items-center border border-red-50"
     >
@@ -101,7 +111,7 @@ const BarCodeScanner = (props: BarCodeScannerProps) => {
               //   barcodeScannerSettings={{
               //     barcodeTypes: ["upc_a", "upc_e", "qr", "codabar", ],
               //   }}
-              onBarcodeScanned={handleBarCodeScanned}
+              onBarcodeScanned={onBarcodeScanned}
             >
               <View className="border-2 border-neutral-600 dark:border-neutral-400 rounded-2xl flex-1 w-full" />
             </CameraView>

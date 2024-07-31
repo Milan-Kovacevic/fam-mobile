@@ -192,7 +192,7 @@ const ManageRegistrarForm = (props: ManageRegistrarFormProps) => {
     return (
       <BarCodeScanner
         onCanceled={() => setShowScanner(false)}
-        onBarCodeRead={handleBarcodeScanned}
+        onScanned={handleBarcodeScanned}
       />
     );
   }

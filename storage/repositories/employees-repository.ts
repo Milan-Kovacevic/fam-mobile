@@ -19,6 +19,7 @@ interface EmployeeEntity {
 export async function createEmployeesTable(db: SQLiteDatabase) {
   await db.execAsync(`
     PRAGMA journal_mode = 'wal';
+    PRAGMA foreign_keys = ON;
     CREATE TABLE IF NOT EXISTS employees (id INTEGER PRIMARY KEY NOT NULL, firstName TEXT NOT NULL, lastName TEXT NOT NULL);
     `);
 }

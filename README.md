@@ -1,50 +1,40 @@
-# Welcome to your Expo app 👋
+# Fixed Asset Manager
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Effortlessly manage your company's assets with the Fixed Asset Manager app! Designed for companies of all sizes, this powerful tool helps you track, monitor, and manage all your fixed assets with ease.
 
-## Get started
+This is a [React Native](https://reactnative.dev/) project created in [Expo framework](https://expo.dev) and released using EAS Build tools.
 
-1. Install dependencies
+### Development - Get started
+
+1. Clone the repository
+
+   ```bash
+   git clone https://github.com/Milan-Kovacevic/fam-mobile.git
+   ```
+   
+2. Install required dependencies (inside project directory)
 
    ```bash
    npm install
    ```
 
-2. Start the app
+3. Start the app in development
 
    ```bash
     npx expo start
    ```
+   
+### Application Preview
 
-In the output, you'll find options to open the app in a
+Here you can review some of the features that FAM app has to offer.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+<img src="https://github.com/user-attachments/assets/d493dddf-6380-45bc-8479-ea21c16850c1" width="360">
+<img src="https://github.com/user-attachments/assets/4d016b9d-2d3a-414a-955d-adca330bd169" width="360">
+<img src="https://github.com/user-attachments/assets/c124a6c4-7835-416c-b84a-4277d11e33b8" width="360">
+<img src="https://github.com/user-attachments/assets/afc3c5b8-a5e7-4306-9796-d409b45b2f46" width="360">
+<img src="https://github.com/user-attachments/assets/db3923ae-3036-4071-850b-79e474889269" width="360">
+<img src="https://github.com/user-attachments/assets/57b73660-f113-44c7-92a1-98c34a79da03" width="360">
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Download the release
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+You can download and try out Fixed Asset Manager application on Google Play Store by clicking [here](https://play.google.com/).

@@ -37,4 +37,4 @@ Here you can review some of the features that FAM app has to offer.
 
 ### Download the release
 
-You can download and try out Fixed Asset Manager application on Google Play Store by clicking [here](https://play.google.com/).
+You can download and try out Fixed Asset Manager application on Google Play Store by clicking [here](https://play.google.com/store/apps/details?id=org.unibl.etf.fam).
